@@ -1,0 +1,26 @@
+@if (store.dashboard(); as dashboard) {
+  <h1>Crear equipo · {{ dashboard.league.name }}</h1>
+  <p>Presupuesto inicial: 100M · Restante: {{ remainingBudget() }}</p>
+  <p>Jugadores seleccionados: {{ selectedPlayerIds().length }}/6</p>
+  <ul>
+    @for (player of dashboard.players; track player.id) {
+      <li>
+        <label>
+          <input
+            type="checkbox"
+            [checked]="selectedPlayerIds().includes(player.id)"
+            (change)="togglePlayer(player.id)"
+          />
+          {{ player.name }} · {{ player.price }}
+        </label>
+      </li>
+    }
+  </ul>
+  <label for="captain">Capitán</label>
+  <select id="captain" [ngModel]="captainId()" (ngModelChange)="captainId.set($event)">
+    <option [ngValue]="null">Selecciona capitán</option>
+    @for (playerId of selectedPlayerIds(); track playerId) {
+      <option [value]="playerId">{{ playerId }}</option>
+    }
+  </select>
+}

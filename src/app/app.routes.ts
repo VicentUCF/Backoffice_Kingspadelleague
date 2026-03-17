@@ -26,6 +26,12 @@ const publicSiteRoutes: Routes = [
     loadChildren: () =>
       import('@features/players/ui/players.routes').then((module) => module.PLAYERS_ROUTES),
   },
+
+  {
+    path: 'fantasy',
+    loadChildren: () =>
+      import('@features/fantasy/ui/fantasy.routes').then((module) => module.FANTASY_ROUTES),
+  },
   {
     path: 'jornadas',
     loadChildren: () =>

@@ -1,0 +1,17 @@
+<header>
+  <h1>Fantasy Kings Padel League</h1>
+  <p>Compite por ligas con equipo independiente por cada competición.</p>
+  <a routerLink="/fantasy/leagues/create">Crear liga</a> ·
+  <a routerLink="/fantasy/leagues/join">Unirse</a>
+</header>
+@if (store.isLoading()) {
+  <p>Cargando ligas...</p>
+}
+@if (store.errorMessage()) {
+  <p>{{ store.errorMessage() }}</p>
+}
+<div class="o-grid o-grid--cards">
+  @for (league of store.leagues(); track league.id) {
+    <app-fantasy-league-card [league]="league" />
+  }
+</div>

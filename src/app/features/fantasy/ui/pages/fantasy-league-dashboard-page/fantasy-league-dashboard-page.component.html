@@ -1,0 +1,17 @@
+@if (store.isLoading()) {
+  <p>Cargando dashboard fantasy...</p>
+}
+@if (store.dashboard(); as dashboard) {
+  <header>
+    <h1>{{ dashboard.league.name }}</h1>
+    <p>Posición {{ dashboard.league.myRank }} · {{ dashboard.league.myPoints }} puntos</p>
+    <a [routerLink]="['/fantasy/leagues', dashboard.league.id, 'market']">Ver mercado</a>
+    ·
+    <a [routerLink]="['/fantasy/leagues', dashboard.league.id, 'team']">Gestionar equipo</a>
+  </header>
+  <app-fantasy-mvp-card [player]="store.mvp()" />
+  <section>
+    <h2>Top 5 ranking</h2>
+    <app-fantasy-ranking-table [entries]="dashboard.ranking.slice(0, 5)" />
+  </section>
+}

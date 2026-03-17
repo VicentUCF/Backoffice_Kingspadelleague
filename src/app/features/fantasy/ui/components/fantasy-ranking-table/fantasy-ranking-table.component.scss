@@ -1,0 +1,16 @@
+.fantasy-ranking-table__wrap {
+  overflow-x: auto;
+}
+.fantasy-ranking-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.fantasy-ranking-table th,
+.fantasy-ranking-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.fantasy-ranking-table__row--mine {
+  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
+  font-weight: 600;
+}

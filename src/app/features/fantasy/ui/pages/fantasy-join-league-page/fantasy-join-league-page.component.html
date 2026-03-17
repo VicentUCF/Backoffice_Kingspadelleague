@@ -1,0 +1,9 @@
+<h1>Unirse a liga fantasy</h1>
+<form #joinForm="ngForm" (ngSubmit)="joinLeague(leagueCode.value)">
+  <label for="league-code">Código de liga</label>
+  <input #leagueCode="ngModel" id="league-code" name="leagueCode" ngModel required minlength="4" />
+  <button type="submit" [disabled]="joinForm.invalid">Entrar</button>
+</form>
+@if (joinMessage()) {
+  <p>{{ joinMessage() }} <a routerLink="/fantasy/leagues/league-1/create-team">Crear equipo</a></p>
+}

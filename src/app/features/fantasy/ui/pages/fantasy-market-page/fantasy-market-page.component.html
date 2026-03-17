@@ -1,0 +1,17 @@
+@if (store.dashboard(); as dashboard) {
+  <h1>Mercado · {{ dashboard.league.name }}</h1>
+  <p>Presupuesto disponible: {{ dashboard.myTeam?.budgetRemaining ?? 0 }}</p>
+  <label for="player-search">Buscar jugador</label>
+  <input id="player-search" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
+  @if (filteredPlayers().length === 0) {
+    <p>No hay jugadores para tu filtro.</p>
+  }
+  <ul>
+    @for (player of filteredPlayers(); track player.id) {
+      <li>
+        {{ player.name }} · {{ player.teamName }} · {{ player.price }} ·
+        {{ player.pointsTotal }} pts
+      </li>
+    }
+  </ul>
+}

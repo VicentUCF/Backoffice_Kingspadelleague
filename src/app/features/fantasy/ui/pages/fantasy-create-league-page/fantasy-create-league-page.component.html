@@ -1,0 +1,13 @@
+<h1>Crear liga fantasy</h1>
+<form #leagueForm="ngForm" (ngSubmit)="createLeague(leagueName.value)">
+  <label for="league-name">Nombre de liga</label>
+  <input #leagueName="ngModel" id="league-name" name="leagueName" ngModel required />
+  <label for="league-description">Descripción</label>
+  <textarea id="league-description" name="leagueDescription" ngModel></textarea>
+  <button type="submit" [disabled]="leagueForm.invalid">Crear liga</button>
+</form>
+@if (generatedCode()) {
+  <p>
+    Tu código de invitación es <strong>{{ generatedCode() }}</strong>
+  </p>
+}
