@@ -5,7 +5,9 @@
 .fantasy-team-inspector-modal {
   &__body {
     display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     gap: var(--space-5);
+    min-height: 0;
   }
 
   &__summary-grid {
@@ -51,15 +53,18 @@
   &__roster-grid {
     display: grid;
     gap: var(--space-4);
+    min-height: 0;
   }
 
   &__panel {
     display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
     gap: var(--space-4);
+    min-height: 0;
   }
 
   &__panel--bench {
-    align-content: start;
+    align-content: stretch;
   }
 
   &__panel-header {
@@ -102,6 +107,14 @@
     text-transform: uppercase;
   }
 
+  &__list-scroller {
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-inline-end: var(--space-1);
+    margin-inline-end: calc(var(--space-1) * -1);
+  }
+
   &__starter-grid,
   &__bench-list {
     display: grid;
@@ -109,6 +122,8 @@
     padding: 0;
     margin: 0;
     list-style: none;
+    min-height: 0;
+    align-content: start;
   }
 
   &__starter-grid {
@@ -196,26 +211,13 @@
     display: flex;
     justify-content: flex-end;
   }
-
-  &__close {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 2.85rem;
-    padding-inline: var(--space-4);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: 999px;
-    background: rgb(255 255 255 / 0.03);
-    color: var(--color-text-strong);
-    font-weight: 700;
-    cursor: pointer;
-  }
 }
 
 @media (min-width: 70rem) {
   .fantasy-team-inspector-modal {
     &__roster-grid {
       grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.95fr);
+      align-items: stretch;
     }
   }
 }

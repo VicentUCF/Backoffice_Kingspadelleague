@@ -2,6 +2,8 @@
   display: block;
   min-width: 0;
   container-type: inline-size;
+  --fantasy-ranking-columns: minmax(4rem, 0.7fr) minmax(0, 2.2fr) minmax(0, 1.2fr) minmax(0, 0.9fr)
+    minmax(0, 0.9fr) minmax(0, 1fr) minmax(9.5rem, 1.2fr);
 }
 
 .fantasy-ranking-table {
@@ -15,40 +17,36 @@
   }
 
   &__table {
-    width: 100%;
-    min-width: 50rem;
-    border-collapse: separate;
-    border-spacing: 0;
+    min-width: 62rem;
   }
 
-  th,
-  td {
-    padding: var(--space-4);
+  &__header,
+  &__body {
+    display: grid;
+  }
+
+  &__grid,
+  &__row {
+    display: grid;
+    grid-template-columns: var(--fantasy-ranking-columns);
+    align-items: center;
+    column-gap: var(--space-2);
+    min-width: 0;
+  }
+
+  &__grid {
+    padding-inline: var(--space-4);
     border-bottom: 1px solid var(--color-border-subtle);
-    text-align: left;
-    vertical-align: middle;
-  }
-
-  th {
-    position: sticky;
-    top: 0;
-    z-index: 1;
     background: color-mix(in srgb, var(--color-surface-raised) 94%, rgb(15 23 42 / 0.6));
-    color: var(--color-text-muted);
-    font-size: 0.76rem;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  td {
-    color: var(--color-text-default);
   }
 
   &__row {
-    transition:
-      background-color 160ms ease,
-      transform 160ms ease;
+    padding-inline: var(--space-4);
+    transition: background-color 160ms ease;
+
+    &:not(:last-child) {
+      border-bottom: 1px solid var(--color-border-subtle);
+    }
 
     &:hover {
       background: rgb(255 255 255 / 0.03);
@@ -73,10 +71,36 @@
   &__row--mine {
     background: rgb(201 162 39 / 0.08);
 
-    td {
+    .fantasy-ranking-table__cell {
       color: var(--color-text-strong);
       font-weight: 700;
     }
+  }
+
+  &__cell {
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    min-height: 4.25rem;
+    padding-block: var(--space-2);
+    color: var(--color-text-default);
+  }
+
+  &__cell--header {
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__cell--rank,
+  &__cell--total,
+  &__cell--matchday,
+  &__cell--value-column,
+  &__cell--detail {
+    justify-content: center;
+    text-align: center;
   }
 
   &__rank-pill,
@@ -104,6 +128,7 @@
     flex-wrap: wrap;
     align-items: center;
     gap: var(--space-2);
+    min-width: 0;
 
     strong {
       color: var(--color-text-strong);
@@ -128,7 +153,7 @@
     align-items: center;
     justify-content: center;
     min-height: 2.5rem;
-    min-width: 8.5rem;
+    width: min(100%, 9rem);
     border-radius: 999px;
     font-size: 0.82rem;
     font-weight: 700;
@@ -167,19 +192,11 @@
       background: transparent;
     }
 
-    &__table,
-    &__table thead,
-    &__table tbody,
-    &__table tr,
-    &__table td {
-      display: block;
-    }
-
     &__table {
       min-width: 0;
     }
 
-    &__table thead {
+    &__header {
       position: absolute;
       width: 1px;
       height: 1px;
@@ -189,13 +206,12 @@
       white-space: nowrap;
     }
 
-    &__table tbody {
-      display: grid;
+    &__body {
       gap: var(--space-3);
     }
 
     &__row {
-      display: grid;
+      grid-template-columns: 1fr;
       gap: var(--space-3);
       padding: var(--space-4);
       border: 1px solid var(--color-border-subtle);
@@ -203,22 +219,42 @@
       background:
         radial-gradient(circle at top left, rgb(255 255 255 / 0.08), transparent 60%),
         var(--color-surface-raised);
+
+      &:not(:last-child) {
+        border-bottom: 1px solid var(--color-border-subtle);
+      }
     }
 
-    td {
+    &__cell {
       display: grid;
       gap: var(--space-1);
+      min-height: 0;
       padding: 0;
-      border: 0;
+      text-align: left;
+      justify-content: stretch;
     }
 
-    td::before {
+    &__cell::before {
       content: attr(data-label);
       color: var(--color-text-muted);
       font-size: 0.72rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
+    }
+
+    &__cell--rank,
+    &__cell--total,
+    &__cell--matchday,
+    &__cell--value-column,
+    &__cell--detail {
+      justify-content: stretch;
+      text-align: left;
+    }
+
+    &__inspect-button,
+    &__inspect-placeholder {
+      width: 100%;
     }
   }
 }

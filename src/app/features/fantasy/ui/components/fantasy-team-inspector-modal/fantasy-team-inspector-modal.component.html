@@ -26,11 +26,6 @@
           <strong>{{ team.matchdayPointsLabel }}</strong>
           <small>{{ team.teamValueLabel }} de valor</small>
         </article>
-        <article class="fantasy-team-inspector-modal__summary-card">
-          <span>Estructura</span>
-          <strong>{{ team.formationLabel }}</strong>
-          <small>{{ team.playersCountLabel }}</small>
-        </article>
       </section>
 
       <section class="fantasy-team-inspector-modal__roster-grid">
@@ -43,42 +38,49 @@
             <span>{{ team.starters.length }}</span>
           </header>
 
-          <ul class="fantasy-team-inspector-modal__starter-grid" role="list">
-            @for (player of team.starters; track player.id) {
-              <li>
-                <article class="fantasy-team-inspector-modal__starter-card">
-                  <div class="fantasy-team-inspector-modal__player-main">
-                    <app-fantasy-player-avatar
-                      [altText]="player.name"
-                      [initials]="player.avatar"
-                      [photoPath]="player.photoPath"
-                      size="md"
-                    />
+          <div
+            aria-label="Titulares del equipo"
+            class="fantasy-team-inspector-modal__list-scroller"
+            role="region"
+            tabindex="0"
+          >
+            <ul class="fantasy-team-inspector-modal__starter-grid" role="list">
+              @for (player of team.starters; track player.id) {
+                <li>
+                  <article class="fantasy-team-inspector-modal__starter-card">
+                    <div class="fantasy-team-inspector-modal__player-main">
+                      <app-fantasy-player-avatar
+                        [altText]="player.name"
+                        [initials]="player.avatar"
+                        [photoPath]="player.photoPath"
+                        size="md"
+                      />
 
-                    <div class="fantasy-team-inspector-modal__player-copy">
-                      <div class="fantasy-team-inspector-modal__player-heading">
-                        <h4>
-                          <a [routerLink]="player.detailLink">{{ player.name }}</a>
-                        </h4>
-                        @if (player.captainLabel; as captainLabel) {
-                          <span class="fantasy-team-inspector-modal__captain-badge">
-                            {{ captainLabel }}
-                          </span>
-                        }
+                      <div class="fantasy-team-inspector-modal__player-copy">
+                        <div class="fantasy-team-inspector-modal__player-heading">
+                          <h4>
+                            <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                          </h4>
+                          @if (player.captainLabel; as captainLabel) {
+                            <span class="fantasy-team-inspector-modal__captain-badge">
+                              {{ captainLabel }}
+                            </span>
+                          }
+                        </div>
+                        <p>{{ player.teamName }}</p>
+                        <span>{{ player.sideLabel }} · {{ player.roleLabel }}</span>
                       </div>
-                      <p>{{ player.teamName }}</p>
-                      <span>{{ player.sideLabel }} · {{ player.roleLabel }}</span>
                     </div>
-                  </div>
 
-                  <div class="fantasy-team-inspector-modal__player-stats">
-                    <strong>{{ player.priceLabel }}</strong>
-                    <small>{{ player.totalPointsLabel }}</small>
-                  </div>
-                </article>
-              </li>
-            }
-          </ul>
+                    <div class="fantasy-team-inspector-modal__player-stats">
+                      <strong>{{ player.priceLabel }}</strong>
+                      <small>{{ player.totalPointsLabel }}</small>
+                    </div>
+                  </article>
+                </li>
+              }
+            </ul>
+          </div>
         </article>
 
         <article
@@ -92,39 +94,40 @@
             <span>{{ team.bench.length }}</span>
           </header>
 
-          <ul class="fantasy-team-inspector-modal__bench-list" role="list">
-            @for (player of team.bench; track player.id) {
-              <li>
-                <article class="fantasy-team-inspector-modal__bench-card">
-                  <div class="fantasy-team-inspector-modal__player-main">
-                    <app-fantasy-player-avatar
-                      [altText]="player.name"
-                      [initials]="player.avatar"
-                      [photoPath]="player.photoPath"
-                      size="sm"
-                    />
+          <div
+            aria-label="Rotación del equipo"
+            class="fantasy-team-inspector-modal__list-scroller"
+            role="region"
+            tabindex="0"
+          >
+            <ul class="fantasy-team-inspector-modal__bench-list" role="list">
+              @for (player of team.bench; track player.id) {
+                <li>
+                  <article class="fantasy-team-inspector-modal__bench-card">
+                    <div class="fantasy-team-inspector-modal__player-main">
+                      <app-fantasy-player-avatar
+                        [altText]="player.name"
+                        [initials]="player.avatar"
+                        [photoPath]="player.photoPath"
+                        size="sm"
+                      />
 
-                    <div class="fantasy-team-inspector-modal__player-copy">
-                      <h4>
-                        <a [routerLink]="player.detailLink">{{ player.name }}</a>
-                      </h4>
-                      <p>{{ player.teamName }}</p>
+                      <div class="fantasy-team-inspector-modal__player-copy">
+                        <h4>
+                          <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                        </h4>
+                        <p>{{ player.teamName }}</p>
+                      </div>
                     </div>
-                  </div>
 
-                  <strong>{{ player.priceLabel }}</strong>
-                </article>
-              </li>
-            }
-          </ul>
+                    <strong>{{ player.priceLabel }}</strong>
+                  </article>
+                </li>
+              }
+            </ul>
+          </div>
         </article>
       </section>
-    </div>
-
-    <div class="fantasy-team-inspector-modal__footer" modalFooter>
-      <button type="button" class="fantasy-team-inspector-modal__close" (click)="close()">
-        Cerrar
-      </button>
     </div>
   </app-modal-shell>
 }

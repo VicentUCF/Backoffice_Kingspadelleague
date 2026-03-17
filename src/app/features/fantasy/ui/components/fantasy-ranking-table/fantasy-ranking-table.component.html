@@ -1,46 +1,122 @@
 <div class="fantasy-ranking-table__wrap">
-  <table class="fantasy-ranking-table__table">
-    <caption class="u-visually-hidden">
-      Clasificación fantasy de la liga
-    </caption>
-    <thead>
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">Equipo</th>
-        <th scope="col">Manager</th>
-        <th scope="col">Total</th>
-        <th scope="col">Jornada</th>
-        <th scope="col">Valor</th>
-        <th scope="col">Detalle</th>
-      </tr>
-    </thead>
-    <tbody>
+  <div
+    aria-label="Clasificación fantasy de la liga"
+    class="fantasy-ranking-table__table"
+    role="table"
+  >
+    <div class="fantasy-ranking-table__header" role="rowgroup">
+      <div class="fantasy-ranking-table__grid fantasy-ranking-table__grid--head" role="row">
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--rank"
+          role="columnheader"
+        >
+          #
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--team"
+          role="columnheader"
+        >
+          Equipo
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--manager"
+          role="columnheader"
+        >
+          Manager
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--total"
+          role="columnheader"
+        >
+          Total
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--matchday"
+          role="columnheader"
+        >
+          Jornada
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--value-column"
+          role="columnheader"
+        >
+          Valor
+        </span>
+        <span
+          class="fantasy-ranking-table__cell fantasy-ranking-table__cell--header fantasy-ranking-table__cell--detail"
+          role="columnheader"
+        >
+          Detalle
+        </span>
+      </div>
+    </div>
+
+    <div class="fantasy-ranking-table__body" role="rowgroup">
       @for (entry of entries(); track entry.rankLabel; let position = $index) {
-        <tr
+        <div
           class="fantasy-ranking-table__row"
           [attr.data-podium]="position < 3 ? position + 1 : null"
           [class.fantasy-ranking-table__row--mine]="entry.isMe"
+          role="row"
         >
-          <td data-label="Posición">
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--rank"
+            data-label="Posición"
+            role="cell"
+          >
             <span class="fantasy-ranking-table__rank-pill">{{ entry.rankLabel }}</span>
-          </td>
-          <td data-label="Equipo">
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--team"
+            data-label="Equipo"
+            role="cell"
+          >
             <div class="fantasy-ranking-table__identity">
               <strong>{{ entry.teamName }}</strong>
               @if (entry.isMe) {
                 <span class="fantasy-ranking-table__team-badge">Tu equipo</span>
               }
             </div>
-          </td>
-          <td data-label="Manager">
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--manager"
+            data-label="Manager"
+            role="cell"
+          >
             <span class="fantasy-ranking-table__manager">{{ entry.managerName }}</span>
-          </td>
-          <td data-label="Total">
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--total"
+            data-label="Total"
+            role="cell"
+          >
             <strong class="fantasy-ranking-table__value">{{ entry.totalPointsLabel }}</strong>
-          </td>
-          <td data-label="Jornada">{{ entry.matchdayPointsLabel }}</td>
-          <td data-label="Valor">{{ entry.teamValueLabel }}</td>
-          <td data-label="Detalle">
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--matchday"
+            data-label="Jornada"
+            role="cell"
+          >
+            {{ entry.matchdayPointsLabel }}
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--value-column"
+            data-label="Valor"
+            role="cell"
+          >
+            {{ entry.teamValueLabel }}
+          </div>
+
+          <div
+            class="fantasy-ranking-table__cell fantasy-ranking-table__cell--detail"
+            data-label="Detalle"
+            role="cell"
+          >
             @if (entry.canInspect) {
               <button
                 type="button"
@@ -52,9 +128,9 @@
             } @else {
               <span class="fantasy-ranking-table__inspect-placeholder">Sin plantilla visible</span>
             }
-          </td>
-        </tr>
+          </div>
+        </div>
       }
-    </tbody>
-  </table>
+    </div>
+  </div>
 </div>
