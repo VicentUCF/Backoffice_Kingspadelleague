@@ -1,0 +1,26 @@
+<div class="fantasy-ranking-table__wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Equipo</th>
+        <th>Manager</th>
+        <th>Total</th>
+        <th>Jornada</th>
+        <th>Valor</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (entry of entries(); track entry.rank) {
+        <tr [class.fantasy-ranking-table__row--mine]="entry.isMe">
+          <td>{{ entry.rank }}</td>
+          <td>{{ entry.teamName }}</td>
+          <td>{{ entry.managerName }}</td>
+          <td>{{ entry.totalPoints }}</td>
+          <td>{{ entry.matchdayPoints }}</td>
+          <td>{{ entry.teamValue }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

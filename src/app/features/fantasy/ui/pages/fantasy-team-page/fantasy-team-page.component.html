@@ -1,0 +1,38 @@
+@if (store.dashboard(); as dashboard) {
+  <h1>Mi equipo · {{ dashboard.league.name }}</h1>
+  @if (dashboard.myTeam; as myTeam) {
+    <p>
+      {{ myTeam.name }} · Presupuesto {{ myTeam.budgetRemaining }} · Valor {{ myTeam.teamValue }}
+    </p>
+    <p [attr.role]="dashboard.marketLocked ? 'status' : null">
+      {{
+        dashboard.marketLocked
+          ? 'Jornada cerrada: equipo bloqueado.'
+          : 'Jornada abierta: puedes hacer cambios.'
+      }}
+    </p>
+    <h2>Titulares</h2>
+    <ul>
+      @for (teamPlayer of myTeam.players; track teamPlayer.playerId) {
+        @if (teamPlayer.isStarter) {
+          <li>
+            {{ teamPlayer.playerId }}
+            @if (teamPlayer.isCaptain) {
+              <strong>(Capitán x2)</strong>
+            }
+          </li>
+        }
+      }
+    </ul>
+    <h2>Suplentes</h2>
+    <ul>
+      @for (teamPlayer of myTeam.players; track teamPlayer.playerId) {
+        @if (!teamPlayer.isStarter) {
+          <li>{{ teamPlayer.playerId }}</li>
+        }
+      }
+    </ul>
+  } @else {
+    <p>No tienes equipo en esta liga todavía.</p>
+  }
+}

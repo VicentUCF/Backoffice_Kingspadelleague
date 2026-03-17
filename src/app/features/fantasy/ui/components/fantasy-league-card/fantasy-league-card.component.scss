@@ -1,0 +1,25 @@
+.fantasy-league-card__surface {
+  border: 1px solid var(--border-subtle);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: var(--surface-primary);
+}
+.fantasy-league-card__header,
+.fantasy-league-card__stats,
+.fantasy-league-card__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+.fantasy-league-card__stats dt {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.fantasy-league-card__stats dd {
+  margin: 0;
+  font-weight: 600;
+}
+.fantasy-league-card__actions a {
+  font-weight: 600;
+}

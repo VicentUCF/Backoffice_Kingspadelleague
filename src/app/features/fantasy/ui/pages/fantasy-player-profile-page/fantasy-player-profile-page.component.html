@@ -1,0 +1,8 @@
+@if (store.player(); as player) {
+  <h1>{{ player.name }}</h1>
+  <p>{{ player.teamName }}</p>
+  <p>Precio: {{ player.price }} · Variación: {{ player.price - player.previousPrice }}</p>
+  <p>Puntos jornada: {{ player.pointsMatchday }} · Totales: {{ player.pointsTotal }}</p>
+  <button type="button">Comprar jugador</button>
+  <button type="button">Vender jugador</button>
+}

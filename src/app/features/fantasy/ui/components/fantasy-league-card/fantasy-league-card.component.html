@@ -1,0 +1,27 @@
+<article class="fantasy-league-card__surface">
+  <header class="fantasy-league-card__header">
+    <h3>{{ league().name }}</h3>
+    <span class="fantasy-league-card__code">{{ league().code }}</span>
+  </header>
+
+  <dl class="fantasy-league-card__stats">
+    <div>
+      <dt>Participantes</dt>
+      <dd>{{ league().memberCount }}</dd>
+    </div>
+    <div>
+      <dt>Mi posición</dt>
+      <dd>#{{ league().myRank }}</dd>
+    </div>
+    <div>
+      <dt>Mis puntos</dt>
+      <dd>{{ league().myPoints }}</dd>
+    </div>
+  </dl>
+
+  <nav class="fantasy-league-card__actions" aria-label="Acciones de liga fantasy">
+    <a [routerLink]="['/fantasy/leagues', league().id]">Entrar</a>
+    <a [routerLink]="['/fantasy/leagues', league().id, 'ranking']">Ranking</a>
+    <a [routerLink]="['/fantasy/leagues', league().id, 'team']">Mi equipo</a>
+  </nav>
+</article>

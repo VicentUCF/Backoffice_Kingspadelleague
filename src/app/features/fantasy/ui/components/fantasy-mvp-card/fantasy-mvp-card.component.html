@@ -1,0 +1,10 @@
+<article class="fantasy-mvp-card__surface">
+  <p class="fantasy-mvp-card__title">MVP jornada</p>
+  @if (player(); as featuredPlayer) {
+    <h3>{{ featuredPlayer.name }}</h3>
+    <p>{{ featuredPlayer.teamName }} · {{ featuredPlayer.pointsMatchday }} pts</p>
+    <small>Precio actual: {{ featuredPlayer.price }}</small>
+  } @else {
+    <p>No hay datos de jornada para calcular el MVP.</p>
+  }
+</article>

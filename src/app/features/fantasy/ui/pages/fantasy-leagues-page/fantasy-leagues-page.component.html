@@ -1,0 +1,14 @@
+<header>
+  <h1>Mis ligas fantasy</h1>
+  <a routerLink="/fantasy/leagues/create">Crear liga</a>
+</header>
+@if (store.isLoading()) {
+  <p>Cargando...</p>
+} @else if (!store.hasLeagues()) {
+  <p>No participas en ninguna liga.</p>
+}
+<div class="o-grid o-grid--cards">
+  @for (league of store.leagues(); track league.id) {
+    <app-fantasy-league-card [league]="league" />
+  }
+</div>

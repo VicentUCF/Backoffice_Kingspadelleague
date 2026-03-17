@@ -1,0 +1,4 @@
+@if (store.dashboard(); as dashboard) {
+  <h1>Ranking · {{ dashboard.league.name }}</h1>
+  <app-fantasy-ranking-table [entries]="dashboard.ranking" />
+}
