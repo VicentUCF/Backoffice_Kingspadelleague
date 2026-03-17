@@ -1,0 +1,12 @@
+<nav aria-label="Navegación de liga fantasy" class="fantasy-league-navigation__scroll">
+  @for (link of links(); track link.id) {
+    <a
+      [attr.aria-current]="link.id === currentSection() ? 'page' : null"
+      [class.fantasy-league-navigation__link--active]="link.id === currentSection()"
+      [routerLink]="link.href"
+      class="fantasy-league-navigation__link"
+    >
+      {{ link.label }}
+    </a>
+  }
+</nav>

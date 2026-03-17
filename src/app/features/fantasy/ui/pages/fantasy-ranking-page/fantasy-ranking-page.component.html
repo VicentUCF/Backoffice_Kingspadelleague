@@ -2,6 +2,7 @@
   <p aria-live="polite" role="status">Cargando ranking fantasy...</p>
 } @else if (store.errorMessage()) {
   <app-empty-state
+    [actions]="missingLeagueActions"
     [description]="store.errorMessage() ?? ''"
     [icon]="shieldAlert"
     eyebrow="Ranking"
@@ -10,13 +11,140 @@
   />
 } @else if (store.viewModel(); as viewModel) {
   <header class="fantasy-ranking-page__hero">
-    <p class="fantasy-ranking-page__eyebrow">{{ viewModel.phaseLabel }}</p>
-    <h1>{{ viewModel.rankingTitle }} · {{ viewModel.leagueName }}</h1>
-    <p>{{ viewModel.rankingDescription }}</p>
+    <div class="fantasy-ranking-page__hero-copy">
+      <p class="fantasy-ranking-page__eyebrow">{{ viewModel.phaseLabel }}</p>
+      <h1>{{ viewModel.rankingTitle }} · {{ viewModel.leagueName }}</h1>
+      <p>{{ viewModel.rankingDescription }}</p>
+    </div>
+
+    <dl class="fantasy-ranking-page__hero-facts">
+      <div class="fantasy-ranking-page__fact">
+        <dt>Participantes</dt>
+        <dd>{{ viewModel.memberCountLabel }}</dd>
+      </div>
+      <div class="fantasy-ranking-page__fact">
+        <dt>Tu puesto</dt>
+        <dd>{{ viewModel.myRankLabel }}</dd>
+      </div>
+      <div class="fantasy-ranking-page__fact">
+        <dt>Tus puntos</dt>
+        <dd>{{ viewModel.myPointsLabel }}</dd>
+      </div>
+    </dl>
   </header>
-  <app-fantasy-ranking-table [entries]="viewModel.rankingEntries" />
+
+  <app-fantasy-league-section-nav
+    activeSection="ranking"
+    [leagueName]="viewModel.leagueName"
+    [marketLink]="viewModel.marketLink"
+    [overviewLink]="viewModel.overviewLink"
+    [rankingLink]="viewModel.rankingLink"
+    [resultsLink]="viewModel.resultsLink"
+    [teamDraftLink]="viewModel.teamCreationLink"
+    [teamLink]="viewModel.teamLink"
+  />
+
+  <div class="fantasy-ranking-page__overview">
+    <section class="fantasy-ranking-page__summary-grid" aria-label="Indicadores de clasificación">
+      <article class="fantasy-ranking-page__summary-card">
+        <p class="fantasy-ranking-page__summary-label">Participantes</p>
+        <strong>{{ viewModel.memberCountLabel }}</strong>
+        <span>La tabla arranca con todas las ligas privadas activas.</span>
+      </article>
+      <article class="fantasy-ranking-page__summary-card">
+        <p class="fantasy-ranking-page__summary-label">Tu posición</p>
+        <strong>{{ viewModel.myRankLabel }}</strong>
+        <span>Referencia rápida para ver si estás en zona alta.</span>
+      </article>
+      <article class="fantasy-ranking-page__summary-card">
+        <p class="fantasy-ranking-page__summary-label">Tus puntos</p>
+        <strong>{{ viewModel.myPointsLabel }}</strong>
+        <span>En pretemporada manda el valor y la composición del roster.</span>
+      </article>
+      <article class="fantasy-ranking-page__summary-card">
+        <p class="fantasy-ranking-page__summary-label">Líder actual</p>
+        <strong>{{ leadingEntry()?.teamName ?? 'Pendiente' }}</strong>
+        <span>{{ leadingEntry()?.totalPointsLabel ?? 'Sin datos disponibles' }}</span>
+      </article>
+    </section>
+
+    <section
+      class="fantasy-ranking-page__podium c-surface-card"
+      aria-labelledby="fantasy-ranking-podium"
+    >
+      <header class="fantasy-ranking-page__section-header">
+        <div>
+          <p class="fantasy-ranking-page__section-kicker">Podio</p>
+          <h2 id="fantasy-ranking-podium">Pulso de la liga</h2>
+          <p>Los equipos que mejor llegan por valor de plantilla y estabilidad de proyecto.</p>
+        </div>
+      </header>
+
+      <div class="fantasy-ranking-page__podium-grid">
+        @for (entry of podiumEntries(); track entry.rankLabel; let position = $index) {
+          <article class="fantasy-ranking-page__podium-card" [attr.data-rank]="position + 1">
+            <div class="fantasy-ranking-page__podium-topline">
+              <span class="fantasy-ranking-page__podium-rank">{{ entry.rankLabel }}</span>
+              @if (entry.isMe) {
+                <span class="fantasy-ranking-page__podium-chip">Tu equipo</span>
+              }
+            </div>
+
+            <div class="fantasy-ranking-page__podium-copy">
+              <h3>{{ entry.teamName }}</h3>
+              <p>{{ entry.managerName }}</p>
+            </div>
+
+            <dl class="fantasy-ranking-page__podium-stats">
+              <div>
+                <dt>Total</dt>
+                <dd>{{ entry.totalPointsLabel }}</dd>
+              </div>
+              <div>
+                <dt>Jornada</dt>
+                <dd>{{ entry.matchdayPointsLabel }}</dd>
+              </div>
+              <div>
+                <dt>Valor</dt>
+                <dd>{{ entry.teamValueLabel }}</dd>
+              </div>
+            </dl>
+          </article>
+        }
+      </div>
+    </section>
+  </div>
+
+  <section
+    class="fantasy-ranking-page__table-panel c-surface-card"
+    aria-labelledby="fantasy-ranking-table"
+  >
+    <header class="fantasy-ranking-page__section-header">
+      <div>
+        <p class="fantasy-ranking-page__section-kicker">Tabla completa</p>
+        <h2 id="fantasy-ranking-table">Clasificación con detalle</h2>
+        <p>Consulta puntos totales, jornada y valor de todos los managers sin perder contexto.</p>
+      </div>
+      <p class="fantasy-ranking-page__table-hint">
+        En pantallas pequeñas la tabla se transforma en fichas legibles y mantiene todas las
+        métricas.
+      </p>
+    </header>
+
+    <app-fantasy-ranking-table
+      [entries]="viewModel.rankingEntries"
+      (teamViewed)="inspectTeam($event)"
+    />
+  </section>
+
+  <app-fantasy-team-inspector-modal
+    [isOpen]="selectedTeam() !== null"
+    [team]="selectedTeam()"
+    (closed)="closeTeamInspector()"
+  />
 } @else if (store.isNotFound()) {
   <app-empty-state
+    [actions]="missingLeagueActions"
     [description]="'No existe una liga con ese identificador para consultar su clasificación.'"
     [icon]="shieldAlert"
     eyebrow="Ranking"

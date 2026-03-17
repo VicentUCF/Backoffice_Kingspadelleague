@@ -44,6 +44,8 @@ function toFantasyPlayer(player: PublicLeaguePlayerCatalogEntry, index: number):
   });
   const price = resolveFantasyPrice(player, index, team);
   const previousPrice = resolvePreviousPrice(price, index, teamId);
+  const pointsTotal = resolveTotalPoints(player, index, team);
+  const pointsMatchday = resolveMatchdayPoints(player, index, team);
 
   return {
     id: player.id,
@@ -60,8 +62,8 @@ function toFantasyPlayer(player: PublicLeaguePlayerCatalogEntry, index: number):
     scoutingNote: resolveScoutingNote(player, team),
     price,
     previousPrice,
-    pointsMatchday: 0,
-    pointsTotal: 0,
+    pointsMatchday,
+    pointsTotal,
   };
 }
 
@@ -97,6 +99,35 @@ function resolvePreviousPrice(currentPrice: number, index: number, teamId: strin
   const currentMovement = movementByIndex[index % movementByIndex.length] ?? 0;
 
   return currentPrice - currentMovement;
+}
+
+function resolveTotalPoints(
+  player: PublicLeaguePlayerCatalogEntry,
+  index: number,
+  team: FantasyTeamCatalogEntry | undefined,
+): number {
+  const rosterSlot = resolveRosterSlot(player.id);
+  const teamBase = team ? 12 : 8;
+  const slotBonus = Math.max(0, 6 - Math.min(rosterSlot, 6)) * 3;
+  const versatilityBonus = player.side === 'ambas' ? 3 : 1;
+  const captainBonus = team?.presidentName === player.displayName ? 5 : 0;
+  const momentumBonus = index % 4;
+
+  return teamBase + slotBonus + versatilityBonus + captainBonus + momentumBonus;
+}
+
+function resolveMatchdayPoints(
+  player: PublicLeaguePlayerCatalogEntry,
+  index: number,
+  team: FantasyTeamCatalogEntry | undefined,
+): number {
+  const rosterSlot = resolveRosterSlot(player.id);
+  const teamBase = team ? 2 : 1;
+  const slotBonus = Math.max(0, 5 - Math.min(rosterSlot, 5));
+  const versatilityBonus = player.side === 'ambas' ? 1 : 0;
+  const momentumBonus = index % 3;
+
+  return teamBase + slotBonus + versatilityBonus + momentumBonus;
 }
 
 function resolveRoleLabel(

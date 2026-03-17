@@ -14,45 +14,220 @@
     <div class="fantasy-dashboard-page__hero-copy">
       <p class="fantasy-dashboard-page__eyebrow">{{ viewModel.phaseLabel }}</p>
       <h1>{{ viewModel.leagueName }}</h1>
-      <p class="fantasy-dashboard-page__hero-description">{{ viewModel.phaseDescription }}</p>
-
-      <nav aria-label="Acciones de la liga fantasy" class="fantasy-dashboard-page__actions">
-        <a
-          class="fantasy-dashboard-page__action fantasy-dashboard-page__action--primary"
-          [routerLink]="viewModel.marketLink"
-        >
-          Ir al mercado
-        </a>
-        <a class="fantasy-dashboard-page__action" [routerLink]="viewModel.teamLink">
-          Gestionar equipo
-        </a>
-        <a class="fantasy-dashboard-page__action" [routerLink]="viewModel.rankingLink">
-          Clasificación
-        </a>
-      </nav>
+      <p class="fantasy-dashboard-page__hero-description">
+        {{ viewModel.heroSummary.description }}
+      </p>
     </div>
 
+    <nav aria-label="Acciones de la liga fantasy" class="fantasy-dashboard-page__actions">
+      <a
+        class="fantasy-dashboard-page__action fantasy-dashboard-page__action--primary"
+        [routerLink]="viewModel.heroSummary.primaryAction.href"
+      >
+        {{ viewModel.heroSummary.primaryAction.label }}
+      </a>
+      @for (action of viewModel.heroSummary.secondaryActions; track action.href) {
+        <a class="fantasy-dashboard-page__action" [routerLink]="action.href">{{ action.label }}</a>
+      }
+    </nav>
+
     <dl class="fantasy-dashboard-page__hero-facts">
-      <div class="fantasy-dashboard-page__fact">
-        <dt>Código</dt>
-        <dd>{{ viewModel.inviteCode }}</dd>
-      </div>
-      <div class="fantasy-dashboard-page__fact">
-        <dt>Posición</dt>
-        <dd>{{ viewModel.myRankLabel }}</dd>
-      </div>
-      <div class="fantasy-dashboard-page__fact">
-        <dt>Puntos</dt>
-        <dd>{{ viewModel.myPointsLabel }}</dd>
-      </div>
+      @for (fact of viewModel.heroSummary.facts; track fact.label) {
+        <div class="fantasy-dashboard-page__fact">
+          <dt>{{ fact.label }}</dt>
+          <dd>
+            <span class="fantasy-dashboard-page__fact-value">{{ fact.value }}</span>
+            <span class="fantasy-dashboard-page__fact-supporting">{{ fact.supportingLabel }}</span>
+          </dd>
+        </div>
+      }
     </dl>
   </section>
 
+  <app-fantasy-league-section-nav
+    activeSection="overview"
+    [leagueName]="viewModel.leagueName"
+    [marketLink]="viewModel.marketLink"
+    [overviewLink]="viewModel.overviewLink"
+    [rankingLink]="viewModel.rankingLink"
+    [resultsLink]="viewModel.resultsLink"
+    [teamDraftLink]="viewModel.teamCreationLink"
+    [teamLink]="viewModel.teamLink"
+  />
+
   <div class="fantasy-dashboard-page__grid">
-    <app-fantasy-mvp-card [player]="viewModel.spotlight" />
+    <section
+      class="fantasy-dashboard-page__panel fantasy-dashboard-page__panel--command c-surface-card"
+      aria-labelledby="fantasy-dashboard-command-center"
+    >
+      <header class="fantasy-dashboard-page__panel-header">
+        <div>
+          <p class="fantasy-dashboard-page__section-kicker">Resumen</p>
+          <h2 id="fantasy-dashboard-command-center">
+            {{ viewModel.hasTeam ? 'Cabina del manager' : 'Punto de arranque de la liga' }}
+          </h2>
+          <p>{{ viewModel.primarySummary.description }}</p>
+        </div>
+      </header>
+
+      @if (viewModel.team; as team) {
+        <div class="fantasy-dashboard-page__command-grid">
+          <article
+            class="fantasy-dashboard-page__command-card fantasy-dashboard-page__command-card--accent"
+          >
+            <span>Equipo activo</span>
+            <strong>{{ team.name }}</strong>
+            <small>{{ team.playersCountLabel }} · {{ team.formationLabel }}</small>
+          </article>
+          <article class="fantasy-dashboard-page__command-card">
+            <span>Capitán</span>
+            <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
+            <small>Tu pieza con multiplicador x2</small>
+          </article>
+          <article class="fantasy-dashboard-page__command-card">
+            <span>Valor</span>
+            <strong>{{ team.teamValueLabel }}</strong>
+            <small>{{ team.budgetRemainingLabel }} disponibles</small>
+          </article>
+          <article class="fantasy-dashboard-page__command-card">
+            <span>Composición</span>
+            <strong>{{ team.compositionLabel }}</strong>
+            <small>{{ team.matchdayPointsLabel }} en jornada</small>
+          </article>
+        </div>
+
+        <div class="fantasy-dashboard-page__lineup-shell">
+          <section class="fantasy-dashboard-page__lineup-panel">
+            <header class="fantasy-dashboard-page__mini-header">
+              <div>
+                <p class="fantasy-dashboard-page__mini-kicker">Titulares</p>
+                <h3>Tu cuarteto principal</h3>
+              </div>
+              <span>{{ team.starters.length }}</span>
+            </header>
+
+            <ul class="fantasy-dashboard-page__starter-grid" role="list">
+              @for (player of team.starters; track player.id) {
+                <li>
+                  <article class="fantasy-dashboard-page__starter-card">
+                    <div class="fantasy-dashboard-page__player-main">
+                      <app-fantasy-player-avatar
+                        [altText]="player.name"
+                        [initials]="player.avatar"
+                        [photoPath]="player.photoPath"
+                        size="md"
+                      />
+
+                      <div class="fantasy-dashboard-page__player-copy">
+                        <div class="fantasy-dashboard-page__player-heading">
+                          <h3>
+                            <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                          </h3>
+                          @if (player.captainLabel; as captainLabel) {
+                            <span class="fantasy-dashboard-page__captain-badge">
+                              {{ captainLabel }}
+                            </span>
+                          }
+                        </div>
+                        <p>{{ player.teamName }}</p>
+                        <span>{{ player.sideLabel }} · {{ player.roleLabel }}</span>
+                      </div>
+                    </div>
+
+                    <strong>{{ player.priceLabel }}</strong>
+                  </article>
+                </li>
+              }
+            </ul>
+          </section>
+
+          <div class="fantasy-dashboard-page__lineup-side">
+            <header class="fantasy-dashboard-page__mini-header">
+              <div>
+                <p class="fantasy-dashboard-page__mini-kicker">Rotación</p>
+                <h3>Apoyo corto</h3>
+              </div>
+              <span>{{ team.bench.length }}</span>
+            </header>
+
+            <ul class="fantasy-dashboard-page__bench-list" role="list">
+              @for (player of team.bench; track player.id) {
+                <li>
+                  <article class="fantasy-dashboard-page__bench-card">
+                    <div class="fantasy-dashboard-page__player-main">
+                      <app-fantasy-player-avatar
+                        [altText]="player.name"
+                        [initials]="player.avatar"
+                        [photoPath]="player.photoPath"
+                        size="sm"
+                      />
+
+                      <div class="fantasy-dashboard-page__player-copy">
+                        <h3>
+                          <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                        </h3>
+                        <p>{{ player.teamName }}</p>
+                      </div>
+                    </div>
+
+                    <strong>{{ player.priceLabel }}</strong>
+                  </article>
+                </li>
+              }
+            </ul>
+
+            <nav
+              aria-label="Acciones rápidas de la plantilla"
+              class="fantasy-dashboard-page__inline-actions"
+            >
+              <a
+                class="fantasy-dashboard-page__inline-action fantasy-dashboard-page__inline-action--primary"
+                [routerLink]="viewModel.teamLink"
+              >
+                Gestionar equipo
+              </a>
+              <a
+                class="fantasy-dashboard-page__inline-action"
+                [routerLink]="viewModel.teamCreationLink"
+              >
+                Editar plantilla
+              </a>
+            </nav>
+          </div>
+        </div>
+      } @else {
+        <div class="fantasy-dashboard-page__onboarding">
+          <ul
+            class="fantasy-dashboard-page__onboarding-list"
+            aria-label="Checklist de pretemporada"
+          >
+            @for (item of viewModel.primarySummary.checklist; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+
+          <nav
+            aria-label="Acciones para crear equipo"
+            class="fantasy-dashboard-page__inline-actions"
+          >
+            <a
+              class="fantasy-dashboard-page__inline-action fantasy-dashboard-page__inline-action--primary"
+              [routerLink]="viewModel.primarySummary.primaryAction.href"
+            >
+              {{ viewModel.primarySummary.primaryAction.label }}
+            </a>
+            @for (action of viewModel.primarySummary.secondaryActions; track action.href) {
+              <a class="fantasy-dashboard-page__inline-action" [routerLink]="action.href">
+                {{ action.label }}
+              </a>
+            }
+          </nav>
+        </div>
+      }
+    </section>
 
     <section
-      class="fantasy-dashboard-page__panel c-surface-card"
+      class="fantasy-dashboard-page__panel fantasy-dashboard-page__panel--ranking c-surface-card"
       aria-labelledby="fantasy-dashboard-ranking"
     >
       <header class="fantasy-dashboard-page__panel-header">
@@ -61,35 +236,52 @@
             <lucide-angular [img]="rankingIcon" [size]="16" aria-hidden="true" />
             <span>Ranking</span>
           </p>
-          <h2 id="fantasy-dashboard-ranking">{{ viewModel.rankingTitle }}</h2>
-          <p>{{ viewModel.rankingDescription }}</p>
-        </div>
-      </header>
-
-      <app-fantasy-ranking-table [entries]="viewModel.topRankingEntries" />
-    </section>
-
-    <section
-      class="fantasy-dashboard-page__panel c-surface-card"
-      aria-labelledby="fantasy-dashboard-market"
-    >
-      <header class="fantasy-dashboard-page__panel-header">
-        <div>
-          <p class="fantasy-dashboard-page__section-kicker">
-            <lucide-angular [img]="walletIcon" [size]="16" aria-hidden="true" />
-            <span>Mercado</span>
+          <h2 id="fantasy-dashboard-ranking">Pulso de la liga</h2>
+          <p>
+            Mira rápido quién manda ahora mismo y entra a la clasificación completa para abrir
+            cualquier plantilla rival.
           </p>
-          <h2 id="fantasy-dashboard-market">{{ viewModel.marketStatusLabel }}</h2>
-          <p>{{ viewModel.marketStatusDescription }}</p>
         </div>
       </header>
 
-      <div class="fantasy-dashboard-page__quick-links">
-        <a [routerLink]="viewModel.marketLink">Abrir mercado</a>
-        <a [routerLink]="viewModel.teamCreationLink">Editar plantilla</a>
-        <a [routerLink]="viewModel.teamLink">Ver mi equipo</a>
-      </div>
+      <ol class="fantasy-dashboard-page__ranking-list">
+        @for (entry of viewModel.topRankingEntries; track entry.teamId) {
+          <li class="fantasy-dashboard-page__ranking-item">
+            <div class="fantasy-dashboard-page__ranking-main">
+              <span class="fantasy-dashboard-page__ranking-rank">{{ entry.rankLabel }}</span>
+              <div>
+                <div class="fantasy-dashboard-page__ranking-heading">
+                  <strong>{{ entry.teamName }}</strong>
+                  @if (entry.isMe) {
+                    <span class="fantasy-dashboard-page__ranking-chip">Tu equipo</span>
+                  }
+                </div>
+                <p>{{ entry.managerName }}</p>
+              </div>
+            </div>
+
+            <div class="fantasy-dashboard-page__ranking-stats">
+              <span>{{ entry.teamValueLabel }}</span>
+              <span>{{ entry.totalPointsLabel }}</span>
+            </div>
+          </li>
+        }
+      </ol>
+
+      <a class="fantasy-dashboard-page__panel-link" [routerLink]="viewModel.rankingLink">
+        Ver clasificación completa
+      </a>
     </section>
+
+    <app-fantasy-dashboard-market-snapshot-card
+      class="fantasy-dashboard-page__market-snapshot"
+      [snapshot]="viewModel.marketSnapshot"
+    />
+
+    <app-fantasy-mvp-card
+      class="fantasy-dashboard-page__spotlight"
+      [player]="viewModel.spotlight"
+    />
   </div>
 } @else if (store.isNotFound()) {
   <app-empty-state

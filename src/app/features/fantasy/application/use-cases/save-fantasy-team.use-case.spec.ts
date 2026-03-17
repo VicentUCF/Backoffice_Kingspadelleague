@@ -1,10 +1,15 @@
 import {
   type CreateFantasyLeagueCommand,
+  type FantasyHomeExperience,
   type FantasyLeague,
   type FantasyLeagueDashboard,
+  type FantasyLeagueResults,
   type SaveFantasyTeamCommand,
 } from '@features/fantasy/domain/entities/fantasy.models';
-import { createFantasyLeagueDashboard } from '@features/fantasy/testing/fantasy-test.fixtures';
+import {
+  createFantasyLeagueDashboard,
+  createFantasyWeeklyCycle,
+} from '@features/fantasy/testing/fantasy-test.fixtures';
 
 import { FantasyRepository } from '../ports/fantasy.repository';
 import { SaveFantasyTeamUseCase } from './save-fantasy-team.use-case';
@@ -21,6 +26,17 @@ class FantasyRepositoryStub extends FantasyRepository {
   }
 
   override async loadLeagueDashboard(_leagueId: string): Promise<FantasyLeagueDashboard | null> {
+    return null;
+  }
+
+  override async loadHomeExperience(): Promise<FantasyHomeExperience> {
+    return {
+      primaryLeague: null,
+      secondaryLeagues: [],
+    };
+  }
+
+  override async loadLeagueResults(_leagueId: string): Promise<FantasyLeagueResults | null> {
     return null;
   }
 
@@ -62,9 +78,14 @@ describe('SaveFantasyTeamUseCase', () => {
   const dashboard: FantasyLeagueDashboard = {
     league,
     myTeam: null,
+    teams: [],
     ranking: [],
     players: [],
     marketLocked: false,
+    weeklyCycle: createFantasyWeeklyCycle({
+      phase: 'prediction-open',
+      predictionOutcome: null,
+    }),
   };
   const command: SaveFantasyTeamCommand = {
     leagueId: 'league-1',

@@ -19,10 +19,12 @@ describe('FantasyTeamPageComponent', () => {
     expect(
       await screen.findByRole('heading', { name: /Mi equipo · Amigos del curro/i }),
     ).toBeVisible();
-    expect(screen.getByText('Borja Vercher')).toBeVisible();
+    expect(screen.getByRole('link', { name: 'Borja Vercher' })).toBeVisible();
     expect(screen.getByText(/Capitán x2/i)).toBeVisible();
     expect(screen.queryByText(/^thormentadores-player-1$/i)).toBeNull();
-    expect(screen.getByText(/Puedes hacer cambios libres/i)).toBeVisible();
+    expect(
+      screen.getByText(/La jornada todavía no ha cerrado y puedes seguir ajustando la plantilla/i),
+    ).toBeVisible();
   });
 
   it('has no accessibility violations in the roster page', async () => {

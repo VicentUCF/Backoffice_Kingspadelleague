@@ -1,7 +1,14 @@
+:host {
+  display: block;
+  min-width: 0;
+  container-type: inline-size;
+}
+
 .fantasy-mvp-card {
   &__surface {
     display: grid;
     gap: var(--space-4);
+    height: 100%;
     padding: var(--space-5);
   }
 
@@ -17,35 +24,14 @@
   &__body {
     display: grid;
     gap: var(--space-4);
+    align-items: start;
   }
 
   &__identity {
     display: flex;
+    min-width: 0;
     align-items: center;
     gap: var(--space-4);
-  }
-
-  &__photo,
-  &__avatar {
-    display: grid;
-    place-items: center;
-    width: 5rem;
-    height: 5rem;
-    border-radius: 1.25rem;
-    background:
-      radial-gradient(circle at top, rgb(201 162 39 / 16%), transparent 62%),
-      var(--color-surface-raised);
-  }
-
-  &__photo {
-    object-fit: cover;
-  }
-
-  &__avatar {
-    color: var(--color-brand-strong);
-    font-family: var(--font-family-heading);
-    font-size: 1.35rem;
-    font-weight: 800;
   }
 
   &__copy {
@@ -62,6 +48,7 @@
       color: var(--color-text-strong);
       font-size: clamp(1.4rem, 2vw + 0.6rem, 2rem);
       letter-spacing: -0.04em;
+      line-height: 0.95;
     }
 
     p {
@@ -84,6 +71,7 @@
   &__meta {
     display: grid;
     gap: var(--space-2);
+    min-width: 0;
     padding: var(--space-4);
     border: 1px solid var(--color-border-subtle);
     border-radius: 1.25rem;
@@ -107,7 +95,16 @@
   }
 }
 
-@media (min-width: 48rem) {
+@container (max-width: 28rem) {
+  .fantasy-mvp-card {
+    &__identity {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+}
+
+@container (min-width: 38rem) {
   .fantasy-mvp-card {
     &__body {
       grid-template-columns: minmax(0, 1fr) minmax(16rem, 18rem);

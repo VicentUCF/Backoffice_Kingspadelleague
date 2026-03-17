@@ -46,6 +46,17 @@
     }
   </section>
 
+  <app-fantasy-league-section-nav
+    activeSection="team"
+    [leagueName]="viewModel.leagueName"
+    [marketLink]="viewModel.marketLink"
+    [overviewLink]="viewModel.overviewLink"
+    [rankingLink]="viewModel.rankingLink"
+    [resultsLink]="viewModel.resultsLink"
+    [teamDraftLink]="viewModel.teamCreationLink"
+    [teamLink]="viewModel.teamLink"
+  />
+
   @if (viewModel.team; as team) {
     <section class="fantasy-team-page__planner c-surface-card">
       <header class="fantasy-team-page__planner-header">
@@ -64,7 +75,7 @@
       </header>
 
       <div class="fantasy-team-page__planner-grid">
-        <article class="fantasy-team-page__panel">
+        <article class="fantasy-team-page__panel fantasy-team-page__panel--starters">
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Titulares</p>
@@ -73,24 +84,34 @@
             <span class="fantasy-team-page__panel-chip">{{ team.starters.length }}</span>
           </header>
 
-          <ul aria-label="Titulares fantasy" class="fantasy-team-page__roster-list">
+          <div class="fantasy-team-page__starter-summary">
+            <article class="fantasy-team-page__summary-card">
+              <span>Capitán</span>
+              <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
+              <small>Jugador que multiplica x2</small>
+            </article>
+            <article class="fantasy-team-page__summary-card">
+              <span>Valor</span>
+              <strong>{{ team.teamValueLabel }}</strong>
+              <small>{{ team.budgetRemainingLabel }} libres</small>
+            </article>
+            <article class="fantasy-team-page__summary-card">
+              <span>Estructura</span>
+              <strong>{{ team.formationLabel }}</strong>
+              <small>{{ team.compositionLabel }}</small>
+            </article>
+          </div>
+
+          <ul aria-label="Titulares fantasy" class="fantasy-team-page__starter-grid">
             @for (player of team.starters; track player.id) {
               <li class="fantasy-team-page__roster-card">
                 <div class="fantasy-team-page__roster-main">
-                  @if (player.photoPath) {
-                    <img
-                      [ngSrc]="player.photoPath"
-                      [alt]="player.name"
-                      class="fantasy-team-page__roster-photo"
-                      decoding="async"
-                      height="64"
-                      width="64"
-                    />
-                  } @else {
-                    <span aria-hidden="true" class="fantasy-team-page__roster-avatar">
-                      {{ player.avatar }}
-                    </span>
-                  }
+                  <app-fantasy-player-avatar
+                    [altText]="player.name"
+                    [initials]="player.avatar"
+                    [photoPath]="player.photoPath"
+                    size="md"
+                  />
 
                   <div class="fantasy-team-page__roster-copy">
                     <div class="fantasy-team-page__roster-heading">
@@ -130,33 +151,30 @@
           </ul>
         </article>
 
-        <article class="fantasy-team-page__panel">
+        <article class="fantasy-team-page__panel fantasy-team-page__panel--rotation">
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Rotación</p>
-              <h3>Banquillo y cobertura</h3>
+              <h3>Banquillo corto</h3>
             </div>
             <span class="fantasy-team-page__panel-chip">{{ team.bench.length }}</span>
           </header>
 
-          <ul aria-label="Suplentes fantasy" class="fantasy-team-page__roster-list">
+          <p class="fantasy-team-page__rotation-copy">
+            Aquí solo tienes dos piezas de apoyo. La idea es ver cobertura rápida y entrar a editar
+            plantilla si quieres mover jerarquías.
+          </p>
+
+          <ul aria-label="Suplentes fantasy" class="fantasy-team-page__bench-list">
             @for (player of team.bench; track player.id) {
               <li class="fantasy-team-page__roster-card fantasy-team-page__roster-card--bench">
                 <div class="fantasy-team-page__roster-main">
-                  @if (player.photoPath) {
-                    <img
-                      [ngSrc]="player.photoPath"
-                      [alt]="player.name"
-                      class="fantasy-team-page__roster-photo"
-                      decoding="async"
-                      height="64"
-                      width="64"
-                    />
-                  } @else {
-                    <span aria-hidden="true" class="fantasy-team-page__roster-avatar">
-                      {{ player.avatar }}
-                    </span>
-                  }
+                  <app-fantasy-player-avatar
+                    [altText]="player.name"
+                    [initials]="player.avatar"
+                    [photoPath]="player.photoPath"
+                    size="md"
+                  />
 
                   <div class="fantasy-team-page__roster-copy">
                     <h4>
@@ -180,8 +198,6 @@
                   </div>
                 </div>
 
-                <p class="fantasy-team-page__roster-note">{{ player.scoutingNote }}</p>
-
                 <div class="fantasy-team-page__roster-footer">
                   <span>{{ player.priceLabel }}</span>
                   <span>{{ player.totalPointsLabel }}</span>
@@ -189,6 +205,21 @@
               </li>
             }
           </ul>
+
+          <dl class="fantasy-team-page__rotation-metrics">
+            <div>
+              <dt>Puntos</dt>
+              <dd>{{ team.totalPointsLabel }}</dd>
+            </div>
+            <div>
+              <dt>Jornada</dt>
+              <dd>{{ team.matchdayPointsLabel }}</dd>
+            </div>
+            <div>
+              <dt>Invertido</dt>
+              <dd>{{ team.budgetSpentLabel }}</dd>
+            </div>
+          </dl>
         </article>
       </div>
     </section>

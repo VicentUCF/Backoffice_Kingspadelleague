@@ -1,7 +1,9 @@
 import {
   type CreateFantasyLeagueCommand,
+  type FantasyHomeExperience,
   type FantasyLeague,
   type FantasyLeagueDashboard,
+  type FantasyLeagueResults,
   type FantasyPlayer,
   type SaveFantasyTeamCommand,
 } from '@features/fantasy/domain/entities/fantasy.models';
@@ -22,6 +24,17 @@ class FantasyRepositoryStub extends FantasyRepository {
   }
 
   override async loadLeagueDashboard(_leagueId: string): Promise<FantasyLeagueDashboard | null> {
+    return null;
+  }
+
+  override async loadHomeExperience(): Promise<FantasyHomeExperience> {
+    return {
+      primaryLeague: null,
+      secondaryLeagues: [],
+    };
+  }
+
+  override async loadLeagueResults(_leagueId: string): Promise<FantasyLeagueResults | null> {
     return null;
   }
 

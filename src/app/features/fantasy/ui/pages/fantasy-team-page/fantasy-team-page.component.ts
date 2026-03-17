@@ -12,13 +12,22 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ArrowRight, LucideAngularModule, ShieldAlert, Users } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
+import { FantasyLeagueSectionNavComponent } from '@features/fantasy/ui/components/fantasy-league-section-nav/fantasy-league-section-nav.component';
+import { FantasyPlayerAvatarComponent } from '@features/fantasy/ui/components/fantasy-player-avatar/fantasy-player-avatar.component';
 import { FantasyLeagueDashboardStore } from '@features/fantasy/ui/state/fantasy-league-dashboard.store';
 import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-fantasy-team-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [EmptyStateComponent, LucideAngularModule, NgOptimizedImage, RouterLink],
+  imports: [
+    EmptyStateComponent,
+    FantasyLeagueSectionNavComponent,
+    FantasyPlayerAvatarComponent,
+    LucideAngularModule,
+    NgOptimizedImage,
+    RouterLink,
+  ],
   providers: [FantasyLeagueDashboardStore],
   host: { class: 'fantasy-page fantasy-team-page o-container o-stack' },
   templateUrl: './fantasy-team-page.component.html',

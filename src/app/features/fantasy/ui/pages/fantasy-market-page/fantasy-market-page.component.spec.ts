@@ -28,6 +28,27 @@ describe('FantasyMarketPageComponent', () => {
     expect(screen.queryByRole('link', { name: /Adri Alvarez/i })).toBeNull();
   });
 
+  it('renders the market cockpit and shows a confirmation dialog before selling', async () => {
+    await render(FantasyMarketPageComponent, {
+      providers: [
+        provideFantasyFeature(),
+        provideRouter([]),
+        createActivatedRouteProvider('league-1'),
+      ],
+    });
+
+    await screen.findByRole('heading', { name: /Mercado · Amigos del curro/i });
+
+    expect(screen.getByRole('heading', { name: /Cockpit de mercado/i })).toBeVisible();
+    expect(screen.getByRole('heading', { name: /Tu bloque actual/i })).toBeVisible();
+
+    fireEvent.click(screen.getAllByRole('button', { name: /Vender/i })[0]!);
+
+    expect(await screen.findByRole('heading', { name: /Vender a/i })).toBeVisible();
+    expect(screen.getByText(/Tu presupuesto subirá a/i)).toBeVisible();
+    expect(screen.getByRole('button', { name: /Confirmar venta/i })).toBeVisible();
+  });
+
   it('has no accessibility violations in the market page', async () => {
     const { container } = await render(FantasyMarketPageComponent, {
       providers: [

@@ -1,0 +1,46 @@
+<article class="fantasy-dashboard-market-snapshot-card__surface c-surface-card">
+  <header class="fantasy-dashboard-market-snapshot-card__header">
+    <div>
+      <p class="fantasy-dashboard-market-snapshot-card__eyebrow">
+        <lucide-angular [img]="walletIcon" [size]="16" aria-hidden="true" />
+        <span>Mercado</span>
+      </p>
+      <h2>{{ snapshot().title }}</h2>
+      <p>{{ snapshot().description }}</p>
+    </div>
+  </header>
+
+  <dl class="fantasy-dashboard-market-snapshot-card__metrics">
+    @for (metric of snapshot().metrics; track metric.label) {
+      <div class="fantasy-dashboard-market-snapshot-card__metric">
+        <dt>{{ metric.label }}</dt>
+        <dd>
+          <span class="fantasy-dashboard-market-snapshot-card__metric-value">{{
+            metric.value
+          }}</span>
+          <span class="fantasy-dashboard-market-snapshot-card__metric-supporting">
+            {{ metric.supportingLabel }}
+          </span>
+        </dd>
+      </div>
+    }
+  </dl>
+
+  <nav
+    aria-label="Acciones del mercado fantasy"
+    class="fantasy-dashboard-market-snapshot-card__actions"
+  >
+    <a
+      class="fantasy-dashboard-market-snapshot-card__action fantasy-dashboard-market-snapshot-card__action--primary"
+      [routerLink]="snapshot().primaryAction.href"
+    >
+      {{ snapshot().primaryAction.label }}
+    </a>
+    <a
+      class="fantasy-dashboard-market-snapshot-card__action"
+      [routerLink]="snapshot().secondaryAction.href"
+    >
+      {{ snapshot().secondaryAction.label }}
+    </a>
+  </nav>
+</article>

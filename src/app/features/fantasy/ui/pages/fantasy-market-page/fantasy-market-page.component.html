@@ -39,12 +39,127 @@
       </div>
       <div class="fantasy-market-page__fact">
         <dt>Objetivos</dt>
-        <dd>{{ store.affordablePlayersCountLabel() }}</dd>
+        <dd>{{ store.teamSlotsLabel() }}</dd>
       </div>
     </dl>
   </section>
 
+  <app-fantasy-league-section-nav
+    activeSection="market"
+    [leagueName]="viewModel.leagueName"
+    [marketLink]="viewModel.marketLink"
+    [overviewLink]="viewModel.overviewLink"
+    [rankingLink]="viewModel.rankingLink"
+    [resultsLink]="viewModel.resultsLink"
+    [teamDraftLink]="viewModel.teamCreationLink"
+    [teamLink]="viewModel.teamLink"
+  />
+
   <div class="fantasy-market-page__content">
+    @if (store.transactionMessage()) {
+      <p aria-live="polite" class="fantasy-market-page__feedback" role="status">
+        {{ store.transactionMessage() }}
+      </p>
+    }
+
+    <section
+      class="fantasy-market-page__cockpit c-surface-card"
+      aria-labelledby="fantasy-market-cockpit"
+    >
+      <header class="fantasy-market-page__cockpit-header">
+        <div>
+          <p class="fantasy-market-page__section-kicker">Cockpit de mercado</p>
+          <h2 id="fantasy-market-cockpit">Cockpit de mercado</h2>
+          <p>Controla saldo, huecos y bloque actual antes de cerrar cada movimiento del mercado.</p>
+        </div>
+
+        <div class="fantasy-market-page__cockpit-actions">
+          <a class="fantasy-market-page__inline-link" [routerLink]="viewModel.teamLink">
+            Ver mi equipo
+          </a>
+          <button
+            type="button"
+            class="fantasy-market-page__inline-button"
+            [disabled]="!store.canResetFilters()"
+            (click)="resetFilters()"
+          >
+            Limpiar filtros
+          </button>
+        </div>
+      </header>
+
+      <div class="fantasy-market-page__cockpit-grid">
+        <article class="fantasy-market-page__cockpit-card">
+          <span>Presupuesto</span>
+          <strong>{{ store.budgetRemainingLabel() }}</strong>
+          <small>Saldo real disponible para fichar</small>
+        </article>
+        <article class="fantasy-market-page__cockpit-card">
+          <span>Plantilla</span>
+          <strong>{{ store.teamSlotsLabel() }}</strong>
+          <small>{{ store.ownedPlayersCountLabel() }}</small>
+        </article>
+        <article class="fantasy-market-page__cockpit-card">
+          <span>Asequibles</span>
+          <strong>{{ store.affordablePlayersCountLabel() }}</strong>
+          <small>Según los filtros activos</small>
+        </article>
+        <article class="fantasy-market-page__cockpit-card">
+          <span>Mercado</span>
+          <strong>{{ viewModel.marketStatusLabel }}</strong>
+          <small>{{ viewModel.marketStatusDescription }}</small>
+        </article>
+      </div>
+
+      @if (store.hasOwnedPlayers()) {
+        <section aria-labelledby="fantasy-market-roster" class="fantasy-market-page__roster-strip">
+          <header class="fantasy-market-page__roster-header">
+            <div>
+              <p class="fantasy-market-page__section-kicker">Tu bloque actual</p>
+              <h3 id="fantasy-market-roster">Tu bloque actual</h3>
+              <p>Jugadores que ya controlas sin salir de la vista de mercado.</p>
+            </div>
+            <p>{{ store.ownedPlayersCountLabel() }}</p>
+          </header>
+
+          <ul class="fantasy-market-page__roster-list" role="list">
+            @for (player of store.ownedPlayers(); track player.id) {
+              <li>
+                <article class="fantasy-market-page__roster-card">
+                  <div class="fantasy-market-page__roster-main">
+                    <app-fantasy-player-avatar
+                      [altText]="player.name"
+                      [initials]="player.avatar"
+                      [photoPath]="player.photoPath"
+                      size="sm"
+                    />
+
+                    <div class="fantasy-market-page__roster-copy">
+                      <strong>{{ player.name }}</strong>
+                      <span>{{ player.teamName }}</span>
+                      <small>{{ player.priceLabel }}</small>
+                    </div>
+                  </div>
+
+                  <div class="fantasy-market-page__roster-actions">
+                    <button
+                      type="button"
+                      class="fantasy-market-page__micro-action fantasy-market-page__micro-action--danger"
+                      [disabled]="player.actionDisabled"
+                      (click)="requestSellPlayer(player)"
+                    >
+                      Vender
+                    </button>
+                    <a [routerLink]="player.detailLink">Ficha</a>
+                  </div>
+                </article>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </section>
+
     <section
       class="fantasy-market-page__filters c-surface-card"
       aria-labelledby="fantasy-market-filters"
@@ -57,7 +172,18 @@
           </p>
           <h2 id="fantasy-market-filters">Ajusta tu búsqueda</h2>
         </div>
-        <p role="status">{{ store.resultsLabel() }}</p>
+        <div class="fantasy-market-page__filters-meta">
+          <p role="status">{{ store.resultsLabel() }}</p>
+          @if (store.canResetFilters()) {
+            <button
+              type="button"
+              class="fantasy-market-page__inline-button"
+              (click)="resetFilters()"
+            >
+              Resetear
+            </button>
+          }
+        </div>
       </div>
 
       <div class="fantasy-market-page__filters-grid">
@@ -124,25 +250,17 @@
         class="fantasy-market-page__player-grid"
         role="list"
       >
-        @for (player of store.filteredPlayers(); track player.id) {
+        @for (player of store.marketPlayers(); track player.id) {
           <li>
             <article class="fantasy-market-page__player-card c-surface-card">
               <div class="fantasy-market-page__player-header">
                 <div class="fantasy-market-page__player-identity">
-                  @if (player.photoPath) {
-                    <img
-                      [ngSrc]="player.photoPath"
-                      [alt]="player.name"
-                      class="fantasy-market-page__player-photo"
-                      decoding="async"
-                      height="72"
-                      width="72"
-                    />
-                  } @else {
-                    <span aria-hidden="true" class="fantasy-market-page__player-avatar">
-                      {{ player.avatar }}
-                    </span>
-                  }
+                  <app-fantasy-player-avatar
+                    [altText]="player.name"
+                    [initials]="player.avatar"
+                    [photoPath]="player.photoPath"
+                    size="lg"
+                  />
 
                   <div class="fantasy-market-page__player-copy">
                     <div class="fantasy-market-page__player-heading">
@@ -194,13 +312,32 @@
               </dl>
 
               <div class="fantasy-market-page__player-actions">
-                <a [routerLink]="player.detailLink">Ver ficha</a>
                 @if (player.isInMyTeam) {
+                  <button
+                    type="button"
+                    class="fantasy-market-page__action-button fantasy-market-page__action-button--danger"
+                    [disabled]="player.actionDisabled"
+                    (click)="requestSellPlayer(player)"
+                  >
+                    {{ player.actionLabel }}
+                  </button>
                   <a [routerLink]="viewModel.teamLink">Ver en mi equipo</a>
                 } @else {
-                  <a [routerLink]="viewModel.teamCreationLink">Añadir a borrador</a>
+                  <button
+                    type="button"
+                    class="fantasy-market-page__action-button fantasy-market-page__action-button--primary"
+                    [disabled]="player.actionDisabled"
+                    (click)="requestBuyPlayer(player)"
+                  >
+                    {{ player.actionLabel }}
+                  </button>
                 }
+                <a [routerLink]="player.detailLink">Ver ficha</a>
               </div>
+
+              @if (player.actionHint; as actionHint) {
+                <p class="fantasy-market-page__action-hint">{{ actionHint }}</p>
+              }
             </article>
           </li>
         }
@@ -210,6 +347,19 @@
         [description]="'Prueba con otro filtro o limpia la búsqueda para recuperar el roster completo.'"
         eyebrow="Mercado"
         title="No hay jugadores para esta búsqueda"
+      />
+    }
+
+    @if (confirmState(); as confirmState) {
+      <app-confirm-action-dialog
+        cancelLabel="Cancelar"
+        [confirmLabel]="confirmState.confirmLabel"
+        [confirmTone]="confirmState.confirmTone"
+        [description]="confirmState.description"
+        [isOpen]="true"
+        [title]="confirmState.title"
+        (cancelled)="closeConfirmation()"
+        (confirmed)="confirmTransaction()"
       />
     }
   </div>

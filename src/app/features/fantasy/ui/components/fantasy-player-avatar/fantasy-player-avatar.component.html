@@ -1,0 +1,17 @@
+<span class="fantasy-player-avatar__surface" [style.--avatar-size]="sizeCssValue()">
+  @if (resolvedPhotoPath(); as resolvedPhotoPath) {
+    <img
+      [ngSrc]="resolvedPhotoPath"
+      [alt]="altText()"
+      [height]="dimension()"
+      [width]="dimension()"
+      class="fantasy-player-avatar__image"
+      decoding="async"
+      (error)="handleImageError()"
+    />
+  } @else {
+    <span aria-hidden="true" class="fantasy-player-avatar__fallback">
+      <lucide-angular [img]="userIcon" [size]="fallbackIconSize()" aria-hidden="true" />
+    </span>
+  }
+</span>

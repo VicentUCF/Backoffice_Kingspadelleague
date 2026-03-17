@@ -10,29 +10,29 @@ import {
 import { toFantasyLeagueDashboardViewModel } from './fantasy-league-dashboard.viewmodel';
 
 describe('toFantasyLeagueDashboardViewModel', () => {
-  it('maps the preseason snapshot into the dashboard view model', () => {
+  it('maps the competitive snapshot into the dashboard view model', () => {
     const viewModel = toFantasyLeagueDashboardViewModel(
       FANTASY_DASHBOARD_BY_LEAGUE_SEED['league-1']!,
     );
 
     expect(viewModel.leagueName).toBe('Amigos del curro');
-    expect(viewModel.phaseLabel).toBe('Pretemporada');
-    expect(viewModel.marketStatusLabel).toBe('Mercado de pretemporada abierto.');
-    expect(viewModel.rankingTitle).toBe('Ranking provisional por valor de plantilla');
+    expect(viewModel.phaseLabel).toBe('Mercado abierto');
+    expect(viewModel.marketStatusLabel).toBe('Mercado abierto y equipo editable.');
+    expect(viewModel.rankingTitle).toBe('Clasificación fantasy');
     expect(viewModel.team?.formationLabel).toBe('4 titulares · 2 rotaciones');
     expect(viewModel.team?.playersCountLabel).toBe('6 jugadores');
     expect(viewModel.team?.starters).toHaveLength(4);
     expect(viewModel.team?.bench).toHaveLength(2);
-    expect(viewModel.spotlight?.title).toBe('Jugador a seguir');
-    expect(viewModel.spotlight?.badgeLabel).toBe('Jugador mejor cotizado');
-    expect(viewModel.spotlight?.supportingLabel).toContain('pretemporada');
+    expect(viewModel.spotlight?.title).toBe('MVP de la jornada');
+    expect(viewModel.spotlight?.badgeLabel).toMatch(/\d+ pts/);
+    expect(viewModel.spotlight?.supportingLabel).toBeTruthy();
     expect(viewModel.topRankingEntries[0]).toMatchObject({
       rankLabel: '#1',
-      managerName: 'Vicent',
+      managerName: 'Marta',
     });
     expect(viewModel.topRankingEntries[1]).toMatchObject({
       rankLabel: '#2',
-      teamName: 'Drive de Oficina',
+      teamName: 'Rivales del Viernes',
     });
     expect(viewModel.marketPlayers.some((player) => player.name === 'Vicent Ciscar')).toBe(true);
   });

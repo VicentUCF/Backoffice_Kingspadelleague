@@ -79,6 +79,26 @@
     }
   }
 
+  &__action,
+  &__inline-link,
+  &__inline-button,
+  &__micro-action,
+  &__action-button,
+  &__player-copy a,
+  &__player-actions a,
+  &__roster-actions a {
+    transition:
+      transform 160ms ease,
+      border-color 160ms ease,
+      background 160ms ease,
+      color 160ms ease;
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--color-brand) 70%, white);
+      outline-offset: 3px;
+    }
+  }
+
   &__hero-facts {
     display: grid;
     gap: var(--space-3);
@@ -114,6 +134,197 @@
   &__content {
     display: grid;
     gap: var(--space-5);
+  }
+
+  &__cockpit,
+  &__roster-strip {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__cockpit {
+    padding: var(--space-5);
+  }
+
+  &__cockpit-header,
+  &__roster-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    h2,
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h2,
+    h3 {
+      color: var(--color-text-strong);
+      letter-spacing: -0.04em;
+    }
+
+    h2 {
+      font-size: 1.6rem;
+    }
+
+    h3 {
+      font-size: 1.1rem;
+    }
+
+    p:last-child {
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+  }
+
+  &__cockpit-actions,
+  &__filters-meta,
+  &__roster-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  &__cockpit-grid {
+    display: grid;
+    gap: var(--space-3);
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+  }
+
+  &__cockpit-card {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border-radius: 1.25rem;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background:
+      radial-gradient(circle at top left, rgb(201 162 39 / 0.1), transparent 60%),
+      rgb(255 255 255 / 0.03);
+
+    span,
+    small {
+      color: var(--color-text-muted);
+    }
+
+    strong {
+      color: var(--color-text-strong);
+      font-size: 1.15rem;
+      letter-spacing: -0.03em;
+    }
+  }
+
+  &__inline-link,
+  &__inline-button,
+  &__micro-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.7rem;
+    padding-inline: var(--space-4);
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__inline-link,
+  &__micro-action {
+    border: 1px solid var(--color-border-subtle);
+    background: rgb(255 255 255 / 0.03);
+    color: var(--color-text-strong);
+  }
+
+  &__inline-button {
+    border: 1px solid var(--color-border-subtle);
+    background: transparent;
+    color: var(--color-text-muted);
+
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+
+  &__inline-link,
+  &__inline-button,
+  &__micro-action {
+    &:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+  }
+
+  &__micro-action {
+    min-height: 2.4rem;
+    padding-inline: var(--space-3);
+
+    &--danger {
+      background: rgb(248 113 113 / 0.14);
+      color: #fca5a5;
+    }
+  }
+
+  &__roster-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__roster-card {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.03);
+  }
+
+  &__roster-main {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__roster-copy {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+
+    strong,
+    span,
+    small {
+      margin: 0;
+      min-width: 0;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+    }
+
+    span,
+    small {
+      overflow: hidden;
+      color: var(--color-text-muted);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__feedback {
+    margin: 0;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--color-brand) 24%, transparent);
+    border-radius: 1rem;
+    background: rgb(201 162 39 / 0.08);
+    color: var(--color-text-strong);
+    font-weight: 700;
   }
 
   &__filters {
@@ -166,29 +377,6 @@
     display: flex;
     gap: var(--space-4);
     align-items: flex-start;
-  }
-
-  &__player-photo,
-  &__player-avatar {
-    display: grid;
-    place-items: center;
-    width: 4.5rem;
-    height: 4.5rem;
-    border-radius: 1.25rem;
-    background:
-      radial-gradient(circle at top, rgb(201 162 39 / 0.18), transparent 62%),
-      var(--color-surface-raised);
-  }
-
-  &__player-photo {
-    object-fit: cover;
-  }
-
-  &__player-avatar {
-    color: var(--color-brand-strong);
-    font-family: var(--font-family-heading);
-    font-size: 1.25rem;
-    font-weight: 800;
   }
 
   &__player-copy {
@@ -320,12 +508,46 @@
     flex-wrap: wrap;
     gap: var(--space-3);
     margin-top: auto;
+    align-items: center;
 
     a {
       color: var(--color-text-strong);
       font-weight: 700;
       text-decoration: none;
     }
+  }
+
+  &__action-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 2.7rem;
+    padding-inline: var(--space-4);
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-weight: 800;
+
+    &--primary {
+      background: var(--color-brand);
+      color: var(--color-brand-contrast);
+    }
+
+    &--danger {
+      background: rgb(248 113 113 / 0.14);
+      color: #fca5a5;
+    }
+
+    &:disabled {
+      opacity: 0.45;
+    }
+  }
+
+  &__action-hint {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    line-height: 1.45;
   }
 }
 
@@ -344,8 +566,38 @@
       display: grid;
     }
 
-    &__action {
+    &__action,
+    &__inline-link,
+    &__inline-button {
       width: 100%;
+    }
+
+    &__cockpit,
+    &__filters,
+    &__player-card {
+      padding: var(--space-4);
+    }
+
+    &__roster-card,
+    &__mover-card,
+    &__player-actions {
+      align-items: stretch;
+    }
+
+    &__roster-card,
+    &__player-header,
+    &__player-identity {
+      flex-direction: column;
+    }
+
+    &__roster-actions,
+    &__player-actions {
+      width: 100%;
+
+      a,
+      button {
+        width: 100%;
+      }
     }
   }
 }
@@ -365,6 +617,10 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    &__roster-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
     &__player-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
@@ -377,8 +633,16 @@
 
 @media (min-width: 80rem) {
   .fantasy-market-page {
+    &__content {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     &__filters-grid {
       grid-template-columns: minmax(0, 2fr) repeat(4, minmax(0, 1fr));
+    }
+
+    &__roster-list {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
 
     &__player-grid {

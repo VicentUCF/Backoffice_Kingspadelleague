@@ -71,6 +71,13 @@ export const FANTASY_ROUTES: Routes = [
           ),
       },
       {
+        path: 'leagues/:leagueId/results',
+        loadComponent: () =>
+          import('./pages/fantasy-league-results-page/fantasy-league-results-page.component').then(
+            (module) => module.FantasyLeagueResultsPageComponent,
+          ),
+      },
+      {
         path: 'players/:playerId',
         loadComponent: () =>
           import('./pages/fantasy-player-profile-page/fantasy-player-profile-page.component').then(

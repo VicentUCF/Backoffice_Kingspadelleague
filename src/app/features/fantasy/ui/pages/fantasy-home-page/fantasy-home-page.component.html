@@ -1,53 +1,265 @@
-<header class="fantasy-home-page__hero">
-  <p class="fantasy-home-page__eyebrow">Fantasy KingsPadelLeague</p>
-  <h1>Prepara tu plantilla antes de que empiece la liga.</h1>
-  <p>
-    Trabaja con el roster real del proyecto, abre ligas privadas y afina el mercado y tu equipo
-    desde pretemporada.
-  </p>
-  <nav aria-label="Acciones principales de fantasy" class="fantasy-home-page__actions">
-    <a
-      class="fantasy-home-page__action fantasy-home-page__action--primary"
-      routerLink="/fantasy/leagues/create"
-    >
-      Crear liga
-    </a>
-    <a class="fantasy-home-page__action" routerLink="/fantasy/leagues/join">Unirse a una liga</a>
-  </nav>
-</header>
+<div class="fantasy-home-page o-container o-stack">
+  @if (store.isLoading()) {
+    <p aria-live="polite" role="status">Cargando experiencia semanal fantasy...</p>
+  } @else if (store.errorMessage()) {
+    <app-empty-state
+      [actions]="emptyStateActions"
+      [description]="store.errorMessage() ?? ''"
+      [icon]="trophyIcon"
+      eyebrow="Fantasy"
+      layout="feature"
+      title="No hemos podido cargar tu semana fantasy"
+    />
+  } @else if (store.viewModel(); as viewModel) {
+    <section class="fantasy-home-page__hero" [attr.data-phase]="viewModel.primaryLeague.phase">
+      <div class="fantasy-home-page__hero-copy">
+        <p class="fantasy-home-page__eyebrow">
+          {{ viewModel.primaryLeague.phaseLabel }} · {{ viewModel.primaryLeague.leagueName }}
+        </p>
+        <h1>{{ viewModel.primaryLeague.title }}</h1>
+        <p class="fantasy-home-page__hero-description">{{ viewModel.primaryLeague.summary }}</p>
 
-@if (store.isLoading()) {
-  <p aria-live="polite" role="status">Cargando tus ligas fantasy...</p>
-} @else if (store.errorMessage()) {
-  <app-empty-state
-    [actions]="emptyStateActions"
-    [description]="store.errorMessage() ?? ''"
-    [icon]="trophyIcon"
-    eyebrow="Fantasy"
-    layout="feature"
-    title="No hemos podido cargar tus ligas"
-  />
-} @else if (store.hasLeagues()) {
-  <section aria-labelledby="fantasy-home-leagues" class="o-stack o-stack--compact">
-    <h2 id="fantasy-home-leagues">Tus ligas activas</h2>
-    <div class="fantasy-home-page__leagues-grid o-grid o-grid--cards">
-      @for (league of store.leagues(); track league.id) {
-        <app-fantasy-league-card [league]="league" />
+        <div class="fantasy-home-page__hero-meta">
+          <span class="fantasy-home-page__badge">{{ viewModel.primaryLeague.leagueCode }}</span>
+          @if (viewModel.primaryLeague.countdown; as countdown) {
+            <span
+              class="fantasy-home-page__badge fantasy-home-page__badge--countdown"
+              [attr.data-urgent]="countdown.isUrgent ? 'true' : null"
+            >
+              {{ countdown.label }}
+            </span>
+          }
+        </div>
+
+        <nav aria-label="Acciones principales fantasy" class="fantasy-home-page__actions">
+          @for (action of viewModel.primaryLeague.actions; track action.href) {
+            <a
+              class="fantasy-home-page__action"
+              [class.fantasy-home-page__action--primary]="action.tone === 'primary'"
+              [routerLink]="action.href"
+            >
+              {{ action.label }}
+            </a>
+          }
+        </nav>
+      </div>
+
+      <article class="fantasy-home-page__hero-panel c-surface-card">
+        <header class="fantasy-home-page__panel-header">
+          <div>
+            <p class="fantasy-home-page__section-kicker">Estado actual</p>
+            <h2>{{ viewModel.primaryLeague.teamSummary.teamName }}</h2>
+          </div>
+        </header>
+
+        <div class="fantasy-home-page__impact-grid">
+          @for (metric of viewModel.primaryLeague.statusMetrics; track metric.label) {
+            <article class="fantasy-home-page__impact-card" [attr.data-tone]="metric.tone">
+              <span>{{ metric.label }}</span>
+              <strong>{{ metric.value }}</strong>
+              <small>{{ metric.supportingText }}</small>
+            </article>
+          }
+        </div>
+
+        <div class="fantasy-home-page__team-summary">
+          <strong>{{ viewModel.primaryLeague.teamSummary.captainLabel }}</strong>
+          <p>{{ viewModel.primaryLeague.teamSummary.subtitle }}</p>
+        </div>
+      </article>
+
+      @if (viewModel.primaryLeague.predictionOutcome; as predictionOutcome) {
+        <article
+          class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--prediction c-surface-card"
+        >
+          <header class="fantasy-home-page__panel-header">
+            <div>
+              <p class="fantasy-home-page__section-kicker">Bonus de porra</p>
+              <h2>{{ predictionOutcome.headline }}</h2>
+            </div>
+          </header>
+
+          <div class="fantasy-home-page__prediction-grid">
+            <article class="fantasy-home-page__prediction-card">
+              <span>Aciertos</span>
+              <strong>{{ predictionOutcome.hitsLabel }}</strong>
+            </article>
+            <article class="fantasy-home-page__prediction-card">
+              <span>Bonus</span>
+              <strong>{{ predictionOutcome.bonusLabel }}</strong>
+            </article>
+          </div>
+
+          <p class="fantasy-home-page__prediction-copy">{{ predictionOutcome.lockedMessage }}</p>
+          @if (predictionOutcome.sundayChangeNote; as sundayChangeNote) {
+            <p class="fantasy-home-page__prediction-note">{{ sundayChangeNote }}</p>
+          }
+        </article>
+      } @else if (viewModel.primaryLeague.countdown; as countdown) {
+        <article
+          class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--countdown c-surface-card"
+        >
+          <header class="fantasy-home-page__panel-header">
+            <div>
+              <p class="fantasy-home-page__section-kicker">{{ countdown.label }}</p>
+              <h2>La ventana de decisión sigue abierta</h2>
+            </div>
+          </header>
+
+          <p
+            class="fantasy-home-page__countdown"
+            [attr.data-urgent]="countdown.isUrgent ? 'true' : null"
+          >
+            {{ formatCountdown(countdown.targetIso) }}
+          </p>
+          <p class="fantasy-home-page__countdown-supporting">
+            {{ viewModel.primaryLeague.secondaryNote }}
+          </p>
+        </article>
       }
+    </section>
+
+    <app-fantasy-league-section-nav
+      activeSection="overview"
+      [leagueName]="viewModel.primaryLeague.leagueName"
+      [marketLink]="viewModel.primaryLeague.marketLink"
+      [overviewLink]="viewModel.primaryLeague.overviewLink"
+      [rankingLink]="viewModel.primaryLeague.rankingLink"
+      [resultsLink]="viewModel.primaryLeague.resultsLink"
+      [teamDraftLink]="viewModel.primaryLeague.teamDraftLink"
+      [teamLink]="viewModel.primaryLeague.teamLink"
+    />
+
+    @if (viewModel.primaryLeague.countdown && viewModel.primaryLeague.predictionOutcome) {
+      <section class="fantasy-home-page__countdown-bar c-surface-card">
+        <div>
+          <p class="fantasy-home-page__section-kicker">
+            {{ viewModel.primaryLeague.countdown.label }}
+          </p>
+          <strong>{{ formatCountdown(viewModel.primaryLeague.countdown.targetIso) }}</strong>
+        </div>
+        <p>{{ viewModel.primaryLeague.secondaryNote }}</p>
+      </section>
+    }
+
+    <div class="fantasy-home-page__content-grid">
+      <section class="fantasy-home-page__panel fantasy-home-page__panel--market c-surface-card">
+        <header class="fantasy-home-page__panel-header">
+          <div>
+            <p class="fantasy-home-page__section-kicker">
+              {{
+                viewModel.primaryLeague.phase === 'matchday-finished'
+                  ? 'Mercado post-jornada'
+                  : 'Mercado caliente'
+              }}
+            </p>
+            <h2>
+              {{
+                viewModel.primaryLeague.phase === 'matchday-finished'
+                  ? 'El nuevo meta ya está en marcha'
+                  : 'Jugadores que pueden mover tu decisión'
+              }}
+            </h2>
+          </div>
+        </header>
+
+        <div class="fantasy-home-page__market-sections">
+          @for (section of viewModel.primaryLeague.marketSections; track section.id) {
+            <article class="fantasy-home-page__market-section">
+              <header class="fantasy-home-page__market-header">
+                <div>
+                  <h3>{{ section.title }}</h3>
+                  <p>{{ section.description }}</p>
+                </div>
+              </header>
+
+              <ul class="fantasy-home-page__mover-list" role="list">
+                @for (mover of section.movers; track mover.detailLink) {
+                  <li>
+                    <article class="fantasy-home-page__mover-card">
+                      <div class="fantasy-home-page__mover-main">
+                        <app-fantasy-player-avatar
+                          [altText]="mover.name"
+                          [initials]="mover.avatar"
+                          [photoPath]="mover.photoPath"
+                          size="md"
+                        />
+
+                        <div class="fantasy-home-page__mover-copy">
+                          <h4>
+                            <a [routerLink]="mover.detailLink">{{ mover.name }}</a>
+                          </h4>
+                          <p>{{ mover.teamName }}</p>
+                          <span>{{ mover.recentPointsLabel }}</span>
+                        </div>
+                      </div>
+
+                      <div class="fantasy-home-page__mover-stats">
+                        <span [attr.data-tone]="mover.priceChangeTone">{{
+                          mover.priceChangeLabel
+                        }}</span>
+                      </div>
+                    </article>
+                  </li>
+                }
+              </ul>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section class="fantasy-home-page__panel fantasy-home-page__panel--feed c-surface-card">
+        <header class="fantasy-home-page__panel-header">
+          <div>
+            <p class="fantasy-home-page__section-kicker">Feed social</p>
+            <h2>Lo que pasa en tu liga entre cierres</h2>
+          </div>
+        </header>
+
+        <ol class="fantasy-home-page__feed-list">
+          @for (entry of viewModel.primaryLeague.weeklyFeed; track entry.id) {
+            <li class="fantasy-home-page__feed-item" [attr.data-tone]="entry.tone">
+              <div class="fantasy-home-page__feed-meta">
+                <span class="fantasy-home-page__feed-chip">{{ entry.accentLabel }}</span>
+                <span>{{ entry.relativeTimeLabel }}</span>
+              </div>
+              <h3>{{ entry.headline }}</h3>
+              <p>{{ entry.detail }}</p>
+              <strong>{{ entry.actorName }}</strong>
+            </li>
+          }
+        </ol>
+      </section>
     </div>
-  </section>
-} @else {
-  <app-empty-state
-    [actions]="emptyStateActions"
-    [description]="'Empieza creando una liga privada o únete con un código para activar tu experiencia fantasy.'"
-    [highlights]="[
-      'Una plantilla por liga',
-      'Mercado con precios dinámicos',
-      'Ranking por jornada y total',
-    ]"
-    [icon]="trophyIcon"
-    eyebrow="Fantasy"
-    layout="feature"
-    title="Todavía no participas en ninguna liga"
-  />
-}
+
+    @if (viewModel.secondaryLeagues.length) {
+      <section aria-labelledby="fantasy-home-leagues" class="o-stack o-stack--compact">
+        <div class="fantasy-home-page__section-heading">
+          <div>
+            <p class="fantasy-home-page__section-kicker">Más ligas</p>
+            <h2 id="fantasy-home-leagues">Tus otras ligas activas</h2>
+          </div>
+        </div>
+        <div class="fantasy-home-page__leagues-grid o-grid o-grid--cards">
+          @for (league of viewModel.secondaryLeagues; track league.id) {
+            <app-fantasy-league-card [league]="league" />
+          }
+        </div>
+      </section>
+    }
+  } @else {
+    <app-empty-state
+      [actions]="emptyStateActions"
+      [description]="'Empieza creando una liga privada o únete con un código para activar tu experiencia fantasy.'"
+      [highlights]="[
+        'Porra sobre tu propia plantilla',
+        'Edición posterior al viernes',
+        'Comparación continua con tus rivales',
+      ]"
+      [icon]="trophyIcon"
+      eyebrow="Fantasy"
+      layout="feature"
+      title="Todavía no participas en ninguna liga"
+    />
+  }
+</div>

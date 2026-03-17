@@ -8,11 +8,13 @@ import {
 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LucideAngularModule, ShieldAlert, Trophy, Wallet } from 'lucide-angular';
+import { LucideAngularModule, ShieldAlert, Trophy } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
+import { FantasyDashboardMarketSnapshotCardComponent } from '@features/fantasy/ui/components/fantasy-dashboard-market-snapshot-card/fantasy-dashboard-market-snapshot-card.component';
 import { FantasyMvpCardComponent } from '@features/fantasy/ui/components/fantasy-mvp-card/fantasy-mvp-card.component';
-import { FantasyRankingTableComponent } from '@features/fantasy/ui/components/fantasy-ranking-table/fantasy-ranking-table.component';
+import { FantasyPlayerAvatarComponent } from '@features/fantasy/ui/components/fantasy-player-avatar/fantasy-player-avatar.component';
+import { FantasyLeagueSectionNavComponent } from '@features/fantasy/ui/components/fantasy-league-section-nav/fantasy-league-section-nav.component';
 import { FantasyLeagueDashboardStore } from '@features/fantasy/ui/state/fantasy-league-dashboard.store';
 import {
   EmptyStateComponent,
@@ -24,8 +26,10 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     EmptyStateComponent,
+    FantasyDashboardMarketSnapshotCardComponent,
+    FantasyLeagueSectionNavComponent,
     FantasyMvpCardComponent,
-    FantasyRankingTableComponent,
+    FantasyPlayerAvatarComponent,
     LucideAngularModule,
     RouterLink,
   ],
@@ -43,7 +47,6 @@ export class FantasyLeagueDashboardPageComponent implements OnDestroy, OnInit {
   protected readonly store = inject(FantasyLeagueDashboardStore);
   protected readonly rankingIcon = Trophy;
   protected readonly shieldAlert = ShieldAlert;
-  protected readonly walletIcon = Wallet;
   protected readonly missingLeagueActions: readonly EmptyStateAction[] = [
     {
       label: 'Volver a mis ligas',

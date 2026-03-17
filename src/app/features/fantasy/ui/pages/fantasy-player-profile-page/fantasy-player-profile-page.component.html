@@ -13,20 +13,12 @@
   <article class="fantasy-player-profile-page__panel c-surface-card">
     <header class="fantasy-player-profile-page__hero">
       <div class="fantasy-player-profile-page__identity">
-        @if (player.photoPath) {
-          <img
-            [ngSrc]="player.photoPath"
-            [alt]="player.name"
-            class="fantasy-player-profile-page__photo"
-            decoding="async"
-            height="96"
-            width="96"
-          />
-        } @else {
-          <span aria-hidden="true" class="fantasy-player-profile-page__avatar">
-            {{ player.avatarLabel }}
-          </span>
-        }
+        <app-fantasy-player-avatar
+          [altText]="player.name"
+          [initials]="player.avatarLabel"
+          [photoPath]="player.photoPath"
+          size="xl"
+        />
 
         <div class="fantasy-player-profile-page__copy">
           <p class="fantasy-player-profile-page__eyebrow">Jugador fantasy</p>

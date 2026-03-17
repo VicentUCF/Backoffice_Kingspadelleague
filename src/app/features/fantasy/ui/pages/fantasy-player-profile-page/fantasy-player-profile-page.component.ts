@@ -12,6 +12,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideAngularModule, Search, ShieldAlert } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
+import { FantasyPlayerAvatarComponent } from '@features/fantasy/ui/components/fantasy-player-avatar/fantasy-player-avatar.component';
 import { FantasyPlayerProfileStore } from '@features/fantasy/ui/state/fantasy-player-profile.store';
 import {
   EmptyStateComponent,
@@ -21,7 +22,13 @@ import {
 @Component({
   selector: 'app-fantasy-player-profile-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [EmptyStateComponent, LucideAngularModule, NgOptimizedImage, RouterLink],
+  imports: [
+    EmptyStateComponent,
+    FantasyPlayerAvatarComponent,
+    LucideAngularModule,
+    NgOptimizedImage,
+    RouterLink,
+  ],
   providers: [FantasyPlayerProfileStore],
   host: { class: 'fantasy-page fantasy-player-profile-page o-container o-stack' },
   templateUrl: './fantasy-player-profile-page.component.html',

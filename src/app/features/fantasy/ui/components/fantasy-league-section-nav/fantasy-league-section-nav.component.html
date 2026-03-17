@@ -1,0 +1,53 @@
+<div class="fantasy-league-section-nav__surface">
+  <div class="fantasy-league-section-nav__header">
+    <p class="fantasy-league-section-nav__eyebrow">Liga activa</p>
+    <p class="fantasy-league-section-nav__league-name">{{ leagueName() }}</p>
+  </div>
+
+  <nav aria-label="Navegación de la liga fantasy" class="fantasy-league-section-nav__links">
+    <a
+      class="fantasy-league-section-nav__link"
+      [class.fantasy-league-section-nav__link--active]="activeSection() === 'overview'"
+      [routerLink]="overviewLink()"
+    >
+      Resumen
+    </a>
+    <a
+      class="fantasy-league-section-nav__link"
+      [class.fantasy-league-section-nav__link--active]="activeSection() === 'market'"
+      [routerLink]="marketLink()"
+    >
+      Mercado
+    </a>
+    <a
+      class="fantasy-league-section-nav__link"
+      [class.fantasy-league-section-nav__link--active]="activeSection() === 'team'"
+      [routerLink]="teamLink()"
+    >
+      Mi equipo
+    </a>
+    <a
+      class="fantasy-league-section-nav__link"
+      [class.fantasy-league-section-nav__link--active]="activeSection() === 'draft'"
+      [routerLink]="teamDraftLink()"
+    >
+      Plantilla
+    </a>
+    <a
+      class="fantasy-league-section-nav__link"
+      [class.fantasy-league-section-nav__link--active]="activeSection() === 'ranking'"
+      [routerLink]="rankingLink()"
+    >
+      Clasificación
+    </a>
+    @if (resultsLink(); as resultsLink) {
+      <a
+        class="fantasy-league-section-nav__link"
+        [class.fantasy-league-section-nav__link--active]="activeSection() === 'results'"
+        [routerLink]="resultsLink"
+      >
+        Resultados
+      </a>
+    }
+  </nav>
+</div>

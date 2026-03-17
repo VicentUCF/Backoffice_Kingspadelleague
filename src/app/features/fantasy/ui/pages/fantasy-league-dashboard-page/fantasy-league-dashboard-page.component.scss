@@ -5,20 +5,20 @@
 .fantasy-dashboard-page {
   &__hero {
     display: grid;
-    gap: var(--space-6);
-    padding: var(--space-6);
+    gap: var(--space-4);
+    padding: var(--space-5);
     border: 1px solid color-mix(in srgb, var(--color-brand) 18%, rgb(255 255 255 / 10%));
     border-radius: 2rem;
     background:
-      linear-gradient(145deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)),
-      radial-gradient(circle at top right, rgb(201 162 39 / 0.22), transparent 34%),
-      radial-gradient(circle at bottom left, rgb(255 255 255 / 0.08), transparent 38%),
+      linear-gradient(145deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.015)),
+      radial-gradient(circle at top right, rgb(201 162 39 / 0.24), transparent 30%),
+      radial-gradient(circle at bottom left, rgb(255 255 255 / 0.08), transparent 36%),
       var(--color-surface);
   }
 
   &__hero-copy {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-3);
 
     h1,
     p {
@@ -27,40 +27,42 @@
 
     h1 {
       color: var(--color-text-strong);
-      font-size: clamp(2rem, 6vw, 3.8rem);
+      font-size: clamp(2.1rem, 5vw, 3.6rem);
       letter-spacing: -0.06em;
-      line-height: 0.95;
+      line-height: 0.94;
     }
   }
 
   &__eyebrow,
-  &__section-kicker {
+  &__section-kicker,
+  &__mini-kicker {
     display: inline-flex;
     align-items: center;
     gap: var(--space-2);
     margin: 0;
     color: var(--color-brand);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
   }
 
   &__hero-description {
-    max-width: 42rem;
+    max-width: 44rem;
     color: var(--color-text-default);
     line-height: 1.6;
   }
 
   &__actions,
-  &__quick-links {
+  &__inline-actions {
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-3);
   }
 
   &__action,
-  &__quick-links a {
+  &__inline-action,
+  &__panel-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -74,7 +76,8 @@
     text-decoration: none;
   }
 
-  &__action--primary {
+  &__action--primary,
+  &__inline-action--primary {
     border-color: transparent;
     background: var(--color-brand);
     color: var(--color-brand-contrast);
@@ -82,48 +85,71 @@
 
   &__hero-facts {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
     gap: var(--space-3);
     margin: 0;
+  }
+
+  &__fact,
+  &__command-card,
+  &__starter-card,
+  &__bench-card,
+  &__ranking-item {
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1.35rem;
+    background: rgb(255 255 255 / 0.03);
   }
 
   &__fact {
     display: grid;
     gap: var(--space-1);
     padding: var(--space-4);
-    border: 1px solid rgb(255 255 255 / 0.08);
-    border-radius: 1.25rem;
-    background: rgb(255 255 255 / 0.04);
-    backdrop-filter: blur(10px);
 
     dt {
       color: var(--color-text-muted);
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       font-weight: 800;
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
 
     dd {
+      display: grid;
+      gap: var(--space-1);
       margin: 0;
-      color: var(--color-text-strong);
-      font-size: 1rem;
-      font-weight: 700;
-      line-height: 1.35;
     }
+  }
+
+  &__fact-value {
+    color: var(--color-text-strong);
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  &__fact-supporting {
+    color: var(--color-text-muted);
+    line-height: 1.4;
   }
 
   &__grid {
     display: grid;
     gap: var(--space-4);
+
+    > * {
+      min-width: 0;
+    }
   }
 
   &__panel {
     display: grid;
-    gap: var(--space-4);
+    gap: var(--space-5);
     padding: var(--space-5);
+    min-width: 0;
   }
 
   &__panel-header {
+    min-width: 0;
+
     h2,
     p {
       margin: 0;
@@ -131,15 +157,262 @@
 
     h2 {
       color: var(--color-text-strong);
-      font-size: 1.5rem;
+      font-size: 1.7rem;
       letter-spacing: -0.04em;
     }
 
     p:last-child {
       margin-top: var(--space-2);
       color: var(--color-text-muted);
-      line-height: 1.5;
+      line-height: 1.55;
     }
+  }
+
+  &__panel--command {
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.015)),
+      var(--color-surface);
+  }
+
+  &__command-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: var(--space-3);
+  }
+
+  &__command-card {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+
+    span,
+    small {
+      color: var(--color-text-muted);
+    }
+
+    span {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+      font-size: 1.2rem;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  &__command-card--accent {
+    background:
+      radial-gradient(circle at top left, rgb(201 162 39 / 0.16), transparent 72%),
+      rgb(255 255 255 / 0.04);
+  }
+
+  &__lineup-shell {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__lineup-panel,
+  &__lineup-side {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.5rem;
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  &__mini-header {
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    h3,
+    p,
+    span {
+      margin: 0;
+    }
+
+    h3 {
+      color: var(--color-text-strong);
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+    }
+
+    > span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.3rem;
+      min-height: 2.3rem;
+      padding-inline: var(--space-2);
+      border-radius: 999px;
+      background: rgb(201 162 39 / 0.12);
+      color: var(--color-brand-strong);
+      font-weight: 800;
+    }
+  }
+
+  &__starter-grid,
+  &__bench-list,
+  &__ranking-list,
+  &__onboarding-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__starter-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  }
+
+  &__player-main {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    min-width: 0;
+  }
+
+  &__player-copy {
+    min-width: 0;
+
+    h3,
+    p,
+    span {
+      margin: 0;
+    }
+
+    h3 {
+      font-size: 1rem;
+    }
+
+    h3 a {
+      color: var(--color-text-strong);
+      text-decoration: none;
+    }
+
+    p,
+    span {
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__player-heading,
+  &__ranking-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  &__captain-badge,
+  &__ranking-chip {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.8rem;
+    padding-inline: var(--space-2);
+    border-radius: 999px;
+    background: rgb(201 162 39 / 0.12);
+    color: var(--color-brand-strong);
+    font-size: 0.72rem;
+    font-weight: 800;
+  }
+
+  &__starter-card,
+  &__bench-card,
+  &__ranking-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3);
+  }
+
+  &__onboarding {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__onboarding-list li {
+    position: relative;
+    padding-left: 1.5rem;
+    color: var(--color-text-default);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0.45rem;
+      left: 0;
+      width: 0.65rem;
+      height: 0.65rem;
+      border-radius: 999px;
+      background: var(--color-brand);
+      box-shadow: 0 0 0 0.25rem rgb(201 162 39 / 0.12);
+    }
+  }
+
+  &__ranking-list {
+    gap: var(--space-2);
+  }
+
+  &__ranking-main,
+  &__ranking-stats {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  &__ranking-main {
+    min-width: 0;
+
+    > div {
+      min-width: 0;
+    }
+
+    p,
+    strong {
+      margin: 0;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+    }
+
+    p {
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__ranking-rank {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 2.4rem;
+    min-height: 2.4rem;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--color-text-strong);
+    font-size: 0.82rem;
+    font-weight: 800;
+  }
+
+  &__ranking-stats {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    color: var(--color-text-strong);
+    font-weight: 700;
+  }
+
+  &__primary-summary,
+  &__market-snapshot,
+  &__spotlight {
+    min-width: 0;
   }
 }
 
@@ -149,41 +422,76 @@
   }
 
   .fantasy-dashboard-page {
-    &__hero {
-      padding: var(--space-5);
-      border-radius: 1.75rem;
+    &__hero,
+    &__panel {
+      padding: var(--space-4);
     }
 
     &__actions,
-    &__quick-links {
+    &__inline-actions {
       display: grid;
     }
 
     &__action,
-    &__quick-links a {
+    &__inline-action,
+    &__panel-link {
       width: 100%;
+    }
+
+    &__ranking-item,
+    &__starter-card,
+    &__bench-card {
+      align-items: start;
+      flex-direction: column;
+    }
+
+    &__ranking-stats {
+      justify-content: flex-start;
     }
   }
 }
 
-@media (min-width: 48rem) {
+@media (min-width: 64rem) {
+  .fantasy-dashboard-page {
+    &__lineup-shell {
+      grid-template-columns: minmax(0, 1.45fr) minmax(18rem, 0.9fr);
+    }
+  }
+}
+
+@media (min-width: 80rem) {
   .fantasy-dashboard-page {
     &__hero {
-      grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+      grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.95fr);
       align-items: end;
     }
 
-    &__hero-facts {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+    &__actions {
+      grid-column: 1 / -1;
     }
 
     &__grid {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(12, minmax(0, 1fr));
+      grid-template-areas:
+        'command command command command command command command ranking ranking ranking ranking ranking'
+        'market market market market market market spotlight spotlight spotlight spotlight spotlight spotlight';
       align-items: start;
     }
 
-    &__panel:last-child {
-      grid-column: span 2;
+    &__panel--command {
+      grid-area: command;
+    }
+
+    &__panel--ranking {
+      grid-area: ranking;
+    }
+
+    &__market-snapshot {
+      grid-area: market;
+    }
+
+    &__spotlight {
+      grid-area: spotlight;
     }
   }
 }

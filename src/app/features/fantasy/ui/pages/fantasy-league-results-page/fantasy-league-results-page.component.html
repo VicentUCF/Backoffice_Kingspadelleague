@@ -1,0 +1,266 @@
+<div class="fantasy-league-results-page o-container o-stack">
+  @if (store.isLoading()) {
+    <p aria-live="polite" role="status">Cargando resultados fantasy...</p>
+  } @else if (store.errorMessage()) {
+    <app-empty-state
+      [actions]="missingResultsActions"
+      [description]="store.errorMessage() ?? ''"
+      [icon]="shieldAlert"
+      eyebrow="Resultados"
+      layout="feature"
+      title="No hemos podido cargar esta jornada"
+    />
+  } @else if (store.viewModel(); as viewModel) {
+    <section class="fantasy-league-results-page__hero">
+      <div class="fantasy-league-results-page__hero-copy">
+        <p class="fantasy-league-results-page__eyebrow">
+          {{ viewModel.hero.weekLabel }} · {{ viewModel.leagueName }}
+        </p>
+        <h1>{{ viewModel.hero.headline }}</h1>
+        <p class="fantasy-league-results-page__hero-description">{{ viewModel.hero.summary }}</p>
+
+        <nav
+          aria-label="Acciones de resultados fantasy"
+          class="fantasy-league-results-page__actions"
+        >
+          @for (action of viewModel.hero.actions; track action.href) {
+            <a class="fantasy-league-results-page__action" [routerLink]="action.href">{{
+              action.label
+            }}</a>
+          }
+        </nav>
+      </div>
+
+      <div class="fantasy-league-results-page__hero-stats">
+        <article class="fantasy-league-results-page__hero-card c-surface-card">
+          <span>Fantasy</span>
+          <strong>{{ viewModel.hero.matchdayPointsLabel }}</strong>
+          <small>Puntos que llegó a sumar tu equipo</small>
+        </article>
+
+        <article class="fantasy-league-results-page__hero-card c-surface-card">
+          <span>Bonus de porra</span>
+          <strong>{{ viewModel.hero.predictionBonusLabel }}</strong>
+          <small>{{ viewModel.hero.predictionHitsLabel }}</small>
+        </article>
+
+        <article class="fantasy-league-results-page__hero-card c-surface-card">
+          <span>Total final</span>
+          <strong>{{ viewModel.hero.totalPointsLabel }}</strong>
+          <small>Fantasy + bonus cerrado del viernes</small>
+        </article>
+
+        <article class="fantasy-league-results-page__hero-card c-surface-card">
+          <span>Posición</span>
+          <strong>{{ viewModel.hero.rankLabel }}</strong>
+          <small [attr.data-tone]="viewModel.hero.rankChangeTone">{{
+            viewModel.hero.rankChangeLabel
+          }}</small>
+        </article>
+
+        @if (viewModel.hero.captainName && viewModel.hero.captainPointsLabel) {
+          <article
+            class="fantasy-league-results-page__hero-card fantasy-league-results-page__hero-card--captain c-surface-card"
+          >
+            <span>Capitán destacado</span>
+            <strong>{{ viewModel.hero.captainName }}</strong>
+            <small>{{ viewModel.hero.captainPointsLabel }}</small>
+          </article>
+        }
+      </div>
+
+      <article class="fantasy-league-results-page__hero-note c-surface-card">
+        <strong>{{ viewModel.hero.predictionLockedMessage }}</strong>
+        @if (viewModel.hero.sundayChangeNote; as sundayChangeNote) {
+          <p>{{ sundayChangeNote }}</p>
+        }
+      </article>
+    </section>
+
+    <app-fantasy-league-section-nav
+      activeSection="results"
+      [leagueName]="viewModel.leagueName"
+      [marketLink]="viewModel.marketLink"
+      [overviewLink]="viewModel.overviewLink"
+      [rankingLink]="viewModel.rankingLink"
+      [resultsLink]="viewModel.resultsLink"
+      [teamDraftLink]="viewModel.teamCreationLink"
+      [teamLink]="viewModel.teamLink"
+    />
+
+    <div class="fantasy-league-results-page__grid">
+      <section class="fantasy-league-results-page__panel c-surface-card">
+        <header class="fantasy-league-results-page__panel-header">
+          <div>
+            <p class="fantasy-league-results-page__section-kicker">Ranking final jornada</p>
+            <h2>Cómo terminó el domingo</h2>
+          </div>
+        </header>
+
+        <ul class="fantasy-league-results-page__ranking-list" role="list">
+          @for (entry of viewModel.ranking; track entry.rankLabel + entry.teamName) {
+            <li
+              class="fantasy-league-results-page__ranking-row"
+              [attr.data-me]="entry.isMe ? 'true' : null"
+            >
+              <span class="fantasy-league-results-page__ranking-rank">{{ entry.rankLabel }}</span>
+
+              <div class="fantasy-league-results-page__ranking-copy">
+                <strong>{{ entry.teamName }}</strong>
+                <span>{{ entry.managerName }}</span>
+              </div>
+
+              <div class="fantasy-league-results-page__ranking-stats">
+                <strong>{{ entry.matchdayPointsLabel }}</strong>
+                <span [attr.data-tone]="entry.movementTone">{{ entry.movementLabel }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="fantasy-league-results-page__panel c-surface-card">
+        <header class="fantasy-league-results-page__panel-header">
+          <div>
+            <p class="fantasy-league-results-page__section-kicker">Premios</p>
+            <h2>Lo que dejó la jornada</h2>
+          </div>
+        </header>
+
+        <div class="fantasy-league-results-page__awards-grid">
+          @for (award of viewModel.awards; track award.id) {
+            <article class="fantasy-league-results-page__award-card" [attr.data-tone]="award.tone">
+              <p>{{ award.title }}</p>
+              <strong>{{ award.winnerName }}</strong>
+              <span>{{ award.highlight }}</span>
+              <small>{{ award.supportingText }}</small>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section
+        class="fantasy-league-results-page__panel fantasy-league-results-page__panel--team c-surface-card"
+      >
+        <header class="fantasy-league-results-page__panel-header">
+          <div>
+            <p class="fantasy-league-results-page__section-kicker">Tu equipo</p>
+            <h2>{{ viewModel.myTeamName }}</h2>
+          </div>
+        </header>
+
+        <ul class="fantasy-league-results-page__player-list" role="list">
+          @for (player of viewModel.playerLines; track player.detailLink) {
+            <li class="fantasy-league-results-page__player-row">
+              <div class="fantasy-league-results-page__player-main">
+                <app-fantasy-player-avatar
+                  [altText]="player.name"
+                  [initials]="player.avatar"
+                  [photoPath]="player.photoPath"
+                  size="md"
+                />
+
+                <div class="fantasy-league-results-page__player-copy">
+                  <strong>
+                    <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                  </strong>
+                  <p>{{ player.teamName }}</p>
+                  @if (player.captainLabel; as captainLabel) {
+                    <span>{{ captainLabel }}</span>
+                  }
+                </div>
+              </div>
+
+              <div class="fantasy-league-results-page__player-stats">
+                <strong>{{ player.pointsLabel }}</strong>
+                <span [attr.data-tone]="player.priceChangeTone">{{ player.priceChangeLabel }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      </section>
+
+      <section class="fantasy-league-results-page__panel c-surface-card">
+        <header class="fantasy-league-results-page__panel-header">
+          <div>
+            <p class="fantasy-league-results-page__section-kicker">Comparación</p>
+            <h2>Rivales directos</h2>
+          </div>
+        </header>
+
+        <div class="fantasy-league-results-page__rivals">
+          @for (comparison of viewModel.rivalComparisons; track comparison.rivalManagerName) {
+            <article class="fantasy-league-results-page__rival-card">
+              <strong>{{ comparison.rivalManagerName }} · {{ comparison.rivalTeamName }}</strong>
+              <span [attr.data-tone]="comparison.pointsDeltaTone">{{
+                comparison.pointsDeltaLabel
+              }}</span>
+              <p>{{ comparison.summary }}</p>
+            </article>
+          }
+        </div>
+      </section>
+
+      <section
+        class="fantasy-league-results-page__panel fantasy-league-results-page__panel--market c-surface-card"
+      >
+        <header class="fantasy-league-results-page__panel-header">
+          <div>
+            <p class="fantasy-league-results-page__section-kicker">Mercado post-jornada</p>
+            <h2>El nuevo meta ya se está moviendo</h2>
+          </div>
+        </header>
+
+        <div class="fantasy-league-results-page__market-sections">
+          @for (section of viewModel.marketSections; track section.id) {
+            <article class="fantasy-league-results-page__market-section">
+              <header>
+                <h3>{{ section.title }}</h3>
+                <p>{{ section.description }}</p>
+              </header>
+
+              <ul class="fantasy-league-results-page__market-list" role="list">
+                @for (mover of section.movers; track mover.detailLink) {
+                  <li class="fantasy-league-results-page__market-row">
+                    <div class="fantasy-league-results-page__player-main">
+                      <app-fantasy-player-avatar
+                        [altText]="mover.name"
+                        [initials]="mover.avatar"
+                        [photoPath]="mover.photoPath"
+                        size="md"
+                      />
+
+                      <div class="fantasy-league-results-page__player-copy">
+                        <strong>
+                          <a [routerLink]="mover.detailLink">{{ mover.name }}</a>
+                        </strong>
+                        <p>{{ mover.teamName }}</p>
+                        <span>{{ mover.recentPointsLabel }}</span>
+                      </div>
+                    </div>
+
+                    <div class="fantasy-league-results-page__player-stats">
+                      <strong>{{ mover.priceLabel }}</strong>
+                      <span [attr.data-tone]="mover.priceChangeTone">{{
+                        mover.priceChangeLabel
+                      }}</span>
+                    </div>
+                  </li>
+                }
+              </ul>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+  } @else if (store.isNotFound()) {
+    <app-empty-state
+      [actions]="missingResultsActions"
+      [description]="'Esta liga todavía no tiene una jornada de resultados disponible para consultar.'"
+      [icon]="trophyIcon"
+      eyebrow="Resultados"
+      layout="feature"
+      title="Resultados fantasy no disponibles"
+    />
+  }
+</div>

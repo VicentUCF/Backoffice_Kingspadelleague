@@ -5,23 +5,54 @@
     </caption>
     <thead>
       <tr>
-        <th>#</th>
-        <th>Equipo</th>
-        <th>Manager</th>
-        <th>Total</th>
-        <th>Jornada</th>
-        <th>Valor</th>
+        <th scope="col">#</th>
+        <th scope="col">Equipo</th>
+        <th scope="col">Manager</th>
+        <th scope="col">Total</th>
+        <th scope="col">Jornada</th>
+        <th scope="col">Valor</th>
+        <th scope="col">Detalle</th>
       </tr>
     </thead>
     <tbody>
-      @for (entry of entries(); track entry.rankLabel) {
-        <tr [class.fantasy-ranking-table__row--mine]="entry.isMe">
-          <td>{{ entry.rankLabel }}</td>
-          <td>{{ entry.teamName }}</td>
-          <td>{{ entry.managerName }}</td>
-          <td>{{ entry.totalPointsLabel }}</td>
-          <td>{{ entry.matchdayPointsLabel }}</td>
-          <td>{{ entry.teamValueLabel }}</td>
+      @for (entry of entries(); track entry.rankLabel; let position = $index) {
+        <tr
+          class="fantasy-ranking-table__row"
+          [attr.data-podium]="position < 3 ? position + 1 : null"
+          [class.fantasy-ranking-table__row--mine]="entry.isMe"
+        >
+          <td data-label="Posición">
+            <span class="fantasy-ranking-table__rank-pill">{{ entry.rankLabel }}</span>
+          </td>
+          <td data-label="Equipo">
+            <div class="fantasy-ranking-table__identity">
+              <strong>{{ entry.teamName }}</strong>
+              @if (entry.isMe) {
+                <span class="fantasy-ranking-table__team-badge">Tu equipo</span>
+              }
+            </div>
+          </td>
+          <td data-label="Manager">
+            <span class="fantasy-ranking-table__manager">{{ entry.managerName }}</span>
+          </td>
+          <td data-label="Total">
+            <strong class="fantasy-ranking-table__value">{{ entry.totalPointsLabel }}</strong>
+          </td>
+          <td data-label="Jornada">{{ entry.matchdayPointsLabel }}</td>
+          <td data-label="Valor">{{ entry.teamValueLabel }}</td>
+          <td data-label="Detalle">
+            @if (entry.canInspect) {
+              <button
+                type="button"
+                class="fantasy-ranking-table__inspect-button"
+                (click)="viewTeam(entry.teamId)"
+              >
+                {{ entry.inspectLabel }}
+              </button>
+            } @else {
+              <span class="fantasy-ranking-table__inspect-placeholder">Sin plantilla visible</span>
+            }
+          </td>
         </tr>
       }
     </tbody>

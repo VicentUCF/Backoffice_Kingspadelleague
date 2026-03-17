@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 import { type FantasyRankingEntryViewModel } from '@features/fantasy/ui/models/fantasy-league-dashboard.viewmodel';
 
@@ -11,4 +11,9 @@ import { type FantasyRankingEntryViewModel } from '@features/fantasy/ui/models/f
 })
 export class FantasyRankingTableComponent {
   readonly entries = input.required<readonly FantasyRankingEntryViewModel[]>();
+  readonly teamViewed = output<string>();
+
+  protected viewTeam(teamId: string): void {
+    this.teamViewed.emit(teamId);
+  }
 }

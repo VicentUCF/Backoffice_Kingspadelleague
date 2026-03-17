@@ -96,6 +96,58 @@
     gap: var(--space-4);
   }
 
+  &__prediction-card,
+  &__phase-note {
+    padding: var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--color-brand) 18%, transparent);
+    border-radius: 1.25rem;
+    background: rgb(201 162 39 / 0.08);
+  }
+
+  &__prediction-card {
+    display: grid;
+    gap: var(--space-3);
+
+    p,
+    small {
+      margin: 0;
+      color: var(--color-text-default);
+      line-height: 1.5;
+    }
+  }
+
+  &__prediction-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr));
+    gap: var(--space-3);
+
+    span,
+    strong {
+      display: block;
+    }
+
+    span {
+      color: var(--color-text-muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    strong {
+      margin-top: var(--space-1);
+      color: var(--color-text-strong);
+      font-size: 1.4rem;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  &__phase-note {
+    margin: 0;
+    color: var(--color-text-default);
+    line-height: 1.6;
+  }
+
   &__planner-header {
     display: flex;
     flex-wrap: wrap;
@@ -181,15 +233,21 @@
   &__planner-grid {
     display: grid;
     gap: var(--space-4);
+    align-items: start;
   }
 
   &__panel {
     display: grid;
+    align-content: start;
     gap: var(--space-4);
     padding: var(--space-4);
     border: 1px solid var(--color-border-subtle);
     border-radius: 1.5rem;
     background: rgb(255 255 255 / 0.02);
+
+    &--summary {
+      align-content: start;
+    }
   }
 
   &__panel-header {
@@ -237,6 +295,33 @@
     }
   }
 
+  &__team-name-card {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.03);
+
+    span,
+    small {
+      color: var(--color-text-muted);
+    }
+
+    span {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+      font-size: 1.05rem;
+      letter-spacing: -0.03em;
+    }
+  }
+
   &__selected-list,
   &__pool-grid {
     display: grid;
@@ -263,33 +348,20 @@
       var(--color-surface-raised);
   }
 
+  &__pool-card[data-tone='positive'] {
+    border-color: rgb(34 197 94 / 0.32);
+  }
+
+  &__pool-card[data-tone='warning'] {
+    border-color: rgb(226 80 73 / 0.32);
+  }
+
   &__selected-main,
   &__pool-main {
     display: flex;
     gap: var(--space-4);
     align-items: flex-start;
-  }
-
-  &__player-photo,
-  &__player-avatar {
-    display: grid;
-    place-items: center;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 1rem;
-    background:
-      radial-gradient(circle at top, rgb(201 162 39 / 0.16), transparent 62%), var(--color-surface);
-  }
-
-  &__player-photo {
-    object-fit: cover;
-  }
-
-  &__player-avatar {
-    color: var(--color-brand-strong);
-    font-family: var(--font-family-heading);
-    font-size: 1rem;
-    font-weight: 800;
+    min-width: 0;
   }
 
   &__selected-copy,
@@ -335,10 +407,16 @@
   }
 
   &__pool-note,
+  &__pool-intro,
   &__empty {
     margin: 0;
     color: var(--color-text-default);
     line-height: 1.55;
+  }
+
+  &__selected-actions {
+    display: flex;
+    justify-content: flex-end;
   }
 
   &__pool-footer {
@@ -392,6 +470,14 @@
     flex-wrap: wrap;
     justify-content: space-between;
     gap: var(--space-3);
+    position: sticky;
+    bottom: var(--space-4);
+    z-index: 3;
+    padding: var(--space-4);
+    border: 1px solid color-mix(in srgb, var(--color-brand) 20%, transparent);
+    border-radius: 1.25rem;
+    background: color-mix(in srgb, var(--color-surface) 82%, rgb(15 23 42 / 0.9));
+    backdrop-filter: blur(14px);
   }
 
   &__save-message {
@@ -416,10 +502,15 @@
       border-radius: 1.75rem;
     }
 
+    &__selected-actions {
+      width: 100%;
+    }
+
     &__footer-actions {
       align-items: stretch;
     }
 
+    &__selected-actions .fantasy-create-team-page__ghost-action,
     &__save-action,
     &__ghost-action {
       width: 100%;
@@ -442,12 +533,35 @@
       grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
     }
 
+    &__panel--summary {
+      position: sticky;
+      top: var(--space-4);
+      max-height: calc(100vh - 2 * var(--space-4));
+      overflow: auto;
+    }
+
+    &__selected-list {
+      max-height: min(46vh, 32rem);
+      overflow: auto;
+      padding-inline-end: var(--space-2);
+    }
+
+    &__selected-card {
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+    }
+
     &__controls--pool {
       grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
     }
 
     &__pool-grid {
       grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    &__footer-actions {
+      margin-inline-start: auto;
+      width: fit-content;
     }
   }
 }
