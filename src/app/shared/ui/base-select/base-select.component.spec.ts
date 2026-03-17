@@ -31,6 +31,32 @@ class BaseSelectHostComponent {
   });
 }
 
+@Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [BaseSelectComponent, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <app-base-select formControlName="captain" label="Capitán" placeholder="Selecciona capitán">
+        @for (option of options(); track option.value) {
+          <option [value]="option.value">{{ option.label }}</option>
+        }
+      </app-base-select>
+    </form>
+  `,
+})
+class DynamicBaseSelectHostComponent {
+  readonly options = signal([
+    { label: 'Borja Vercher', value: 'borja' },
+    { label: 'Adri Alvarez', value: 'adri' },
+    { label: 'Miguel Esteve', value: 'miguel' },
+  ]);
+  readonly form = new FormGroup({
+    captain: new FormControl('borja', {
+      nonNullable: true,
+    }),
+  });
+}
+
 describe('BaseSelectComponent', () => {
   it('updates the reactive form when the selected option changes', async () => {
     const { fixture } = await render(BaseSelectHostComponent);
@@ -59,6 +85,23 @@ describe('BaseSelectComponent', () => {
     expect(select).toHaveAttribute('aria-invalid', 'true');
     expect(describedBy).toContain(helperText.id);
     expect(describedBy).toContain(errorMessage.id);
+  });
+
+  it('keeps the selected value in sync when the available options change', async () => {
+    const { fixture } = await render(DynamicBaseSelectHostComponent);
+    const host = fixture.componentInstance;
+
+    host.options.set([
+      { label: 'Adri Alvarez', value: 'adri' },
+      { label: 'Miguel Esteve', value: 'miguel' },
+    ]);
+    host.form.controls.captain.setValue('adri');
+    fixture.detectChanges();
+
+    const select = screen.getByRole('combobox', { name: /Capitán/i }) as HTMLSelectElement;
+
+    expect(select.value).toBe('adri');
+    expect(select.selectedOptions[0]?.textContent?.trim()).toBe('Adri Alvarez');
   });
 
   it('has no accessibility violations', async () => {

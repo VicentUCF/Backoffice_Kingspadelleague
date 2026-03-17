@@ -228,7 +228,7 @@
                   label="Capitán"
                   name="captain"
                   placeholder="Selecciona capitán"
-                  [ngModel]="summary.captainId ?? ''"
+                  [ngModel]="store.captainId() ?? ''"
                   (ngModelChange)="store.setCaptainId($event)"
                 >
                   @for (option of store.captainOptions(); track option.value) {
@@ -241,49 +241,65 @@
             @if (store.selectedPlayers().length) {
               <ul
                 [attr.aria-label]="
-                  summary.hasExistingTeam ? 'Titulares de la jornada' : 'Jugadores seleccionados'
+                  summary.hasExistingTeam
+                    ? 'Cuarteto actual de la jornada'
+                    : 'Jugadores seleccionados'
                 "
                 class="fantasy-create-team-page__selected-list"
               >
-                @for (player of store.selectedPlayers(); track player.id) {
-                  @if (!summary.hasExistingTeam || player.isStarter) {
-                    <li class="fantasy-create-team-page__selected-card">
-                      <div class="fantasy-create-team-page__selected-main">
-                        <app-fantasy-player-avatar
-                          [altText]="player.name"
-                          [initials]="player.avatar"
-                          [photoPath]="player.photoPath"
-                          size="sm"
-                        />
+                @for (
+                  player of summary.hasExistingTeam
+                    ? store.starterPlayers()
+                    : store.selectedPlayers();
+                  track player.id
+                ) {
+                  <li class="fantasy-create-team-page__selected-card">
+                    <div class="fantasy-create-team-page__selected-main">
+                      <app-fantasy-player-avatar
+                        [altText]="player.name"
+                        [initials]="player.avatar"
+                        [photoPath]="player.photoPath"
+                        size="sm"
+                      />
 
-                        <div class="fantasy-create-team-page__selected-copy">
-                          <div class="fantasy-create-team-page__selected-heading">
-                            <h4>{{ player.name }}</h4>
-                            @if (summary.hasExistingTeam && player.isStarter) {
-                              <span class="fantasy-create-team-page__selected-badge">Titular</span>
-                            }
-                            @if (summary.captainId === player.id) {
-                              <span class="fantasy-create-team-page__captain-badge">Capitán</span>
-                            }
-                          </div>
-                          <p>{{ player.teamName }} · {{ player.sideLabel }}</p>
-                          <p>{{ player.roleLabel }} · {{ player.priceLabel }}</p>
+                      <div class="fantasy-create-team-page__selected-copy">
+                        <div class="fantasy-create-team-page__selected-heading">
+                          <h4>{{ player.name }}</h4>
+                          @if (summary.hasExistingTeam) {
+                            <span class="fantasy-create-team-page__selected-badge">
+                              {{ player.isStarter ? 'Titular' : 'Rotación' }}
+                            </span>
+                          }
+                          @if (summary.captainId === player.id) {
+                            <span class="fantasy-create-team-page__captain-badge">Capitán</span>
+                          }
                         </div>
+                        <p>{{ player.teamName }} · {{ player.sideLabel }}</p>
+                        <p>{{ player.roleLabel }} · {{ player.priceLabel }}</p>
                       </div>
+                    </div>
 
-                      @if (!summary.hasExistingTeam) {
-                        <div class="fantasy-create-team-page__selected-actions">
-                          <button
-                            type="button"
-                            class="fantasy-create-team-page__ghost-action"
-                            (click)="requestRemovePlayer(player.id, player.name)"
-                          >
-                            Quitar
-                          </button>
-                        </div>
+                    <div class="fantasy-create-team-page__selected-actions">
+                      @if (summary.hasExistingTeam) {
+                        <button
+                          type="button"
+                          class="fantasy-create-team-page__ghost-action"
+                          [disabled]="summary.flowMode === 'locked' || player.starterToggleDisabled"
+                          (click)="store.toggleStarter(player.id)"
+                        >
+                          Mover a rotación
+                        </button>
+                      } @else {
+                        <button
+                          type="button"
+                          class="fantasy-create-team-page__ghost-action fantasy-create-team-page__ghost-action--danger"
+                          (click)="requestRemovePlayer(player.id, player.name)"
+                        >
+                          Quitar
+                        </button>
                       }
-                    </li>
-                  }
+                    </div>
+                  </li>
                 }
               </ul>
             } @else {
@@ -302,12 +318,14 @@
               <div>
                 <p class="fantasy-create-team-page__panel-eyebrow">Pool disponible</p>
                 <h3>
-                  {{ summary.hasExistingTeam ? 'Roster comprado' : 'Roster completo de la liga' }}
+                  {{
+                    summary.hasExistingTeam ? 'Rotación disponible' : 'Roster completo de la liga'
+                  }}
                 </h3>
               </div>
               <span class="fantasy-create-team-page__panel-chip">
                 {{
-                  summary.hasExistingTeam ? store.selectedPlayers().length : store.players().length
+                  summary.hasExistingTeam ? store.rotationPlayers().length : store.players().length
                 }}
               </span>
             </header>
@@ -342,10 +360,10 @@
 
             @if (summary.hasExistingTeam) {
               <ul
-                aria-label="Jugadores comprados disponibles para alinear"
+                aria-label="Jugadores en rotación disponibles para alinear"
                 class="fantasy-create-team-page__pool-grid"
               >
-                @for (player of store.selectedPlayers(); track player.id) {
+                @for (player of store.rotationPlayers(); track player.id) {
                   <li
                     class="fantasy-create-team-page__pool-card"
                     [class.fantasy-create-team-page__pool-card--selected]="player.isStarter"
@@ -388,7 +406,7 @@
                       [disabled]="summary.flowMode === 'locked' || player.starterToggleDisabled"
                       (click)="store.toggleStarter(player.id)"
                     >
-                      {{ player.isStarter ? 'Mandar a rotación' : 'Poner titular' }}
+                      Poner titular
                     </button>
                   </li>
                 }

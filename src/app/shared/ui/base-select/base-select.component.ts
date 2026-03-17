@@ -1,11 +1,14 @@
 import {
+  afterRenderEffect,
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
+  type ElementRef,
   forwardRef,
   input,
   signal,
+  viewChild,
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
@@ -59,6 +62,7 @@ export class BaseSelectComponent implements ControlValueAccessor {
   private readonly generatedId = `${BASE_SELECT_ID_PREFIX}-${++nextBaseSelectId}`;
   private readonly cvaDisabled = signal(false);
   private readonly selectValue = signal('');
+  private readonly selectElement = viewChild<ElementRef<HTMLSelectElement>>('selectElement');
 
   protected readonly controlId = computed(() => this.id() ?? this.generatedId);
   protected readonly helperId = computed(() => `${this.controlId()}-helper`);
@@ -99,6 +103,16 @@ export class BaseSelectComponent implements ControlValueAccessor {
 
   private onChange: (value: string) => void = () => undefined;
   private onTouched: () => void = () => undefined;
+
+  constructor() {
+    afterRenderEffect(() => {
+      const selectElement = this.selectElement()?.nativeElement;
+
+      if (selectElement && selectElement.value !== this.selectValue()) {
+        selectElement.value = this.selectValue();
+      }
+    });
+  }
 
   writeValue(value: string | null): void {
     this.selectValue.set(value ?? '');

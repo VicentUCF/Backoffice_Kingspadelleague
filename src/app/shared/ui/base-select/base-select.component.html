@@ -25,6 +25,7 @@
     [class.c-select-control--disabled]="isDisabled() || loading()"
   >
     <select
+      #selectElement
       class="c-select-control__select"
       [attr.aria-busy]="loading() ? 'true' : null"
       [attr.aria-describedby]="describedBy()"

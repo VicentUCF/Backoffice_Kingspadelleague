@@ -4,6 +4,7 @@ import { autoCompleteFantasyDraft } from '@features/fantasy/domain/services/auto
 import {
   FANTASY_TEAM_STARTERS_COUNT,
   resolveFantasyLineupValidationMessage,
+  sanitizeFantasyLineupCaptain,
   sanitizeFantasyTeamStarters,
   toggleFantasyTeamStarter,
 } from '@features/fantasy/domain/services/build-fantasy-team-lineup';
@@ -143,6 +144,13 @@ export class FantasyTeamDraftStore {
     });
   });
   readonly captainOptions = computed(() => {
+    if (this.viewModel()?.hasTeam) {
+      return this.starterPlayers().map((player) => ({
+        label: player.name,
+        value: player.id,
+      }));
+    }
+
     return this.draft().selectedPlayers.map((player) => ({
       label: player.name,
       value: player.id,
@@ -160,6 +168,7 @@ export class FantasyTeamDraftStore {
     const submittedStarterIds = new Set(
       this.dashboard()?.myTeam?.submittedStarterPlayerIds ?? starterPlayerIds,
     );
+    const captainId = this.captainId();
 
     return selectedPlayerIds.flatMap((playerId) => {
       const player = playersById.get(playerId);
@@ -186,11 +195,22 @@ export class FantasyTeamDraftStore {
             confirmedStarterIds.has(playerId),
           ),
           starterToggleDisabled: !isStarter && startersCount >= requiredStarters,
-          starterToggleHint: resolveStarterToggleHint(isStarter, startersCount, requiredStarters),
+          starterToggleHint: resolveStarterToggleHint(
+            isStarter,
+            startersCount,
+            requiredStarters,
+            captainId === playerId,
+          ),
         },
       ];
     });
   });
+  readonly starterPlayers = computed<readonly FantasySelectedRosterPlayerViewModel[]>(() =>
+    this.selectedPlayers().filter((player) => player.isStarter),
+  );
+  readonly rotationPlayers = computed<readonly FantasySelectedRosterPlayerViewModel[]>(() =>
+    this.selectedPlayers().filter((player) => !player.isStarter),
+  );
   readonly summary = computed(() => {
     const viewModel = this.viewModel();
     const draft = this.draft();
@@ -222,12 +242,16 @@ export class FantasyTeamDraftStore {
 
     const predictionOutcome = mapPredictionOutcomeViewModel(weeklyCycle?.predictionOutcome ?? null);
     const flowMode = resolveDraftFlowMode(weeklyCycle?.phase ?? null, hasExistingTeam);
+    const currentCaptainId = hasExistingTeam ? this.captainId() : draft.captainId;
+    const currentCaptainName = hasExistingTeam
+      ? (this.starterPlayers().find((player) => player.id === currentCaptainId)?.name ?? null)
+      : draft.captainName;
 
     return {
       canSubmit,
-      captainId: draft.captainId,
-      captainName: draft.captainName,
-      captainStatusLabel: draft.captainName ? `Listo · ${draft.captainName}` : 'Pendiente',
+      captainId: currentCaptainId,
+      captainName: currentCaptainName,
+      captainStatusLabel: currentCaptainName ? `Listo · ${currentCaptainName}` : 'Pendiente',
       countdownLabel: weeklyCycle?.countdown?.label ?? null,
       countdownTargetIso: weeklyCycle?.countdown?.targetIso ?? null,
       flowMode,
@@ -264,6 +288,11 @@ export class FantasyTeamDraftStore {
   });
 
   setCaptainId(playerId: string): void {
+    if (this.viewModel()?.hasTeam) {
+      this.captainId.set(sanitizeFantasyLineupCaptain(this.starterPlayerIds(), playerId || null));
+      return;
+    }
+
     this.captainId.set(playerId || null);
   }
 
@@ -316,13 +345,18 @@ export class FantasyTeamDraftStore {
 
   clearDraft(): void {
     if (this.viewModel()?.hasTeam) {
-      this.starterPlayerIds.set(
-        sanitizeFantasyTeamStarters(
-          this.selectedPlayerIds(),
-          this.dashboard()?.myTeam?.submittedStarterPlayerIds ?? this.selectedPlayerIds(),
+      const restoredStarterPlayerIds = sanitizeFantasyTeamStarters(
+        this.selectedPlayerIds(),
+        this.dashboard()?.myTeam?.submittedStarterPlayerIds ?? this.selectedPlayerIds(),
+      );
+
+      this.starterPlayerIds.set(restoredStarterPlayerIds);
+      this.captainId.set(
+        sanitizeFantasyLineupCaptain(
+          restoredStarterPlayerIds,
+          this.dashboard()?.myTeam?.submittedCaptainId ?? this.captainId(),
         ),
       );
-      this.captainId.set(this.dashboard()?.myTeam?.submittedCaptainId ?? this.captainId());
       return;
     }
 
@@ -352,9 +386,14 @@ export class FantasyTeamDraftStore {
   }
 
   toggleStarter(playerId: string): void {
-    this.starterPlayerIds.set(
-      toggleFantasyTeamStarter(this.selectedPlayerIds(), this.starterPlayerIds(), playerId),
+    const nextStarterPlayerIds = toggleFantasyTeamStarter(
+      this.selectedPlayerIds(),
+      this.starterPlayerIds(),
+      playerId,
     );
+
+    this.starterPlayerIds.set(nextStarterPlayerIds);
+    this.captainId.set(sanitizeFantasyLineupCaptain(nextStarterPlayerIds, this.captainId()));
   }
 
   async load(leagueId: string | null): Promise<void> {
@@ -389,7 +428,7 @@ export class FantasyTeamDraftStore {
 
         this.selectedPlayerIds.set(initialSelectedPlayerIds);
         this.starterPlayerIds.set(initialStarterPlayerIds);
-        this.captainId.set(initialCaptainId);
+        this.captainId.set(sanitizeFantasyLineupCaptain(initialStarterPlayerIds, initialCaptainId));
         this.teamName.set(dashboard.myTeam.name);
       } else if (dashboard) {
         this.teamName.set('Nuevo equipo fantasy');
@@ -471,13 +510,16 @@ function resolveStarterToggleHint(
   isStarter: boolean,
   startersCount: number,
   requiredStarters: number,
+  isCaptain: boolean,
 ): string | null {
   if (isStarter) {
-    return 'Sale del bloque titular y pasa a rotación.';
+    return isCaptain
+      ? 'Pasa a rotación y el capitán cambiará a otro titular automáticamente.'
+      : 'Sale del bloque titular y pasa a rotación.';
   }
 
   if (startersCount >= requiredStarters) {
-    return 'Quita antes a un titular para meterlo en la alineación.';
+    return 'Mueve antes a un titular a rotación para abrir hueco.';
   }
 
   return 'Entra como titular para esta jornada.';

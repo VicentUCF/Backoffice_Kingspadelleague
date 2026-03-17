@@ -1,6 +1,6 @@
 export const FANTASY_TEAM_STARTERS_COUNT = 4;
 
-export function sanitizeFantasyTeamStarters(
+export function normalizeFantasyTeamStarters(
   selectedPlayerIds: readonly string[],
   starterPlayerIds: readonly string[] | null | undefined,
 ): readonly string[] {
@@ -8,7 +8,16 @@ export function sanitizeFantasyTeamStarters(
   const sanitizedStarters = (starterPlayerIds ?? []).filter((playerId) =>
     selectedPlayerIds.includes(playerId),
   );
-  const uniqueStarters = [...new Set(sanitizedStarters)].slice(0, maxStarters);
+
+  return [...new Set(sanitizedStarters)].slice(0, maxStarters);
+}
+
+export function sanitizeFantasyTeamStarters(
+  selectedPlayerIds: readonly string[],
+  starterPlayerIds: readonly string[] | null | undefined,
+): readonly string[] {
+  const maxStarters = Math.min(FANTASY_TEAM_STARTERS_COUNT, selectedPlayerIds.length);
+  const uniqueStarters = normalizeFantasyTeamStarters(selectedPlayerIds, starterPlayerIds);
 
   if (uniqueStarters.length === maxStarters) {
     return uniqueStarters;
@@ -29,20 +38,32 @@ export function toggleFantasyTeamStarter(
   playerId: string,
 ): readonly string[] {
   if (!selectedPlayerIds.includes(playerId)) {
-    return sanitizeFantasyTeamStarters(selectedPlayerIds, starterPlayerIds);
+    return normalizeFantasyTeamStarters(selectedPlayerIds, starterPlayerIds);
   }
 
-  const sanitizedStarters = sanitizeFantasyTeamStarters(selectedPlayerIds, starterPlayerIds);
+  const sanitizedStarters = normalizeFantasyTeamStarters(selectedPlayerIds, starterPlayerIds);
+  const requiredStarters = Math.min(FANTASY_TEAM_STARTERS_COUNT, selectedPlayerIds.length);
 
   if (sanitizedStarters.includes(playerId)) {
     return sanitizedStarters.filter((starterId) => starterId !== playerId);
   }
 
-  if (sanitizedStarters.length >= Math.min(FANTASY_TEAM_STARTERS_COUNT, selectedPlayerIds.length)) {
-    return sanitizedStarters;
+  if (sanitizedStarters.length < requiredStarters) {
+    return [...sanitizedStarters, playerId];
   }
 
-  return [...sanitizedStarters, playerId];
+  return sanitizedStarters;
+}
+
+export function sanitizeFantasyLineupCaptain(
+  starterPlayerIds: readonly string[],
+  captainId: string | null,
+): string | null {
+  if (captainId !== null && starterPlayerIds.includes(captainId)) {
+    return captainId;
+  }
+
+  return starterPlayerIds[0] ?? null;
 }
 
 export function resolveFantasyLineupValidationMessage(
