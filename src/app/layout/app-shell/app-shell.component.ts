@@ -18,6 +18,7 @@ import {
   LucideAngularModule,
   Menu,
   Shield,
+  Sparkles,
   Swords,
   Trophy,
   Users,
@@ -72,12 +73,20 @@ export class AppShellComponent {
   protected readonly isUserMenuOpen = signal(false);
   protected readonly openDropdown = signal<string | null>(null);
 
-  protected readonly homeLink: NavigationItem = {
-    label: 'Home',
-    path: '/',
-    icon: House,
-    matchOptions: { exact: true },
-  };
+  protected readonly primaryNavigationItems: readonly NavigationItem[] = [
+    {
+      label: 'Home',
+      path: '/',
+      icon: House,
+      matchOptions: { exact: true },
+    },
+    {
+      label: 'Fantasy',
+      path: '/fantasy',
+      icon: Sparkles,
+      matchOptions: { exact: false },
+    },
+  ];
 
   protected readonly navGroups: readonly NavGroup[] = [
     {

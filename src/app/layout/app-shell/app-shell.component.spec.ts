@@ -71,6 +71,14 @@ async function renderAppShell(
           component: DummyRouteComponent,
         },
         {
+          path: 'fantasy',
+          component: DummyRouteComponent,
+        },
+        {
+          path: 'fantasy/leagues',
+          component: DummyRouteComponent,
+        },
+        {
           path: 'equipos/:slug',
           component: DummyRouteComponent,
         },
@@ -135,6 +143,21 @@ describe('AppShellComponent', () => {
     expect(
       within(screen.getByRole('navigation', { name: /Principal/i })).getByRole('link', {
         name: /^Equipos$/i,
+      }),
+    ).toHaveClass('app-shell__nav-link--active');
+  });
+
+  it('keeps Fantasy navigation active for nested fantasy routes', async () => {
+    const { fixture } = await renderAppShell();
+
+    const router = fixture.componentRef.injector.get(Router);
+
+    await router.navigateByUrl('/fantasy/leagues');
+    fixture.detectChanges();
+
+    expect(
+      within(screen.getByRole('navigation', { name: /Principal/i })).getByRole('link', {
+        name: /^Fantasy$/i,
       }),
     ).toHaveClass('app-shell__nav-link--active');
   });

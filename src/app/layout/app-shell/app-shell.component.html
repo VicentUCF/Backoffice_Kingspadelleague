@@ -67,22 +67,23 @@
         <span class="app-shell__nav-drawer-name">{{ applicationMetadata.name }}</span>
       </div>
 
-      <!-- Home -->
-      <a
-        class="app-shell__nav-link"
-        [routerLink]="homeLink.path"
-        [routerLinkActiveOptions]="homeLink.matchOptions"
-        routerLinkActive="app-shell__nav-link--active"
-        (click)="closeNavigation()"
-      >
-        <lucide-angular
-          [img]="homeLink.icon"
-          [size]="16"
-          aria-hidden="true"
-          class="app-shell__nav-link-icon"
-        />
-        <span>{{ homeLink.label }}</span>
-      </a>
+      @for (navigationItem of primaryNavigationItems; track navigationItem.path) {
+        <a
+          class="app-shell__nav-link"
+          [routerLink]="navigationItem.path"
+          [routerLinkActiveOptions]="navigationItem.matchOptions"
+          routerLinkActive="app-shell__nav-link--active"
+          (click)="closeNavigation()"
+        >
+          <lucide-angular
+            [img]="navigationItem.icon"
+            [size]="16"
+            aria-hidden="true"
+            class="app-shell__nav-link-icon"
+          />
+          <span>{{ navigationItem.label }}</span>
+        </a>
+      }
 
       <!-- Grouped dropdowns -->
       @for (group of navGroups; track group.id) {
