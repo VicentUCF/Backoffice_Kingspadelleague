@@ -1,9 +1,116 @@
-<h1>Unirse a liga fantasy</h1>
-<form #joinForm="ngForm" (ngSubmit)="joinLeague(leagueCode.value)">
-  <label for="league-code">Código de liga</label>
-  <input #leagueCode="ngModel" id="league-code" name="leagueCode" ngModel required minlength="4" />
-  <button type="submit" [disabled]="joinForm.invalid">Entrar</button>
-</form>
-@if (joinMessage()) {
-  <p>{{ joinMessage() }} <a routerLink="/fantasy/leagues/league-1/create-team">Crear equipo</a></p>
-}
+<section class="fantasy-join-league-page__hero">
+  <div class="fantasy-join-league-page__hero-copy">
+    <p class="fantasy-join-league-page__eyebrow">Acceso por código</p>
+    <h1>Entra en una liga privada y sigue trabajando el mercado.</h1>
+    <p class="fantasy-join-league-page__hero-description">
+      Validamos el código contra las ligas disponibles y te llevamos al siguiente punto lógico:
+      dashboard o configuración de equipo.
+    </p>
+  </div>
+
+  <dl class="fantasy-join-league-page__hero-facts">
+    <div class="fantasy-join-league-page__fact">
+      <dt>Entrada</dt>
+      <dd>Código de invitación</dd>
+    </div>
+    <div class="fantasy-join-league-page__fact">
+      <dt>Validación</dt>
+      <dd>Resolución en memoria</dd>
+    </div>
+    <div class="fantasy-join-league-page__fact">
+      <dt>Destino</dt>
+      <dd>Equipo o dashboard</dd>
+    </div>
+  </dl>
+</section>
+
+<div class="fantasy-join-league-page__grid">
+  <form
+    #joinForm="ngForm"
+    class="fantasy-join-league-page__panel c-surface-card"
+    (ngSubmit)="joinLeague()"
+  >
+    <header class="fantasy-join-league-page__panel-header">
+      <div>
+        <p class="fantasy-join-league-page__panel-eyebrow">Invitación</p>
+        <h2>Introduce el código</h2>
+        <p>
+          Si la liga existe, abrimos el acceso correcto sin rutas hardcodeadas ni pasos muertos.
+        </p>
+      </div>
+    </header>
+
+    <app-base-input
+      label="Código de liga"
+      maxlength="12"
+      minlength="4"
+      name="leagueCode"
+      placeholder="Ej. CURRO26"
+      required
+      [ngModel]="leagueCode()"
+      (ngModelChange)="leagueCode.set($event)"
+    />
+
+    <div class="fantasy-join-league-page__actions">
+      <button type="submit" [disabled]="joinForm.invalid || isSubmitting()">
+        {{ isSubmitting() ? 'Validando acceso...' : 'Entrar en la liga' }}
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <p aria-live="polite" class="fantasy-join-league-page__feedback" role="status">
+        {{ errorMessage() }}
+      </p>
+    }
+  </form>
+
+  @if (joinedLeague(); as joinedLeague) {
+    <section
+      class="fantasy-join-league-page__panel fantasy-join-league-page__panel--success c-surface-card"
+      aria-live="polite"
+    >
+      <header class="fantasy-join-league-page__panel-header">
+        <div>
+          <p class="fantasy-join-league-page__panel-eyebrow">Acceso resuelto</p>
+          <h2>{{ joinedLeague.leagueName }}</h2>
+          <p>La liga ya está disponible y puedes continuar exactamente donde toca.</p>
+        </div>
+        <span class="fantasy-join-league-page__phase-chip">{{ joinedLeague.phaseLabel }}</span>
+      </header>
+
+      <dl class="fantasy-join-league-page__summary-grid">
+        <div>
+          <dt>Participantes</dt>
+          <dd>{{ joinedLeague.memberCountLabel }}</dd>
+        </div>
+        <div>
+          <dt>Siguiente paso</dt>
+          <dd>{{ joinedLeague.nextLabel }}</dd>
+        </div>
+      </dl>
+
+      <div class="fantasy-join-league-page__result-actions">
+        <a [routerLink]="joinedLeague.nextLink">{{ joinedLeague.nextLabel }}</a>
+        <a [routerLink]="joinedLeague.dashboardLink">Abrir dashboard</a>
+        <a [routerLink]="joinedLeague.marketLink">Ver mercado</a>
+      </div>
+    </section>
+  } @else {
+    <section
+      class="fantasy-join-league-page__panel fantasy-join-league-page__panel--preview c-surface-card"
+    >
+      <header class="fantasy-join-league-page__panel-header">
+        <div>
+          <p class="fantasy-join-league-page__panel-eyebrow">Qué valida este flujo</p>
+          <h2>Entrada útil desde pretemporada</h2>
+        </div>
+      </header>
+
+      <ol class="fantasy-join-league-page__steps">
+        <li>Comprobamos que el código corresponde a una liga real.</li>
+        <li>Recuperamos su estado actual de mercado, ranking y equipo.</li>
+        <li>Te enviamos al punto de continuidad correcto dentro del fantasy.</li>
+      </ol>
+    </section>
+  }
+</div>

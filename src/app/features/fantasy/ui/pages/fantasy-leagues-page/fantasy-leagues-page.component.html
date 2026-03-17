@@ -1,14 +1,34 @@
-<header>
-  <h1>Mis ligas fantasy</h1>
-  <a routerLink="/fantasy/leagues/create">Crear liga</a>
+<header class="fantasy-leagues-page__hero">
+  <div>
+    <p class="fantasy-leagues-page__eyebrow">Mis ligas</p>
+    <h1>Gestiona todas tus ligas fantasy</h1>
+  </div>
+  <a class="fantasy-leagues-page__action" routerLink="/fantasy/leagues/create">Crear liga</a>
 </header>
 @if (store.isLoading()) {
-  <p>Cargando...</p>
+  <p aria-live="polite" role="status">Cargando tus ligas...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [actions]="emptyStateActions"
+    [description]="store.errorMessage() ?? ''"
+    [icon]="trophyIcon"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="No hemos podido cargar tus ligas"
+  />
 } @else if (!store.hasLeagues()) {
-  <p>No participas en ninguna liga.</p>
+  <app-empty-state
+    [actions]="emptyStateActions"
+    [description]="'Crea tu primera liga para empezar a competir con tus amigos.'"
+    [icon]="trophyIcon"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="No participas en ninguna liga"
+  />
+} @else {
+  <div class="fantasy-leagues-page__grid o-grid o-grid--cards">
+    @for (league of store.leagues(); track league.id) {
+      <app-fantasy-league-card [league]="league" />
+    }
+  </div>
 }
-<div class="o-grid o-grid--cards">
-  @for (league of store.leagues(); track league.id) {
-    <app-fantasy-league-card [league]="league" />
-  }
-</div>

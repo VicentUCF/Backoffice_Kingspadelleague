@@ -1,0 +1,363 @@
+:host {
+  padding-block: var(--space-7) var(--space-10);
+}
+
+.fantasy-team-page {
+  &__hero {
+    display: grid;
+    gap: var(--space-6);
+    padding: var(--space-6);
+    border: 1px solid color-mix(in srgb, var(--color-brand) 16%, rgb(255 255 255 / 10%));
+    border-radius: 2rem;
+    background:
+      linear-gradient(145deg, rgb(255 255 255 / 0.06), rgb(255 255 255 / 0.015)),
+      radial-gradient(circle at top left, rgb(201 162 39 / 0.22), transparent 34%),
+      radial-gradient(circle at bottom right, rgb(255 255 255 / 0.08), transparent 38%),
+      var(--color-surface);
+  }
+
+  &__hero-copy {
+    display: grid;
+    gap: var(--space-4);
+
+    h1,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: var(--color-text-strong);
+      font-size: clamp(2.1rem, 6vw, 4rem);
+      letter-spacing: -0.06em;
+      line-height: 0.95;
+    }
+  }
+
+  &__eyebrow,
+  &__section-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    margin: 0;
+    color: var(--color-brand);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__hero-description {
+    max-width: 44rem;
+    color: var(--color-text-default);
+    line-height: 1.6;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  &__action,
+  &__planner-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    min-height: 3rem;
+    padding-inline: var(--space-5);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.03);
+    color: var(--color-text-strong);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  &__action--primary {
+    border-color: transparent;
+    background: var(--color-brand);
+    color: var(--color-brand-contrast);
+  }
+
+  &__hero-facts {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  &__fact {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-4);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.04);
+    backdrop-filter: blur(10px);
+
+    dt {
+      color: var(--color-text-muted);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    dd {
+      margin: 0;
+      color: var(--color-text-strong);
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.35;
+    }
+  }
+
+  &__planner {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-5);
+  }
+
+  &__planner-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: var(--space-4);
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--color-text-strong);
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    p:last-child {
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__planner-grid {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__panel {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.5rem;
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  &__panel-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h3 {
+      color: var(--color-text-strong);
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+    }
+  }
+
+  &__panel-eyebrow {
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__panel-chip {
+    padding: 0.35rem var(--space-3);
+    border-radius: 999px;
+    background: rgb(201 162 39 / 0.12);
+    color: var(--color-brand-strong);
+    font-size: 0.78rem;
+    font-weight: 800;
+  }
+
+  &__roster-list {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__roster-card {
+    display: grid;
+    gap: var(--space-3);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top left, rgb(201 162 39 / 0.08), transparent 62%),
+      var(--color-surface-raised);
+
+    &--bench {
+      background:
+        radial-gradient(circle at top left, rgb(255 255 255 / 0.06), transparent 62%),
+        var(--color-surface-raised);
+    }
+  }
+
+  &__roster-main {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  &__roster-photo,
+  &__roster-avatar {
+    display: grid;
+    place-items: center;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 1.15rem;
+    background:
+      radial-gradient(circle at top, rgb(201 162 39 / 0.16), transparent 62%), var(--color-surface);
+  }
+
+  &__roster-photo {
+    object-fit: cover;
+  }
+
+  &__roster-avatar {
+    color: var(--color-brand-strong);
+    font-family: var(--font-family-heading);
+    font-size: 1.15rem;
+    font-weight: 800;
+  }
+
+  &__roster-copy {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+
+    h4,
+    p {
+      margin: 0;
+    }
+
+    h4 {
+      color: var(--color-text-strong);
+      font-size: 1rem;
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+    }
+  }
+
+  &__roster-heading {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__captain-badge {
+    padding: 0.25rem var(--space-3);
+    border-radius: 999px;
+    background: rgb(201 162 39 / 0.14);
+    color: var(--color-brand-strong);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  &__roster-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-size: 0.82rem;
+    font-weight: 600;
+  }
+
+  &__team-logo {
+    display: block;
+    width: 1.125rem;
+    height: 1.125rem;
+    object-fit: contain;
+  }
+
+  &__roster-role {
+    color: var(--color-text-strong);
+    font-size: 0.85rem;
+    font-weight: 700;
+  }
+
+  &__roster-note {
+    margin: 0;
+    color: var(--color-text-default);
+    line-height: 1.55;
+  }
+
+  &__roster-footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    justify-content: space-between;
+    color: var(--color-text-strong);
+    font-weight: 700;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  :host {
+    padding-block-start: var(--space-5);
+  }
+
+  .fantasy-team-page {
+    &__hero {
+      padding: var(--space-5);
+      border-radius: 1.75rem;
+    }
+
+    &__actions {
+      display: grid;
+    }
+
+    &__action,
+    &__planner-link {
+      width: 100%;
+    }
+  }
+}
+
+@media (min-width: 48rem) {
+  .fantasy-team-page {
+    &__hero {
+      grid-template-columns: minmax(0, 1fr) minmax(18rem, 24rem);
+      align-items: end;
+    }
+
+    &__hero-facts {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &__planner-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}

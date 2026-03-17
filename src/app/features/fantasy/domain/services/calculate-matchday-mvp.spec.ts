@@ -1,17 +1,8 @@
 import { calculateMatchdayMvp } from './calculate-matchday-mvp';
 
-import { type FantasyPlayer } from '../entities/fantasy.models';
+import { createFantasyPlayer } from '@features/fantasy/testing/fantasy-test.fixtures';
 
-const player = (overrides: Partial<FantasyPlayer>): FantasyPlayer => ({
-  id: overrides.id ?? 'p-1',
-  name: overrides.name ?? 'Alpha',
-  avatar: overrides.avatar ?? 'A',
-  teamName: overrides.teamName ?? 'Team',
-  price: overrides.price ?? 10,
-  previousPrice: overrides.previousPrice ?? 9,
-  pointsMatchday: overrides.pointsMatchday ?? 5,
-  pointsTotal: overrides.pointsTotal ?? 50,
-});
+const player = createFantasyPlayer;
 
 describe('calculateMatchdayMvp', () => {
   it('returns null when there are no players', () => {

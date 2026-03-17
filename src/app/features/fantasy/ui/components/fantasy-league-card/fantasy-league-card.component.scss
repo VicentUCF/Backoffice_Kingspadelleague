@@ -1,25 +1,95 @@
-.fantasy-league-card__surface {
-  border: 1px solid var(--border-subtle);
-  border-radius: 1rem;
-  padding: 1rem;
-  background: var(--surface-primary);
+.fantasy-league-card {
+  display: block;
+
+  &__surface {
+    display: grid;
+    gap: var(--space-4);
+    height: 100%;
+    padding: var(--space-5);
+  }
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: start;
+    justify-content: space-between;
+    gap: var(--space-3);
+
+    h3,
+    p {
+      margin: 0;
+    }
+
+    h3 {
+      color: var(--color-text-strong);
+      font-size: 1.4rem;
+      letter-spacing: -0.04em;
+    }
+  }
+
+  &__eyebrow {
+    color: var(--color-brand);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__code {
+    padding: 0.35rem var(--space-3);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.05);
+    color: var(--color-text-strong);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+  }
+
+  &__stats {
+    display: grid;
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  &__stats div {
+    display: grid;
+    gap: var(--space-1);
+    padding: var(--space-3);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1rem;
+    background: rgb(255 255 255 / 0.02);
+  }
+
+  &__stats dt {
+    color: var(--color-text-muted);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__stats dd {
+    margin: 0;
+    color: var(--color-text-strong);
+    font-weight: 700;
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: auto;
+  }
+
+  &__actions a {
+    color: var(--color-text-strong);
+    font-weight: 700;
+    text-decoration: none;
+  }
 }
-.fantasy-league-card__header,
-.fantasy-league-card__stats,
-.fantasy-league-card__actions {
-  display: flex;
-  gap: 0.75rem;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.fantasy-league-card__stats dt {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-}
-.fantasy-league-card__stats dd {
-  margin: 0;
-  font-weight: 600;
-}
-.fantasy-league-card__actions a {
-  font-weight: 600;
+
+@media (min-width: 48rem) {
+  .fantasy-league-card__stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }

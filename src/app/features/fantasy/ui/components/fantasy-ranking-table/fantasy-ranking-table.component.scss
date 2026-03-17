@@ -1,16 +1,39 @@
-.fantasy-ranking-table__wrap {
-  overflow-x: auto;
-}
-.fantasy-ranking-table table {
-  width: 100%;
-  border-collapse: collapse;
-}
-.fantasy-ranking-table th,
-.fantasy-ranking-table td {
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--border-subtle);
-}
-.fantasy-ranking-table__row--mine {
-  background: color-mix(in srgb, var(--brand-primary) 10%, transparent);
-  font-weight: 600;
+.fantasy-ranking-table {
+  &__wrap {
+    overflow-x: auto;
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 42rem;
+  }
+
+  th,
+  td {
+    padding: var(--space-3);
+    border-bottom: 1px solid var(--color-border-subtle);
+    text-align: left;
+  }
+
+  th {
+    color: var(--color-text-muted);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  td {
+    color: var(--color-text-default);
+  }
+
+  &__row--mine {
+    background: rgb(201 162 39 / 0.08);
+
+    td {
+      color: var(--color-text-strong);
+      font-weight: 700;
+    }
+  }
 }

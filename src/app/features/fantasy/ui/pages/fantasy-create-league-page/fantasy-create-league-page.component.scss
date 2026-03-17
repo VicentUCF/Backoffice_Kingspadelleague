@@ -1,0 +1,163 @@
+:host {
+  display: block;
+}
+
+.fantasy-create-league-page__hero {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: minmax(0, 2.1fr) minmax(0, 1fr);
+  padding: clamp(1.5rem, 3vw, 2.5rem);
+  border: 1px solid rgb(15 23 42 / 0.08);
+  border-radius: 1.75rem;
+  background:
+    radial-gradient(circle at top left, rgb(251 191 36 / 0.18), transparent 36%),
+    linear-gradient(135deg, rgb(15 23 42), rgb(30 41 59));
+  color: rgb(248 250 252);
+}
+
+.fantasy-create-league-page__eyebrow,
+.fantasy-create-league-page__panel-eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.fantasy-create-league-page__hero-copy h1,
+.fantasy-create-league-page__panel-header h2 {
+  margin: 0;
+}
+
+.fantasy-create-league-page__hero-description,
+.fantasy-create-league-page__panel-header p {
+  margin: 0;
+  color: rgb(226 232 240);
+}
+
+.fantasy-create-league-page__hero-facts,
+.fantasy-create-league-page__summary-grid {
+  display: grid;
+  gap: 0.85rem;
+  margin: 0;
+}
+
+.fantasy-create-league-page__fact,
+.fantasy-create-league-page__summary-grid div {
+  padding: 1rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  border-radius: 1rem;
+  background: rgb(255 255 255 / 0.08);
+}
+
+.fantasy-create-league-page__fact dt,
+.fantasy-create-league-page__summary-grid dt {
+  margin-bottom: 0.35rem;
+  color: rgb(148 163 184);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.fantasy-create-league-page__fact dd,
+.fantasy-create-league-page__summary-grid dd {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.fantasy-create-league-page__grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.fantasy-create-league-page__panel {
+  display: grid;
+  gap: 1.25rem;
+  align-content: start;
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+}
+
+.fantasy-create-league-page__panel--success {
+  background:
+    radial-gradient(circle at top right, rgb(16 185 129 / 0.18), transparent 32%),
+    linear-gradient(180deg, rgb(255 255 255), rgb(241 245 249));
+}
+
+.fantasy-create-league-page__panel-header {
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+.fantasy-create-league-page__form-fields,
+.fantasy-create-league-page__steps {
+  display: grid;
+  gap: 1rem;
+}
+
+.fantasy-create-league-page__steps {
+  margin: 0;
+  padding-left: 1.2rem;
+  color: rgb(51 65 85);
+}
+
+.fantasy-create-league-page__invite-code {
+  align-self: start;
+  padding: 0.55rem 0.85rem;
+  border-radius: 999px;
+  background: rgb(15 23 42);
+  color: rgb(248 250 252);
+  font-size: 0.9rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+}
+
+.fantasy-create-league-page__actions button,
+.fantasy-create-league-page__result-actions a {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 2.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.fantasy-create-league-page__actions button {
+  border: 0;
+  background: linear-gradient(135deg, rgb(245 158 11), rgb(249 115 22));
+  color: rgb(15 23 42);
+}
+
+.fantasy-create-league-page__result-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.fantasy-create-league-page__result-actions a {
+  border: 1px solid rgb(15 23 42 / 0.12);
+  color: rgb(15 23 42);
+  background: rgb(255 255 255 / 0.84);
+}
+
+.fantasy-create-league-page__result-actions a:first-child {
+  background: rgb(15 23 42);
+  color: rgb(248 250 252);
+}
+
+.fantasy-create-league-page__feedback {
+  margin: 0;
+  color: rgb(185 28 28);
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .fantasy-create-league-page__hero,
+  .fantasy-create-league-page__grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,5 +1,8 @@
 <div class="fantasy-ranking-table__wrap">
-  <table>
+  <table class="fantasy-ranking-table__table">
+    <caption class="u-visually-hidden">
+      Clasificación fantasy de la liga
+    </caption>
     <thead>
       <tr>
         <th>#</th>
@@ -11,14 +14,14 @@
       </tr>
     </thead>
     <tbody>
-      @for (entry of entries(); track entry.rank) {
+      @for (entry of entries(); track entry.rankLabel) {
         <tr [class.fantasy-ranking-table__row--mine]="entry.isMe">
-          <td>{{ entry.rank }}</td>
+          <td>{{ entry.rankLabel }}</td>
           <td>{{ entry.teamName }}</td>
           <td>{{ entry.managerName }}</td>
-          <td>{{ entry.totalPoints }}</td>
-          <td>{{ entry.matchdayPoints }}</td>
-          <td>{{ entry.teamValue }}</td>
+          <td>{{ entry.totalPointsLabel }}</td>
+          <td>{{ entry.matchdayPointsLabel }}</td>
+          <td>{{ entry.teamValueLabel }}</td>
         </tr>
       }
     </tbody>

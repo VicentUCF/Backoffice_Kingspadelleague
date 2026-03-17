@@ -1,49 +1,96 @@
+import { NgOptimizedImage } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  effect,
   inject,
-  signal,
+  type OnDestroy,
   type OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { LucideAngularModule, ShieldAlert, SlidersHorizontal } from 'lucide-angular';
+import { Subscription } from 'rxjs';
 
-import { FantasyLeagueDashboardStore } from '@features/fantasy/ui/state/fantasy-league-dashboard.store';
+import { BaseInputComponent } from '@shared/ui/base-input/base-input.component';
+import { BaseSelectComponent } from '@shared/ui/base-select/base-select.component';
+import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
+
+import { FantasyMvpCardComponent } from '@features/fantasy/ui/components/fantasy-mvp-card/fantasy-mvp-card.component';
+import { FantasyMarketStore } from '@features/fantasy/ui/state/fantasy-market.store';
 
 @Component({
   selector: 'app-fantasy-market-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
-  providers: [FantasyLeagueDashboardStore],
-  host: { class: 'fantasy-page o-container o-stack' },
+  imports: [
+    BaseInputComponent,
+    BaseSelectComponent,
+    EmptyStateComponent,
+    FantasyMvpCardComponent,
+    FormsModule,
+    LucideAngularModule,
+    NgOptimizedImage,
+    RouterLink,
+  ],
+  providers: [FantasyMarketStore],
+  host: { class: 'fantasy-page fantasy-market-page o-container o-stack' },
   templateUrl: './fantasy-market-page.component.html',
+  styleUrl: './fantasy-market-page.component.scss',
 })
-export class FantasyMarketPageComponent implements OnInit {
+export class FantasyMarketPageComponent implements OnDestroy, OnInit {
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
   private readonly route = inject(ActivatedRoute);
-  readonly store = inject(FantasyLeagueDashboardStore);
-  readonly searchQuery = signal('');
+  private readonly routeSubscription = new Subscription();
 
-  readonly filteredPlayers = computed(() => {
-    const dashboard = this.store.dashboard();
-    if (!dashboard) {
-      return [];
-    }
+  protected readonly store = inject(FantasyMarketStore);
+  protected readonly filtersIcon = SlidersHorizontal;
+  protected readonly shieldAlert = ShieldAlert;
 
-    const normalizedQuery = this.searchQuery().trim().toLowerCase();
-    if (normalizedQuery.length === 0) {
-      return dashboard.players;
-    }
+  constructor() {
+    effect(() => {
+      const viewModel = this.store.viewModel();
 
-    return dashboard.players.filter((player) =>
-      player.name.toLowerCase().includes(normalizedQuery),
-    );
-  });
+      if (viewModel) {
+        this.title.setTitle(`Mercado · ${viewModel.leagueName} | Fantasy | KingsPadelLeague`);
+        this.meta.updateTag({
+          name: 'description',
+          content: `Mercado fantasy de ${viewModel.leagueName}: revisa el roster real de la liga, compara precios y prepara tu plantilla de pretemporada.`,
+        });
+
+        return;
+      }
+
+      if (this.store.isNotFound()) {
+        this.title.setTitle('Mercado fantasy no encontrado | KingsPadelLeague');
+        this.meta.updateTag({
+          name: 'description',
+          content:
+            'La liga fantasy solicitada no está disponible para consultar su mercado de jugadores.',
+        });
+
+        return;
+      }
+
+      this.title.setTitle('Mercado fantasy | KingsPadelLeague');
+      this.meta.updateTag({
+        name: 'description',
+        content:
+          'Consulta el mercado fantasy de KingsPadelLeague para construir plantilla con el roster real de la liga.',
+      });
+    });
+  }
 
   ngOnInit(): void {
-    const leagueId = this.route.snapshot.paramMap.get('leagueId');
-    if (leagueId) {
-      void this.store.load(leagueId);
-    }
+    this.routeSubscription.add(
+      this.route.paramMap.subscribe((paramMap) => {
+        void this.store.load(paramMap.get('leagueId'));
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription.unsubscribe();
   }
 }

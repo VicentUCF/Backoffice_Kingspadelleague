@@ -1,209 +1,217 @@
 import {
   type FantasyLeague,
   type FantasyLeagueDashboard,
+  type FantasyLeaguePhase,
   type FantasyPlayer,
   type FantasyRankingEntry,
   type FantasyTeam,
 } from '@features/fantasy/domain/entities/fantasy.models';
+import { FANTASY_TEAM_INITIAL_BUDGET } from '@features/fantasy/domain/services/build-fantasy-team-draft';
 
-const fantasyPlayers: readonly FantasyPlayer[] = [
+import { buildFantasyPreseasonPlayerPool } from './build-fantasy-preseason-player-pool';
+
+interface LeagueSeedConfig {
+  readonly id: string;
+  readonly name: string;
+  readonly code: string;
+  readonly memberCount: number;
+  readonly myManagerName: string;
+  readonly myTeamName: string;
+  readonly captainId: string;
+  readonly selectedPlayerIds: readonly string[];
+  readonly rankingOpponents: readonly RankingSeedInput[];
+}
+
+interface RankingSeedInput {
+  readonly teamName: string;
+  readonly managerName: string;
+  readonly teamValue: number;
+}
+
+const fantasyPlayers = buildFantasyPreseasonPlayerPool();
+const fantasyPlayersById = new Map(fantasyPlayers.map((player) => [player.id, player] as const));
+const preseasonPhase: FantasyLeaguePhase = 'preseason';
+
+const leagueSeedConfigs: readonly LeagueSeedConfig[] = [
   {
-    id: 'fp-1',
-    name: 'Ale Ruiz',
-    avatar: 'AR',
-    teamName: 'Málaga Smash',
-    price: 24000000,
-    previousPrice: 23500000,
-    pointsMatchday: 14,
-    pointsTotal: 182,
+    id: 'league-1',
+    name: 'Amigos del curro',
+    code: 'CURRO26',
+    memberCount: 8,
+    myManagerName: 'Vicent',
+    myTeamName: 'Previa Imperial',
+    captainId: 'thormentadores-player-1',
+    selectedPlayerIds: [
+      'kings-of-favar-player-1',
+      'thormentadores-player-1',
+      'magic-city-player-1',
+      'barbaridad-player-2',
+      'titanics-player-4',
+      'sin-equipo-player-1',
+    ],
+    rankingOpponents: [
+      { teamName: 'Drive de Oficina', managerName: 'Lucía', teamValue: 80_950_000 },
+      { teamName: 'Cristal Team', managerName: 'Marta', teamValue: 78_200_000 },
+      { teamName: 'Rivales del Viernes', managerName: 'Carlos', teamValue: 76_650_000 },
+      { teamName: 'La Bandeja Club', managerName: 'Nora', teamValue: 74_900_000 },
+    ],
   },
   {
-    id: 'fp-2',
-    name: 'Bea González',
-    avatar: 'BG',
-    teamName: 'Costa Sol Pádel',
-    price: 26000000,
-    previousPrice: 26200000,
-    pointsMatchday: 12,
-    pointsTotal: 190,
+    id: 'league-2',
+    name: 'Colegas pádel',
+    code: 'PALA26',
+    memberCount: 12,
+    myManagerName: 'Vicent',
+    myTeamName: 'Mercado Fino',
+    captainId: 'titanics-player-1',
+    selectedPlayerIds: [
+      'titanics-player-1',
+      'kings-of-favar-player-2',
+      'thormentadores-player-2',
+      'barbaridad-player-1',
+      'magic-city-player-2',
+      'sin-equipo-player-2',
+    ],
+    rankingOpponents: [
+      { teamName: 'Bandeja Táctica', managerName: 'Ana', teamValue: 79_300_000 },
+      { teamName: 'Líderes del Cristal', managerName: 'Joan', teamValue: 77_700_000 },
+      { teamName: 'Ritmo de Liga', managerName: 'Pablo', teamValue: 75_950_000 },
+      { teamName: 'Globo Largo', managerName: 'Sergio', teamValue: 72_800_000 },
+    ],
   },
   {
-    id: 'fp-3',
-    name: 'Arturo Coello',
-    avatar: 'AC',
-    teamName: 'Valladolid Kings',
-    price: 28000000,
-    previousPrice: 27700000,
-    pointsMatchday: 16,
-    pointsTotal: 210,
-  },
-  {
-    id: 'fp-4',
-    name: 'Paula Josemaría',
-    avatar: 'PJ',
-    teamName: 'Extremadura Volley',
-    price: 27000000,
-    previousPrice: 26400000,
-    pointsMatchday: 16,
-    pointsTotal: 205,
-  },
-  {
-    id: 'fp-5',
-    name: 'Juan Lebrón',
-    avatar: 'JL',
-    teamName: 'Cádiz Viboras',
-    price: 22000000,
-    previousPrice: 22500000,
-    pointsMatchday: 9,
-    pointsTotal: 165,
-  },
-  {
-    id: 'fp-6',
-    name: 'Martín Di Nenno',
-    avatar: 'MD',
-    teamName: 'Buenos Aires Drive',
-    price: 25000000,
-    previousPrice: 24700000,
-    pointsMatchday: 11,
-    pointsTotal: 174,
-  },
-  {
-    id: 'fp-7',
-    name: 'Gemma Triay',
-    avatar: 'GT',
-    teamName: 'Menorca Rackets',
-    price: 23500000,
-    previousPrice: 23100000,
-    pointsMatchday: 10,
-    pointsTotal: 170,
-  },
-  {
-    id: 'fp-8',
-    name: 'Agustín Tapia',
-    avatar: 'AT',
-    teamName: 'Catamarca Smash',
-    price: 29000000,
-    previousPrice: 28600000,
-    pointsMatchday: 15,
-    pointsTotal: 214,
+    id: 'league-3',
+    name: 'Global',
+    code: 'GLOBAL26',
+    memberCount: 24,
+    myManagerName: 'Vicent',
+    myTeamName: 'Draft de Domingo',
+    captainId: 'kings-of-favar-player-3',
+    selectedPlayerIds: [
+      'kings-of-favar-player-3',
+      'thormentadores-player-3',
+      'titanics-player-2',
+      'barbaridad-player-3',
+      'magic-city-player-1',
+      'sin-equipo-player-3',
+    ],
+    rankingOpponents: [
+      { teamName: 'Pared de Fondo', managerName: 'Eva', teamValue: 82_150_000 },
+      { teamName: 'Seis en Caja', managerName: 'Toni', teamValue: 80_800_000 },
+      { teamName: 'Presión Alta', managerName: 'Andrea', teamValue: 79_450_000 },
+      { teamName: 'Cierre Perfecto', managerName: 'Javi', teamValue: 76_900_000 },
+    ],
   },
 ];
 
-const leagueOne: FantasyLeague = {
-  id: 'league-1',
-  name: 'Amigos del curro',
-  code: 'CURRO24',
-  memberCount: 8,
-  myRank: 2,
-  myPoints: 542,
-};
-const leagueTwo: FantasyLeague = {
-  id: 'league-2',
-  name: 'Colegas pádel',
-  code: 'COLEGAS',
-  memberCount: 12,
-  myRank: 5,
-  myPoints: 490,
-};
-const leagueThree: FantasyLeague = {
-  id: 'league-3',
-  name: 'Global',
-  code: 'GLOBALX',
-  memberCount: 86,
-  myRank: 24,
-  myPoints: 451,
-};
+export const FANTASY_DASHBOARD_BY_LEAGUE_SEED = Object.fromEntries(
+  leagueSeedConfigs.map((config) => {
+    const dashboard = buildFantasyLeagueDashboard(config);
 
-const myTeamByLeague = (leagueId: string, name: string): FantasyTeam => ({
-  id: `team-${leagueId}`,
-  leagueId,
-  name,
-  budgetRemaining: 8000000,
-  teamValue: 92000000,
-  totalPoints: 542,
-  matchdayPoints: 63,
-  players: [
-    { playerId: 'fp-1', isStarter: true, isCaptain: false },
-    { playerId: 'fp-2', isStarter: true, isCaptain: false },
-    { playerId: 'fp-3', isStarter: true, isCaptain: true },
-    { playerId: 'fp-4', isStarter: true, isCaptain: false },
-    { playerId: 'fp-5', isStarter: false, isCaptain: false },
-    { playerId: 'fp-6', isStarter: false, isCaptain: false },
-  ],
-});
+    return [config.id, dashboard] as const;
+  }),
+) as Record<string, FantasyLeagueDashboard>;
 
-const ranking = (myTeamName: string): readonly FantasyRankingEntry[] => [
-  {
-    rank: 1,
-    teamName: 'Padel Dynasty',
-    managerName: 'Lucía',
-    totalPoints: 578,
-    matchdayPoints: 71,
-    teamValue: 98500000,
-    isMe: false,
-  },
-  {
-    rank: 2,
-    teamName: myTeamName,
-    managerName: 'Vicent',
-    totalPoints: 542,
-    matchdayPoints: 63,
-    teamValue: 92000000,
-    isMe: true,
-  },
-  {
-    rank: 3,
-    teamName: 'Smash Masters',
-    managerName: 'Carlos',
-    totalPoints: 537,
-    matchdayPoints: 60,
-    teamValue: 91300000,
-    isMe: false,
-  },
-  {
-    rank: 4,
-    teamName: 'Viboras Team',
-    managerName: 'Marta',
-    totalPoints: 511,
-    matchdayPoints: 55,
-    teamValue: 88000000,
-    isMe: false,
-  },
-  {
-    rank: 5,
-    teamName: 'Globo Winners',
-    managerName: 'Nora',
-    totalPoints: 500,
-    matchdayPoints: 49,
-    teamValue: 86200000,
-    isMe: false,
-  },
-];
-
-export const FANTASY_LEAGUES_SEED: readonly FantasyLeague[] = [leagueOne, leagueTwo, leagueThree];
-
-export const FANTASY_DASHBOARD_BY_LEAGUE_SEED: Record<string, FantasyLeagueDashboard> = {
-  'league-1': {
-    league: leagueOne,
-    myTeam: myTeamByLeague('league-1', 'Smash Masters'),
-    ranking: ranking('Smash Masters'),
-    players: fantasyPlayers,
-    marketLocked: false,
-  },
-  'league-2': {
-    league: leagueTwo,
-    myTeam: myTeamByLeague('league-2', 'Viboras Team'),
-    ranking: ranking('Viboras Team'),
-    players: fantasyPlayers,
-    marketLocked: true,
-  },
-  'league-3': {
-    league: leagueThree,
-    myTeam: myTeamByLeague('league-3', 'Padel Dynasty'),
-    ranking: ranking('Padel Dynasty'),
-    players: fantasyPlayers,
-    marketLocked: false,
-  },
-};
+export const FANTASY_LEAGUES_SEED: readonly FantasyLeague[] = Object.values(
+  FANTASY_DASHBOARD_BY_LEAGUE_SEED,
+).map((dashboard) => dashboard.league);
 
 export const FANTASY_PLAYERS_SEED = fantasyPlayers;
+
+function buildFantasyLeagueDashboard(config: LeagueSeedConfig): FantasyLeagueDashboard {
+  const myTeam = buildFantasyTeam(
+    config.id,
+    config.myTeamName,
+    config.selectedPlayerIds,
+    config.captainId,
+  );
+  const ranking = buildFantasyRanking(config, myTeam);
+  const myRankingEntry = ranking.find((entry) => entry.isMe);
+
+  const league: FantasyLeague = {
+    id: config.id,
+    name: config.name,
+    code: config.code,
+    memberCount: config.memberCount,
+    myRank: myRankingEntry?.rank ?? ranking.length,
+    myPoints: myRankingEntry?.totalPoints ?? 0,
+    phase: preseasonPhase,
+  };
+
+  return {
+    league,
+    myTeam,
+    ranking,
+    players: fantasyPlayers,
+    marketLocked: false,
+  };
+}
+
+function buildFantasyTeam(
+  leagueId: string,
+  teamName: string,
+  selectedPlayerIds: readonly string[],
+  captainId: string,
+): FantasyTeam {
+  const selectedPlayers = selectedPlayerIds
+    .map((playerId) => fantasyPlayersById.get(playerId))
+    .filter(isFantasyPlayer);
+  const teamValue = selectedPlayers.reduce((total, player) => total + player.price, 0);
+
+  return {
+    id: `team-${leagueId}`,
+    leagueId,
+    name: teamName,
+    budgetRemaining: Math.max(0, FANTASY_TEAM_INITIAL_BUDGET - teamValue),
+    teamValue,
+    totalPoints: 0,
+    matchdayPoints: 0,
+    players: selectedPlayerIds.map((playerId, index) => ({
+      playerId,
+      isStarter: index < 4,
+      isCaptain: playerId === captainId,
+    })),
+  };
+}
+
+function buildFantasyRanking(
+  config: LeagueSeedConfig,
+  myTeam: FantasyTeam,
+): readonly FantasyRankingEntry[] {
+  return [
+    ...config.rankingOpponents.map((entry) => ({
+      ...entry,
+      totalPoints: 0,
+      matchdayPoints: 0,
+      isMe: false,
+    })),
+    {
+      teamName: myTeam.name,
+      managerName: config.myManagerName,
+      teamValue: myTeam.teamValue,
+      totalPoints: 0,
+      matchdayPoints: 0,
+      isMe: true,
+    },
+  ]
+    .sort((leftEntry, rightEntry) => {
+      if (rightEntry.teamValue !== leftEntry.teamValue) {
+        return rightEntry.teamValue - leftEntry.teamValue;
+      }
+
+      return leftEntry.teamName.localeCompare(rightEntry.teamName, 'es');
+    })
+    .map((entry, index) => ({
+      rank: index + 1,
+      teamName: entry.teamName,
+      managerName: entry.managerName,
+      totalPoints: entry.totalPoints,
+      matchdayPoints: entry.matchdayPoints,
+      teamValue: entry.teamValue,
+      isMe: entry.isMe,
+    }));
+}
+
+function isFantasyPlayer(player: FantasyPlayer | undefined): player is FantasyPlayer {
+  return player !== undefined;
+}

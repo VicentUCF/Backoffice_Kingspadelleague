@@ -1,13 +1,124 @@
-<h1>Crear liga fantasy</h1>
-<form #leagueForm="ngForm" (ngSubmit)="createLeague(leagueName.value)">
-  <label for="league-name">Nombre de liga</label>
-  <input #leagueName="ngModel" id="league-name" name="leagueName" ngModel required />
-  <label for="league-description">Descripción</label>
-  <textarea id="league-description" name="leagueDescription" ngModel></textarea>
-  <button type="submit" [disabled]="leagueForm.invalid">Crear liga</button>
-</form>
-@if (generatedCode()) {
-  <p>
-    Tu código de invitación es <strong>{{ generatedCode() }}</strong>
-  </p>
-}
+<section class="fantasy-create-league-page__hero">
+  <div class="fantasy-create-league-page__hero-copy">
+    <p class="fantasy-create-league-page__eyebrow">Ligas privadas</p>
+    <h1>Crea una liga con identidad propia antes del arranque.</h1>
+    <p class="fantasy-create-league-page__hero-description">
+      Deja preparada la competición, genera un código consistente y salta directamente a la
+      construcción de plantilla con el mercado de pretemporada activo.
+    </p>
+  </div>
+
+  <dl class="fantasy-create-league-page__hero-facts">
+    <div class="fantasy-create-league-page__fact">
+      <dt>Fase</dt>
+      <dd>Pretemporada</dd>
+    </div>
+    <div class="fantasy-create-league-page__fact">
+      <dt>Roster</dt>
+      <dd>Jugadores reales</dd>
+    </div>
+    <div class="fantasy-create-league-page__fact">
+      <dt>Siguiente paso</dt>
+      <dd>Gestionar equipo</dd>
+    </div>
+  </dl>
+</section>
+
+<div class="fantasy-create-league-page__grid">
+  <form
+    #leagueForm="ngForm"
+    class="fantasy-create-league-page__panel c-surface-card"
+    (ngSubmit)="createLeague()"
+  >
+    <header class="fantasy-create-league-page__panel-header">
+      <div>
+        <p class="fantasy-create-league-page__panel-eyebrow">Configuración</p>
+        <h2>Define la liga</h2>
+        <p>Usamos el nombre para generar el código y dejar el acceso listo para compartir.</p>
+      </div>
+    </header>
+
+    <div class="fantasy-create-league-page__form-fields">
+      <app-base-input
+        label="Nombre de la liga"
+        maxlength="48"
+        name="leagueName"
+        placeholder="Ej. Amigos del curro"
+        required
+        [ngModel]="leagueName()"
+        (ngModelChange)="leagueName.set($event)"
+      />
+      <app-base-textarea
+        label="Descripción"
+        maxlength="220"
+        name="leagueDescription"
+        placeholder="Define reglas, tono o tipo de rivales que van a entrar"
+        rows="5"
+        [ngModel]="leagueDescription()"
+        (ngModelChange)="leagueDescription.set($event)"
+      />
+    </div>
+
+    <div class="fantasy-create-league-page__actions">
+      <button type="submit" [disabled]="leagueForm.invalid || isSubmitting()">
+        {{ isSubmitting() ? 'Creando liga...' : 'Crear liga' }}
+      </button>
+    </div>
+
+    @if (errorMessage()) {
+      <p aria-live="polite" class="fantasy-create-league-page__feedback" role="status">
+        {{ errorMessage() }}
+      </p>
+    }
+  </form>
+
+  @if (createdLeague(); as createdLeague) {
+    <section
+      class="fantasy-create-league-page__panel fantasy-create-league-page__panel--success c-surface-card"
+      aria-live="polite"
+    >
+      <header class="fantasy-create-league-page__panel-header">
+        <div>
+          <p class="fantasy-create-league-page__panel-eyebrow">Liga creada</p>
+          <h2>{{ createdLeague.leagueName }}</h2>
+          <p>La liga ya existe en fantasy y está preparada para configurar equipo y mercado.</p>
+        </div>
+        <span class="fantasy-create-league-page__invite-code">{{ createdLeague.code }}</span>
+      </header>
+
+      <dl class="fantasy-create-league-page__summary-grid">
+        <div>
+          <dt>Participación inicial</dt>
+          <dd>{{ createdLeague.memberCountLabel }}</dd>
+        </div>
+        <div>
+          <dt>Mercado</dt>
+          <dd>Abierto en pretemporada</dd>
+        </div>
+      </dl>
+
+      <div class="fantasy-create-league-page__result-actions">
+        <a [routerLink]="createdLeague.teamCreationLink">Configurar mi equipo</a>
+        <a [routerLink]="createdLeague.dashboardLink">Abrir dashboard</a>
+        <a [routerLink]="createdLeague.marketLink">Ver mercado</a>
+      </div>
+    </section>
+  } @else {
+    <section
+      class="fantasy-create-league-page__panel fantasy-create-league-page__panel--preview c-surface-card"
+    >
+      <header class="fantasy-create-league-page__panel-header">
+        <div>
+          <p class="fantasy-create-league-page__panel-eyebrow">Qué ocurre después</p>
+          <h2>Onboarding listo para producción</h2>
+        </div>
+      </header>
+
+      <ol class="fantasy-create-league-page__steps">
+        <li>Se genera un código consistente para compartir la liga.</li>
+        <li>Entras directamente al flujo de gestión de plantilla.</li>
+        <li>El dashboard queda preparado con ranking y mercado de pretemporada.</li>
+      </ol>
+    </section>
+  }
+</div>

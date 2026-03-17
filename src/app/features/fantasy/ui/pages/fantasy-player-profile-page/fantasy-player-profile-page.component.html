@@ -1,8 +1,93 @@
-@if (store.player(); as player) {
-  <h1>{{ player.name }}</h1>
-  <p>{{ player.teamName }}</p>
-  <p>Precio: {{ player.price }} · Variación: {{ player.price - player.previousPrice }}</p>
-  <p>Puntos jornada: {{ player.pointsMatchday }} · Totales: {{ player.pointsTotal }}</p>
-  <button type="button">Comprar jugador</button>
-  <button type="button">Vender jugador</button>
+@if (store.isLoading()) {
+  <p aria-live="polite" role="status">Cargando perfil fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [actions]="backToLeaguesActions"
+    [description]="store.errorMessage() ?? ''"
+    [icon]="shieldAlert"
+    eyebrow="Jugador fantasy"
+    layout="feature"
+    title="No hemos podido cargar este perfil"
+  />
+} @else if (store.player(); as player) {
+  <article class="fantasy-player-profile-page__panel c-surface-card">
+    <header class="fantasy-player-profile-page__hero">
+      <div class="fantasy-player-profile-page__identity">
+        @if (player.photoPath) {
+          <img
+            [ngSrc]="player.photoPath"
+            [alt]="player.name"
+            class="fantasy-player-profile-page__photo"
+            decoding="async"
+            height="96"
+            width="96"
+          />
+        } @else {
+          <span aria-hidden="true" class="fantasy-player-profile-page__avatar">
+            {{ player.avatarLabel }}
+          </span>
+        }
+
+        <div class="fantasy-player-profile-page__copy">
+          <p class="fantasy-player-profile-page__eyebrow">Jugador fantasy</p>
+          <h1>{{ player.name }}</h1>
+          <p class="fantasy-player-profile-page__meta">
+            @if (player.teamLogoPath) {
+              <img
+                [ngSrc]="player.teamLogoPath"
+                [alt]="player.teamName"
+                class="fantasy-player-profile-page__team-logo"
+                decoding="async"
+                height="20"
+                width="20"
+              />
+            }
+            <span>{{ player.teamName }}</span>
+            <span>{{ player.sideLabel }}</span>
+          </p>
+          <p class="fantasy-player-profile-page__role">{{ player.roleLabel }}</p>
+        </div>
+      </div>
+    </header>
+
+    <dl class="fantasy-player-profile-page__stats o-grid o-grid--metrics">
+      <div class="c-metric">
+        <span class="c-metric__label">Precio actual</span>
+        <strong class="c-metric__value">{{ player.priceLabel }}</strong>
+      </div>
+      <div class="c-metric">
+        <span class="c-metric__label">Precio anterior</span>
+        <strong class="c-metric__value">{{ player.previousPriceLabel }}</strong>
+      </div>
+      <div class="c-metric">
+        <span class="c-metric__label">Variación</span>
+        <strong class="c-metric__value">{{ player.priceChangeLabel }}</strong>
+      </div>
+    </dl>
+
+    <section class="fantasy-player-profile-page__notes">
+      <div>
+        <h2>Situación de mercado</h2>
+        <p>{{ player.marketTrendLabel }}</p>
+        <p>{{ player.marketGuidance }}</p>
+      </div>
+      <div>
+        <h2>Scouting</h2>
+        <p>{{ player.scoutingNote }}</p>
+      </div>
+    </section>
+
+    <div class="fantasy-player-profile-page__actions">
+      <a routerLink="/fantasy/leagues">Volver a mis ligas</a>
+    </div>
+  </article>
+} @else if (store.isNotFound()) {
+  <app-empty-state
+    [actions]="backToLeaguesActions"
+    [description]="'No hemos encontrado este jugador fantasy. Revisa el mercado de una de tus ligas para abrir otro perfil.'"
+    [icon]="searchIcon"
+    eyebrow="Jugador fantasy"
+    layout="feature"
+    title="No hemos encontrado este jugador fantasy"
+  />
 }

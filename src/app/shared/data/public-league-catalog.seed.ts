@@ -198,7 +198,7 @@ function createPlayer(
   displayName: string,
   roleLabel: string,
   side: PlayerSide,
-  _photoPath: string | null,
+  photoPath: string | null,
 ): PublicLeaguePlayerCatalogEntry {
   return {
     id: `${teamId}-player-${index}`,
@@ -206,7 +206,7 @@ function createPlayer(
     displayName,
     roleLabel,
     side,
-    photoPath: null,
+    photoPath,
   };
 }
 

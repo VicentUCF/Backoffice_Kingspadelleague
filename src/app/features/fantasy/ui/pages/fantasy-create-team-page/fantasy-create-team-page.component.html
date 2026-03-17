@@ -1,26 +1,305 @@
-@if (store.dashboard(); as dashboard) {
-  <h1>Crear equipo · {{ dashboard.league.name }}</h1>
-  <p>Presupuesto inicial: 100M · Restante: {{ remainingBudget() }}</p>
-  <p>Jugadores seleccionados: {{ selectedPlayerIds().length }}/6</p>
-  <ul>
-    @for (player of dashboard.players; track player.id) {
-      <li>
-        <label>
-          <input
-            type="checkbox"
-            [checked]="selectedPlayerIds().includes(player.id)"
-            (change)="togglePlayer(player.id)"
-          />
-          {{ player.name }} · {{ player.price }}
-        </label>
-      </li>
-    }
-  </ul>
-  <label for="captain">Capitán</label>
-  <select id="captain" [ngModel]="captainId()" (ngModelChange)="captainId.set($event)">
-    <option [ngValue]="null">Selecciona capitán</option>
-    @for (playerId of selectedPlayerIds(); track playerId) {
-      <option [value]="playerId">{{ playerId }}</option>
-    }
-  </select>
+@if (store.isLoading()) {
+  <p aria-live="polite" role="status">Preparando tu plantilla fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [description]="store.errorMessage() ?? ''"
+    [icon]="shieldAlert"
+    eyebrow="Plantilla"
+    layout="feature"
+    title="No hemos podido preparar el equipo"
+  />
+} @else if (store.summary(); as summary) {
+  @if (store.viewModel(); as viewModel) {
+    <section class="fantasy-create-team-page__hero">
+      <div class="fantasy-create-team-page__hero-copy">
+        <p class="fantasy-create-team-page__eyebrow">
+          {{ summary.hasExistingTeam ? 'Edición de plantilla' : 'Alta inicial' }}
+        </p>
+        <h1>{{ summary.heading }} · {{ summary.leagueName }}</h1>
+        <p class="fantasy-create-team-page__hero-description">
+          {{ viewModel.phaseDescription }}
+        </p>
+      </div>
+
+      <dl class="fantasy-create-team-page__hero-facts">
+        <div class="fantasy-create-team-page__fact">
+          <dt>Selección</dt>
+          <dd>{{ summary.selectedPlayersCountLabel }}</dd>
+        </div>
+        <div class="fantasy-create-team-page__fact">
+          <dt>Presupuesto</dt>
+          <dd>{{ summary.remainingBudgetLabel }}</dd>
+        </div>
+        <div class="fantasy-create-team-page__fact">
+          <dt>Mercado</dt>
+          <dd>{{ summary.captainStatusLabel }}</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="fantasy-create-team-page__planner c-surface-card">
+      <div class="fantasy-create-team-page__planner-top">
+        <header class="fantasy-create-team-page__planner-header">
+          <div>
+            <p class="fantasy-create-team-page__section-kicker">
+              <lucide-angular [img]="rosterIcon" [size]="16" aria-hidden="true" />
+              <span>Borrador</span>
+            </p>
+            <h2>Configura tu alineación fantasy</h2>
+            <p>{{ summary.validationMessage ?? 'Todo listo para guardar la plantilla.' }}</p>
+          </div>
+
+          <div class="fantasy-create-team-page__planner-tools">
+            <button
+              type="button"
+              class="fantasy-create-team-page__ghost-action"
+              (click)="store.autoCompleteDraft()"
+            >
+              Autocompletar
+            </button>
+            <button
+              type="button"
+              class="fantasy-create-team-page__ghost-action"
+              [disabled]="!summary.selectedPlayersCount"
+              (click)="store.clearDraft()"
+            >
+              Limpiar borrador
+            </button>
+          </div>
+        </header>
+
+        <nav aria-label="Pasos del equipo fantasy" class="fantasy-create-team-page__steps">
+          <div
+            class="fantasy-create-team-page__step"
+            [class.fantasy-create-team-page__step--active]="summary.selectedPlayersCount < 6"
+            [class.fantasy-create-team-page__step--done]="summary.selectedPlayersCount === 6"
+          >
+            <span class="fantasy-create-team-page__step-num">1</span>
+            <div class="fantasy-create-team-page__step-copy">
+              <strong>Selecciona plantilla</strong>
+              <p>{{ summary.selectedPlayersCountLabel }}</p>
+            </div>
+          </div>
+
+          <div
+            class="fantasy-create-team-page__step"
+            [class.fantasy-create-team-page__step--active]="
+              summary.selectedPlayersCount === 6 && !summary.captainId
+            "
+            [class.fantasy-create-team-page__step--done]="summary.canSubmit"
+          >
+            <span class="fantasy-create-team-page__step-num">2</span>
+            <div class="fantasy-create-team-page__step-copy">
+              <strong>Capitán y guardado</strong>
+              <p>{{ summary.captainStatusLabel }}</p>
+            </div>
+          </div>
+        </nav>
+      </div>
+
+      <div class="fantasy-create-team-page__planner-grid">
+        <article class="fantasy-create-team-page__panel">
+          <header class="fantasy-create-team-page__panel-header">
+            <div>
+              <p class="fantasy-create-team-page__panel-eyebrow">Resumen</p>
+              <h3>Identidad del equipo</h3>
+            </div>
+          </header>
+
+          <div class="fantasy-create-team-page__controls">
+            <app-base-input
+              label="Nombre del equipo"
+              name="teamName"
+              placeholder="Ponle nombre a tu equipo"
+              [ngModel]="summary.teamName"
+              (ngModelChange)="store.setTeamName($event)"
+            />
+
+            @if (store.captainOptions().length) {
+              <app-base-select
+                label="Capitán"
+                name="captain"
+                placeholder="Selecciona capitán"
+                [ngModel]="summary.captainId ?? ''"
+                (ngModelChange)="store.setCaptainId($event)"
+              >
+                @for (option of store.captainOptions(); track option.value) {
+                  <option [value]="option.value">{{ option.label }}</option>
+                }
+              </app-base-select>
+            }
+          </div>
+
+          @if (store.selectedPlayers().length) {
+            <ul
+              aria-label="Jugadores seleccionados"
+              class="fantasy-create-team-page__selected-list"
+            >
+              @for (player of store.selectedPlayers(); track player.id) {
+                <li class="fantasy-create-team-page__selected-card">
+                  <div class="fantasy-create-team-page__selected-main">
+                    @if (player.photoPath) {
+                      <img
+                        [ngSrc]="player.photoPath"
+                        [alt]="player.name"
+                        class="fantasy-create-team-page__player-photo"
+                        decoding="async"
+                        height="56"
+                        width="56"
+                      />
+                    } @else {
+                      <span aria-hidden="true" class="fantasy-create-team-page__player-avatar">
+                        {{ player.avatar }}
+                      </span>
+                    }
+
+                    <div class="fantasy-create-team-page__selected-copy">
+                      <div class="fantasy-create-team-page__selected-heading">
+                        <h4>{{ player.name }}</h4>
+                        @if (summary.captainId === player.id) {
+                          <span class="fantasy-create-team-page__captain-badge">Capitán</span>
+                        }
+                      </div>
+                      <p>{{ player.teamName }} · {{ player.sideLabel }}</p>
+                      <p>{{ player.priceLabel }}</p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    class="fantasy-create-team-page__ghost-action"
+                    (click)="store.togglePlayer(player.id)"
+                  >
+                    Quitar
+                  </button>
+                </li>
+              }
+            </ul>
+          } @else {
+            <p class="fantasy-create-team-page__empty">
+              Todavía no has seleccionado jugadores para el borrador.
+            </p>
+          }
+        </article>
+
+        <article class="fantasy-create-team-page__panel fantasy-create-team-page__panel--pool">
+          <header class="fantasy-create-team-page__panel-header">
+            <div>
+              <p class="fantasy-create-team-page__panel-eyebrow">Pool disponible</p>
+              <h3>Roster completo de la liga</h3>
+            </div>
+            <span class="fantasy-create-team-page__panel-chip">{{ store.players().length }}</span>
+          </header>
+
+          <div class="fantasy-create-team-page__controls fantasy-create-team-page__controls--pool">
+            <app-base-input
+              label="Buscar jugador"
+              name="draftSearch"
+              placeholder="Nombre, equipo o rol"
+              type="search"
+              [ngModel]="store.searchQuery()"
+              (ngModelChange)="store.setSearchQuery($event)"
+            />
+
+            <app-base-select
+              label="Equipo"
+              name="draftTeamFilter"
+              [ngModel]="store.selectedTeamId()"
+              (ngModelChange)="store.setSelectedTeamId($event)"
+            >
+              @for (option of store.teamOptions(); track option.value) {
+                <option [value]="option.value">{{ option.label }}</option>
+              }
+            </app-base-select>
+          </div>
+
+          <ul
+            aria-label="Jugadores disponibles para la plantilla fantasy"
+            class="fantasy-create-team-page__pool-grid"
+          >
+            @for (player of store.players(); track player.id) {
+              <li
+                class="fantasy-create-team-page__pool-card"
+                [class.fantasy-create-team-page__pool-card--selected]="player.isSelected"
+              >
+                <div class="fantasy-create-team-page__pool-main">
+                  @if (player.photoPath) {
+                    <img
+                      [ngSrc]="player.photoPath"
+                      [alt]="player.name"
+                      class="fantasy-create-team-page__player-photo"
+                      decoding="async"
+                      height="56"
+                      width="56"
+                    />
+                  } @else {
+                    <span aria-hidden="true" class="fantasy-create-team-page__player-avatar">
+                      {{ player.avatar }}
+                    </span>
+                  }
+
+                  <div class="fantasy-create-team-page__pool-copy">
+                    <div class="fantasy-create-team-page__selected-heading">
+                      <h4>{{ player.name }}</h4>
+                      @if (player.isSelected) {
+                        <span class="fantasy-create-team-page__selected-badge">En borrador</span>
+                      }
+                    </div>
+                    <p>{{ player.teamName }} · {{ player.sideLabel }}</p>
+                    <p>{{ player.roleLabel }}</p>
+                  </div>
+                </div>
+
+                <p class="fantasy-create-team-page__pool-note">{{ player.scoutingNote }}</p>
+
+                <div class="fantasy-create-team-page__pool-footer">
+                  <span>{{ player.priceLabel }}</span>
+                  @if (player.selectionHint; as selectionHint) {
+                    <span class="fantasy-create-team-page__hint">{{ selectionHint }}</span>
+                  }
+                </div>
+
+                <button
+                  type="button"
+                  class="fantasy-create-team-page__toggle-action"
+                  [disabled]="player.selectionDisabled"
+                  (click)="store.togglePlayer(player.id)"
+                >
+                  {{ player.isSelected ? 'Quitar del borrador' : 'Añadir al borrador' }}
+                </button>
+              </li>
+            }
+          </ul>
+        </article>
+      </div>
+
+      <div class="fantasy-create-team-page__footer-actions">
+        <a class="fantasy-create-team-page__ghost-action" [routerLink]="viewModel.teamLink">
+          Volver a mi equipo
+        </a>
+        <button
+          type="button"
+          class="fantasy-create-team-page__save-action"
+          [disabled]="!summary.canSubmit || store.isLoading()"
+          (click)="saveDraft()"
+        >
+          Guardar plantilla
+        </button>
+      </div>
+
+      @if (saveMessage()) {
+        <p aria-live="polite" class="fantasy-create-team-page__save-message" role="status">
+          {{ saveMessage() }}
+        </p>
+      }
+    </section>
+  }
+} @else if (store.isNotFound()) {
+  <app-empty-state
+    [description]="'No existe una liga con ese identificador para preparar la plantilla.'"
+    [icon]="shieldAlert"
+    eyebrow="Plantilla"
+    layout="feature"
+    title="Liga fantasy no encontrada"
+  />
 }

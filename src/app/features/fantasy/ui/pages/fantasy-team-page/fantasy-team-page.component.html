@@ -1,38 +1,219 @@
-@if (store.dashboard(); as dashboard) {
-  <h1>Mi equipo · {{ dashboard.league.name }}</h1>
-  @if (dashboard.myTeam; as myTeam) {
-    <p>
-      {{ myTeam.name }} · Presupuesto {{ myTeam.budgetRemaining }} · Valor {{ myTeam.teamValue }}
-    </p>
-    <p [attr.role]="dashboard.marketLocked ? 'status' : null">
-      {{
-        dashboard.marketLocked
-          ? 'Jornada cerrada: equipo bloqueado.'
-          : 'Jornada abierta: puedes hacer cambios.'
-      }}
-    </p>
-    <h2>Titulares</h2>
-    <ul>
-      @for (teamPlayer of myTeam.players; track teamPlayer.playerId) {
-        @if (teamPlayer.isStarter) {
-          <li>
-            {{ teamPlayer.playerId }}
-            @if (teamPlayer.isCaptain) {
-              <strong>(Capitán x2)</strong>
+@if (store.isLoading()) {
+  <p aria-live="polite" role="status">Cargando tu equipo fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [description]="store.errorMessage() ?? ''"
+    [icon]="shieldAlert"
+    eyebrow="Mi equipo"
+    layout="feature"
+    title="No hemos podido cargar tu roster"
+  />
+} @else if (store.viewModel(); as viewModel) {
+  <section class="fantasy-team-page__hero">
+    <div class="fantasy-team-page__hero-copy">
+      <p class="fantasy-team-page__eyebrow">{{ viewModel.phaseLabel }}</p>
+      <h1>Mi equipo · {{ viewModel.leagueName }}</h1>
+      <p class="fantasy-team-page__hero-description">{{ viewModel.phaseDescription }}</p>
+
+      <nav aria-label="Acciones del equipo fantasy" class="fantasy-team-page__actions">
+        <a
+          class="fantasy-team-page__action fantasy-team-page__action--primary"
+          [routerLink]="viewModel.teamCreationLink"
+        >
+          Editar alineación fantasy
+        </a>
+        <a class="fantasy-team-page__action" [routerLink]="viewModel.marketLink"
+          >Explorar mercado</a
+        >
+      </nav>
+    </div>
+
+    @if (viewModel.team; as team) {
+      <dl class="fantasy-team-page__hero-facts">
+        <div class="fantasy-team-page__fact">
+          <dt>Presupuesto restante</dt>
+          <dd>{{ team.budgetRemainingLabel }}</dd>
+        </div>
+        <div class="fantasy-team-page__fact">
+          <dt>Invertido</dt>
+          <dd>{{ team.budgetSpentLabel }}</dd>
+        </div>
+        <div class="fantasy-team-page__fact">
+          <dt>Composición</dt>
+          <dd>{{ team.compositionLabel }}</dd>
+        </div>
+      </dl>
+    }
+  </section>
+
+  @if (viewModel.team; as team) {
+    <section class="fantasy-team-page__planner c-surface-card">
+      <header class="fantasy-team-page__planner-header">
+        <div>
+          <p class="fantasy-team-page__section-kicker">
+            <lucide-angular [img]="rosterIcon" [size]="16" aria-hidden="true" />
+            <span>Gestión de equipo</span>
+          </p>
+          <h2>{{ team.name }}</h2>
+          <p>{{ team.formationLabel }} · {{ team.playersCountLabel }}</p>
+        </div>
+        <a class="fantasy-team-page__planner-link" [routerLink]="viewModel.teamCreationLink">
+          Ajustar plantilla
+          <lucide-angular [img]="arrowRightIcon" [size]="16" aria-hidden="true" />
+        </a>
+      </header>
+
+      <div class="fantasy-team-page__planner-grid">
+        <article class="fantasy-team-page__panel">
+          <header class="fantasy-team-page__panel-header">
+            <div>
+              <p class="fantasy-team-page__panel-eyebrow">Titulares</p>
+              <h3>Bloque principal</h3>
+            </div>
+            <span class="fantasy-team-page__panel-chip">{{ team.starters.length }}</span>
+          </header>
+
+          <ul aria-label="Titulares fantasy" class="fantasy-team-page__roster-list">
+            @for (player of team.starters; track player.id) {
+              <li class="fantasy-team-page__roster-card">
+                <div class="fantasy-team-page__roster-main">
+                  @if (player.photoPath) {
+                    <img
+                      [ngSrc]="player.photoPath"
+                      [alt]="player.name"
+                      class="fantasy-team-page__roster-photo"
+                      decoding="async"
+                      height="64"
+                      width="64"
+                    />
+                  } @else {
+                    <span aria-hidden="true" class="fantasy-team-page__roster-avatar">
+                      {{ player.avatar }}
+                    </span>
+                  }
+
+                  <div class="fantasy-team-page__roster-copy">
+                    <div class="fantasy-team-page__roster-heading">
+                      <h4>
+                        <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                      </h4>
+                      @if (player.captainLabel; as captainLabel) {
+                        <span class="fantasy-team-page__captain-badge">{{ captainLabel }}</span>
+                      }
+                    </div>
+                    <p class="fantasy-team-page__roster-meta">
+                      @if (player.teamLogoPath) {
+                        <img
+                          [ngSrc]="player.teamLogoPath"
+                          [alt]="player.teamName"
+                          class="fantasy-team-page__team-logo"
+                          decoding="async"
+                          height="18"
+                          width="18"
+                        />
+                      }
+                      <span>{{ player.teamName }}</span>
+                      <span>{{ player.sideLabel }}</span>
+                    </p>
+                    <p class="fantasy-team-page__roster-role">{{ player.roleLabel }}</p>
+                  </div>
+                </div>
+
+                <p class="fantasy-team-page__roster-note">{{ player.scoutingNote }}</p>
+
+                <div class="fantasy-team-page__roster-footer">
+                  <span>{{ player.priceLabel }}</span>
+                  <span>{{ player.totalPointsLabel }}</span>
+                </div>
+              </li>
             }
-          </li>
-        }
-      }
-    </ul>
-    <h2>Suplentes</h2>
-    <ul>
-      @for (teamPlayer of myTeam.players; track teamPlayer.playerId) {
-        @if (!teamPlayer.isStarter) {
-          <li>{{ teamPlayer.playerId }}</li>
-        }
-      }
-    </ul>
+          </ul>
+        </article>
+
+        <article class="fantasy-team-page__panel">
+          <header class="fantasy-team-page__panel-header">
+            <div>
+              <p class="fantasy-team-page__panel-eyebrow">Rotación</p>
+              <h3>Banquillo y cobertura</h3>
+            </div>
+            <span class="fantasy-team-page__panel-chip">{{ team.bench.length }}</span>
+          </header>
+
+          <ul aria-label="Suplentes fantasy" class="fantasy-team-page__roster-list">
+            @for (player of team.bench; track player.id) {
+              <li class="fantasy-team-page__roster-card fantasy-team-page__roster-card--bench">
+                <div class="fantasy-team-page__roster-main">
+                  @if (player.photoPath) {
+                    <img
+                      [ngSrc]="player.photoPath"
+                      [alt]="player.name"
+                      class="fantasy-team-page__roster-photo"
+                      decoding="async"
+                      height="64"
+                      width="64"
+                    />
+                  } @else {
+                    <span aria-hidden="true" class="fantasy-team-page__roster-avatar">
+                      {{ player.avatar }}
+                    </span>
+                  }
+
+                  <div class="fantasy-team-page__roster-copy">
+                    <h4>
+                      <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                    </h4>
+                    <p class="fantasy-team-page__roster-meta">
+                      @if (player.teamLogoPath) {
+                        <img
+                          [ngSrc]="player.teamLogoPath"
+                          [alt]="player.teamName"
+                          class="fantasy-team-page__team-logo"
+                          decoding="async"
+                          height="18"
+                          width="18"
+                        />
+                      }
+                      <span>{{ player.teamName }}</span>
+                      <span>{{ player.sideLabel }}</span>
+                    </p>
+                    <p class="fantasy-team-page__roster-role">{{ player.roleLabel }}</p>
+                  </div>
+                </div>
+
+                <p class="fantasy-team-page__roster-note">{{ player.scoutingNote }}</p>
+
+                <div class="fantasy-team-page__roster-footer">
+                  <span>{{ player.priceLabel }}</span>
+                  <span>{{ player.totalPointsLabel }}</span>
+                </div>
+              </li>
+            }
+          </ul>
+        </article>
+      </div>
+    </section>
   } @else {
-    <p>No tienes equipo en esta liga todavía.</p>
+    <app-empty-state
+      [actions]="[
+        {
+          label: 'Crear equipo',
+          href: viewModel.teamCreationLink,
+          tone: 'primary',
+        },
+      ]"
+      [description]="'Todavía no tienes un roster registrado en esta liga. Empieza creando tu alineación fantasy.'"
+      [icon]="rosterIcon"
+      eyebrow="Mi equipo"
+      layout="feature"
+      title="No tienes equipo en esta liga"
+    />
   }
+} @else if (store.isNotFound()) {
+  <app-empty-state
+    [description]="'La liga fantasy solicitada no está disponible para consultar tu roster.'"
+    [icon]="shieldAlert"
+    eyebrow="Mi equipo"
+    layout="feature"
+    title="Liga fantasy no encontrada"
+  />
 }

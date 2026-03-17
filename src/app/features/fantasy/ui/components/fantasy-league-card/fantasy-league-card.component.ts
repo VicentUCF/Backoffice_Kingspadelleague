@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { type FantasyLeague } from '@features/fantasy/domain/entities/fantasy.models';
+import { type FantasyLeagueCardViewModel } from '@features/fantasy/ui/models/fantasy-leagues.viewmodel';
 
 @Component({
   selector: 'app-fantasy-league-card',
@@ -14,5 +14,5 @@ import { type FantasyLeague } from '@features/fantasy/domain/entities/fantasy.mo
   styleUrl: './fantasy-league-card.component.scss',
 })
 export class FantasyLeagueCardComponent {
-  readonly league = input.required<FantasyLeague>();
+  readonly league = input.required<FantasyLeagueCardViewModel>();
 }

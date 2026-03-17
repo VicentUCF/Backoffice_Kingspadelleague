@@ -1,0 +1,137 @@
+:host {
+  padding-block: var(--space-7) var(--space-10);
+}
+
+.fantasy-player-profile-page {
+  &__panel {
+    display: grid;
+    gap: var(--space-5);
+    padding: var(--space-6);
+  }
+
+  &__hero,
+  &__identity {
+    display: flex;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  &__photo,
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 6rem;
+    height: 6rem;
+    border-radius: 1.5rem;
+    background:
+      radial-gradient(circle at top, rgb(201 162 39 / 0.16), transparent 62%),
+      var(--color-surface-raised);
+  }
+
+  &__photo {
+    object-fit: cover;
+  }
+
+  &__avatar {
+    color: var(--color-brand-strong);
+    font-family: var(--font-family-heading);
+    font-size: 1.5rem;
+    font-weight: 800;
+  }
+
+  &__copy {
+    display: grid;
+    gap: var(--space-2);
+    min-width: 0;
+
+    h1,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: var(--color-text-strong);
+      font-size: clamp(2rem, 5vw, 3rem);
+      letter-spacing: -0.05em;
+      line-height: 0.95;
+    }
+  }
+
+  &__eyebrow {
+    color: var(--color-brand);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    color: var(--color-text-muted);
+    font-weight: 600;
+  }
+
+  &__team-logo {
+    display: block;
+    width: 1.25rem;
+    height: 1.25rem;
+    object-fit: contain;
+  }
+
+  &__role {
+    color: var(--color-text-strong);
+    font-size: 0.92rem;
+    font-weight: 700;
+  }
+
+  &__notes {
+    display: grid;
+    gap: var(--space-4);
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    div {
+      display: grid;
+      gap: var(--space-2);
+      padding: var(--space-4);
+      border: 1px solid var(--color-border-subtle);
+      border-radius: 1.25rem;
+      background: rgb(255 255 255 / 0.03);
+    }
+
+    h2 {
+      color: var(--color-text-strong);
+      font-size: 1.1rem;
+      letter-spacing: -0.03em;
+    }
+
+    p {
+      color: var(--color-text-default);
+      line-height: 1.6;
+    }
+  }
+
+  &__actions a {
+    color: var(--color-text-strong);
+    font-weight: 700;
+    text-decoration: none;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  :host {
+    padding-block-start: var(--space-5);
+  }
+}
+
+@media (min-width: 48rem) {
+  .fantasy-player-profile-page__notes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

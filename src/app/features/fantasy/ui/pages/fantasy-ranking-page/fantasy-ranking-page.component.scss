@@ -1,0 +1,40 @@
+:host {
+  padding-block: var(--space-7) var(--space-10);
+}
+
+.fantasy-ranking-page {
+  &__hero {
+    display: grid;
+    gap: var(--space-3);
+
+    h1,
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      color: var(--color-text-strong);
+      font-size: clamp(1.9rem, 5vw, 3rem);
+      letter-spacing: -0.05em;
+    }
+
+    p:last-child {
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+  }
+
+  &__eyebrow {
+    color: var(--color-brand);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+}
+
+@media (max-width: 47.999rem) {
+  :host {
+    padding-block-start: var(--space-5);
+  }
+}

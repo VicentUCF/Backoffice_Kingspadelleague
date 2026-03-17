@@ -1,10 +1,117 @@
-.fantasy-mvp-card__surface {
-  border: 1px solid var(--border-subtle);
-  border-radius: 1rem;
-  padding: 1rem;
+.fantasy-mvp-card {
+  &__surface {
+    display: grid;
+    gap: var(--space-4);
+    padding: var(--space-5);
+  }
+
+  &__title {
+    margin: 0;
+    color: var(--color-brand);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  &__body {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__identity {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  &__photo,
+  &__avatar {
+    display: grid;
+    place-items: center;
+    width: 5rem;
+    height: 5rem;
+    border-radius: 1.25rem;
+    background:
+      radial-gradient(circle at top, rgb(201 162 39 / 16%), transparent 62%),
+      var(--color-surface-raised);
+  }
+
+  &__photo {
+    object-fit: cover;
+  }
+
+  &__avatar {
+    color: var(--color-brand-strong);
+    font-family: var(--font-family-heading);
+    font-size: 1.35rem;
+    font-weight: 800;
+  }
+
+  &__copy {
+    display: grid;
+    gap: var(--space-1);
+    min-width: 0;
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--color-text-strong);
+      font-size: clamp(1.4rem, 2vw + 0.6rem, 2rem);
+      letter-spacing: -0.04em;
+    }
+
+    p {
+      color: var(--color-text-muted);
+    }
+  }
+
+  &__badge {
+    width: fit-content;
+    padding: 0.3rem var(--space-3);
+    border-radius: 999px;
+    background: rgb(201 162 39 / 0.12);
+    color: var(--color-brand-strong);
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__meta {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.03);
+
+    p,
+    small {
+      margin: 0;
+    }
+
+    p {
+      color: var(--color-text-strong);
+      font-size: 1.1rem;
+      font-weight: 700;
+    }
+
+    small {
+      color: var(--color-text-muted);
+      line-height: 1.5;
+    }
+  }
 }
-.fantasy-mvp-card__title {
-  text-transform: uppercase;
-  font-size: 0.75rem;
-  color: var(--text-muted);
+
+@media (min-width: 48rem) {
+  .fantasy-mvp-card {
+    &__body {
+      grid-template-columns: minmax(0, 1fr) minmax(16rem, 18rem);
+      align-items: center;
+    }
+  }
 }

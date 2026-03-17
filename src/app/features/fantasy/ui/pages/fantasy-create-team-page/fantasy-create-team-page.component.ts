@@ -1,57 +1,111 @@
+import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  effect,
   inject,
   signal,
+  type OnDestroy,
   type OnInit,
 } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { Meta, Title } from '@angular/platform-browser';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+import { LucideAngularModule, ShieldAlert, Users } from 'lucide-angular';
+import { Subscription } from 'rxjs';
 
-import { FantasyLeagueDashboardStore } from '@features/fantasy/ui/state/fantasy-league-dashboard.store';
+import { BaseInputComponent } from '@shared/ui/base-input/base-input.component';
+import { BaseSelectComponent } from '@shared/ui/base-select/base-select.component';
+import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
+
+import { FantasyTeamDraftStore } from '@features/fantasy/ui/state/fantasy-team-draft.store';
 
 @Component({
   selector: 'app-fantasy-create-team-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [FormsModule],
-  providers: [FantasyLeagueDashboardStore],
-  host: { class: 'fantasy-page o-container o-stack' },
+  imports: [
+    BaseInputComponent,
+    BaseSelectComponent,
+    EmptyStateComponent,
+    FormsModule,
+    LucideAngularModule,
+    NgOptimizedImage,
+    RouterLink,
+  ],
+  providers: [FantasyTeamDraftStore],
+  host: { class: 'fantasy-page fantasy-create-team-page o-container o-stack' },
   templateUrl: './fantasy-create-team-page.component.html',
+  styleUrl: './fantasy-create-team-page.component.scss',
 })
-export class FantasyCreateTeamPageComponent implements OnInit {
+export class FantasyCreateTeamPageComponent implements OnDestroy, OnInit {
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
   private readonly route = inject(ActivatedRoute);
-  readonly store = inject(FantasyLeagueDashboardStore);
-  readonly selectedPlayerIds = signal<readonly string[]>([]);
-  readonly captainId = signal<string | null>(null);
+  private readonly routeSubscription = new Subscription();
+  protected readonly store = inject(FantasyTeamDraftStore);
+  protected readonly saveMessage = signal<string | null>(null);
+  protected readonly rosterIcon = Users;
+  protected readonly shieldAlert = ShieldAlert;
 
-  readonly remainingBudget = computed(() => {
-    const dashboard = this.store.dashboard();
-    if (!dashboard) {
-      return 100_000_000;
-    }
+  constructor() {
+    effect(() => {
+      const summary = this.store.summary();
+      const viewModel = this.store.viewModel();
 
-    const selectedPlayers = dashboard.players.filter((player) =>
-      this.selectedPlayerIds().includes(player.id),
-    );
+      if (summary && viewModel) {
+        this.title.setTitle(`${summary.heading} | Fantasy | KingsPadelLeague`);
+        this.meta.updateTag({
+          name: 'description',
+          content: `${summary.heading} en ${summary.leagueName}: gestiona un borrador de pretemporada con seis jugadores, capitán y presupuesto controlado.`,
+        });
 
-    return 100_000_000 - selectedPlayers.reduce((total, player) => total + player.price, 0);
-  });
+        return;
+      }
 
-  ngOnInit(): void {
-    const leagueId = this.route.snapshot.paramMap.get('leagueId');
-    if (leagueId) {
-      void this.store.load(leagueId);
-    }
+      if (this.store.isNotFound()) {
+        this.title.setTitle('Plantilla fantasy no disponible | KingsPadelLeague');
+        this.meta.updateTag({
+          name: 'description',
+          content:
+            'La liga fantasy solicitada no está disponible para preparar o editar la plantilla.',
+        });
+
+        return;
+      }
+
+      this.title.setTitle('Plantilla fantasy | KingsPadelLeague');
+      this.meta.updateTag({
+        name: 'description',
+        content:
+          'Prepara tu plantilla fantasy en KingsPadelLeague y valida selección, presupuesto y capitán.',
+      });
+    });
   }
 
-  togglePlayer(playerId: string): void {
-    this.selectedPlayerIds.update((selectedIds) =>
-      selectedIds.includes(playerId)
-        ? selectedIds.filter((id) => id !== playerId)
-        : selectedIds.length < 6
-          ? [...selectedIds, playerId]
-          : selectedIds,
+  ngOnInit(): void {
+    this.routeSubscription.add(
+      this.route.paramMap.subscribe((paramMap) => {
+        this.saveMessage.set(null);
+        void this.store.load(paramMap.get('leagueId'));
+      }),
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.routeSubscription.unsubscribe();
+  }
+
+  protected async saveDraft(): Promise<void> {
+    const saved = await this.store.save();
+    const summary = this.store.summary();
+
+    if (!saved || !summary) {
+      this.saveMessage.set(null);
+      return;
+    }
+
+    this.saveMessage.set(
+      `Plantilla guardada: ${summary.teamName} con ${summary.captainName} como capitán.`,
     );
   }
 }

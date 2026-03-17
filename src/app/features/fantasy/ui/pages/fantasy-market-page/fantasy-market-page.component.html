@@ -1,17 +1,224 @@
-@if (store.dashboard(); as dashboard) {
-  <h1>Mercado · {{ dashboard.league.name }}</h1>
-  <p>Presupuesto disponible: {{ dashboard.myTeam?.budgetRemaining ?? 0 }}</p>
-  <label for="player-search">Buscar jugador</label>
-  <input id="player-search" [ngModel]="searchQuery()" (ngModelChange)="searchQuery.set($event)" />
-  @if (filteredPlayers().length === 0) {
-    <p>No hay jugadores para tu filtro.</p>
-  }
-  <ul>
-    @for (player of filteredPlayers(); track player.id) {
-      <li>
-        {{ player.name }} · {{ player.teamName }} · {{ player.price }} ·
-        {{ player.pointsTotal }} pts
-      </li>
+@if (store.isLoading()) {
+  <p aria-live="polite" role="status">Cargando mercado fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [description]="store.errorMessage() ?? ''"
+    [icon]="shieldAlert"
+    eyebrow="Mercado"
+    layout="feature"
+    title="No hemos podido cargar el mercado"
+  />
+} @else if (store.viewModel(); as viewModel) {
+  <section class="fantasy-market-page__hero">
+    <div class="fantasy-market-page__hero-copy">
+      <p class="fantasy-market-page__eyebrow">{{ viewModel.phaseLabel }}</p>
+      <h1>Mercado · {{ viewModel.leagueName }}</h1>
+      <p class="fantasy-market-page__hero-description">{{ viewModel.phaseDescription }}</p>
+
+      <nav aria-label="Acciones del mercado fantasy" class="fantasy-market-page__actions">
+        <a
+          class="fantasy-market-page__action fantasy-market-page__action--primary"
+          [routerLink]="viewModel.teamLink"
+        >
+          Gestionar mi equipo
+        </a>
+        <a class="fantasy-market-page__action" [routerLink]="viewModel.rankingLink">
+          Ver ranking
+        </a>
+      </nav>
+    </div>
+
+    <dl class="fantasy-market-page__hero-facts">
+      <div class="fantasy-market-page__fact">
+        <dt>Presupuesto</dt>
+        <dd>{{ store.budgetRemainingLabel() }}</dd>
+      </div>
+      <div class="fantasy-market-page__fact">
+        <dt>Mercado</dt>
+        <dd>{{ viewModel.marketStatusLabel }}</dd>
+      </div>
+      <div class="fantasy-market-page__fact">
+        <dt>Objetivos</dt>
+        <dd>{{ store.affordablePlayersCountLabel() }}</dd>
+      </div>
+    </dl>
+  </section>
+
+  <div class="fantasy-market-page__content">
+    <section
+      class="fantasy-market-page__filters c-surface-card"
+      aria-labelledby="fantasy-market-filters"
+    >
+      <div class="fantasy-market-page__filters-header">
+        <div>
+          <p class="fantasy-market-page__section-kicker">
+            <lucide-angular [img]="filtersIcon" [size]="16" aria-hidden="true" />
+            <span>Filtros</span>
+          </p>
+          <h2 id="fantasy-market-filters">Ajusta tu búsqueda</h2>
+        </div>
+        <p role="status">{{ store.resultsLabel() }}</p>
+      </div>
+
+      <div class="fantasy-market-page__filters-grid">
+        <app-base-input
+          label="Buscar jugador"
+          name="playerSearch"
+          placeholder="Nombre, equipo o rol"
+          type="search"
+          [ngModel]="store.searchQuery()"
+          (ngModelChange)="store.setSearchQuery($event)"
+        />
+
+        <app-base-select
+          label="Equipo"
+          name="teamFilter"
+          [ngModel]="store.selectedTeamId()"
+          (ngModelChange)="store.setSelectedTeamId($event)"
+        >
+          @for (option of store.teamOptions(); track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </app-base-select>
+
+        <app-base-select
+          label="Lado"
+          name="sideFilter"
+          [ngModel]="store.selectedSide()"
+          (ngModelChange)="store.setSelectedSide($event)"
+        >
+          @for (option of store.sideOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </app-base-select>
+
+        <app-base-select
+          label="Estado"
+          name="statusFilter"
+          [ngModel]="store.selectedAvailability()"
+          (ngModelChange)="store.setSelectedAvailability($event)"
+        >
+          @for (option of store.statusOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </app-base-select>
+
+        <app-base-select
+          label="Orden"
+          name="sortFilter"
+          [ngModel]="store.selectedSort()"
+          (ngModelChange)="store.setSelectedSort($event)"
+        >
+          @for (option of store.sortOptions; track option.value) {
+            <option [value]="option.value">{{ option.label }}</option>
+          }
+        </app-base-select>
+      </div>
+    </section>
+
+    <app-fantasy-mvp-card [player]="viewModel.spotlight" />
+
+    @if (store.hasPlayers()) {
+      <ul
+        aria-label="Jugadores disponibles en el mercado"
+        class="fantasy-market-page__player-grid"
+        role="list"
+      >
+        @for (player of store.filteredPlayers(); track player.id) {
+          <li>
+            <article class="fantasy-market-page__player-card c-surface-card">
+              <div class="fantasy-market-page__player-header">
+                <div class="fantasy-market-page__player-identity">
+                  @if (player.photoPath) {
+                    <img
+                      [ngSrc]="player.photoPath"
+                      [alt]="player.name"
+                      class="fantasy-market-page__player-photo"
+                      decoding="async"
+                      height="72"
+                      width="72"
+                    />
+                  } @else {
+                    <span aria-hidden="true" class="fantasy-market-page__player-avatar">
+                      {{ player.avatar }}
+                    </span>
+                  }
+
+                  <div class="fantasy-market-page__player-copy">
+                    <div class="fantasy-market-page__player-heading">
+                      <h2>
+                        <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                      </h2>
+                      <span
+                        class="fantasy-market-page__status-chip"
+                        [attr.data-tone]="player.statusTone"
+                      >
+                        {{ player.statusLabel }}
+                      </span>
+                    </div>
+
+                    <p class="fantasy-market-page__player-meta">
+                      @if (player.teamLogoPath) {
+                        <img
+                          [ngSrc]="player.teamLogoPath"
+                          [alt]="player.teamName"
+                          class="fantasy-market-page__team-logo"
+                          decoding="async"
+                          height="18"
+                          width="18"
+                        />
+                      }
+                      <span>{{ player.teamName }}</span>
+                      <span class="fantasy-market-page__side-badge">{{ player.sideLabel }}</span>
+                    </p>
+                    <p class="fantasy-market-page__player-role">{{ player.roleLabel }}</p>
+                  </div>
+                </div>
+              </div>
+
+              <p class="fantasy-market-page__player-note">{{ player.scoutingNote }}</p>
+
+              <dl class="fantasy-market-page__player-stats">
+                <div>
+                  <dt>Precio</dt>
+                  <dd>{{ player.priceLabel }}</dd>
+                </div>
+                <div>
+                  <dt>Tendencia</dt>
+                  <dd>{{ player.priceChangeLabel }}</dd>
+                </div>
+                <div>
+                  <dt>Mercado</dt>
+                  <dd>{{ player.affordabilityLabel }}</dd>
+                </div>
+              </dl>
+
+              <div class="fantasy-market-page__player-actions">
+                <a [routerLink]="player.detailLink">Ver ficha</a>
+                @if (player.isInMyTeam) {
+                  <a [routerLink]="viewModel.teamLink">Ver en mi equipo</a>
+                } @else {
+                  <a [routerLink]="viewModel.teamCreationLink">Añadir a borrador</a>
+                }
+              </div>
+            </article>
+          </li>
+        }
+      </ul>
+    } @else {
+      <app-empty-state
+        [description]="'Prueba con otro filtro o limpia la búsqueda para recuperar el roster completo.'"
+        eyebrow="Mercado"
+        title="No hay jugadores para esta búsqueda"
+      />
     }
-  </ul>
+  </div>
+} @else if (store.isNotFound()) {
+  <app-empty-state
+    [description]="'La liga solicitada no está disponible para consultar su mercado.'"
+    [icon]="shieldAlert"
+    eyebrow="Mercado"
+    layout="feature"
+    title="Liga fantasy no encontrada"
+  />
 }

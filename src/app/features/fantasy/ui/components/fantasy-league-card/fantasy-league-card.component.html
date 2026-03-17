@@ -1,27 +1,30 @@
-<article class="fantasy-league-card__surface">
+<article class="fantasy-league-card__surface c-surface-card">
   <header class="fantasy-league-card__header">
-    <h3>{{ league().name }}</h3>
+    <div>
+      <p class="fantasy-league-card__eyebrow">{{ league().phaseLabel }}</p>
+      <h3>{{ league().name }}</h3>
+    </div>
     <span class="fantasy-league-card__code">{{ league().code }}</span>
   </header>
 
   <dl class="fantasy-league-card__stats">
     <div>
       <dt>Participantes</dt>
-      <dd>{{ league().memberCount }}</dd>
+      <dd>{{ league().memberCountLabel }}</dd>
     </div>
     <div>
       <dt>Mi posición</dt>
-      <dd>#{{ league().myRank }}</dd>
+      <dd>{{ league().myRankLabel }}</dd>
     </div>
     <div>
-      <dt>Mis puntos</dt>
-      <dd>{{ league().myPoints }}</dd>
+      <dt>Puntos</dt>
+      <dd>{{ league().myPointsLabel }}</dd>
     </div>
   </dl>
 
-  <nav class="fantasy-league-card__actions" aria-label="Acciones de liga fantasy">
-    <a [routerLink]="['/fantasy/leagues', league().id]">Entrar</a>
-    <a [routerLink]="['/fantasy/leagues', league().id, 'ranking']">Ranking</a>
-    <a [routerLink]="['/fantasy/leagues', league().id, 'team']">Mi equipo</a>
+  <nav class="fantasy-league-card__actions" [attr.aria-label]="'Acciones de ' + league().name">
+    <a [routerLink]="league().dashboardLink">Entrar</a>
+    <a [routerLink]="league().marketLink">Mercado</a>
+    <a [routerLink]="league().teamLink">Mi equipo</a>
   </nav>
 </article>

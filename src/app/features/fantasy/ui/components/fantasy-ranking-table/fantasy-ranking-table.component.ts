@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
-import { type FantasyRankingEntry } from '@features/fantasy/domain/entities/fantasy.models';
+import { type FantasyRankingEntryViewModel } from '@features/fantasy/ui/models/fantasy-league-dashboard.viewmodel';
 
 @Component({
   selector: 'app-fantasy-ranking-table',
@@ -10,5 +10,5 @@ import { type FantasyRankingEntry } from '@features/fantasy/domain/entities/fant
   styleUrl: './fantasy-ranking-table.component.scss',
 })
 export class FantasyRankingTableComponent {
-  readonly entries = input.required<readonly FantasyRankingEntry[]>();
+  readonly entries = input.required<readonly FantasyRankingEntryViewModel[]>();
 }

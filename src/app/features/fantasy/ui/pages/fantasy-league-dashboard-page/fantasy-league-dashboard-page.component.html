@@ -1,17 +1,103 @@
 @if (store.isLoading()) {
-  <p>Cargando dashboard fantasy...</p>
-}
-@if (store.dashboard(); as dashboard) {
-  <header>
-    <h1>{{ dashboard.league.name }}</h1>
-    <p>Posición {{ dashboard.league.myRank }} · {{ dashboard.league.myPoints }} puntos</p>
-    <a [routerLink]="['/fantasy/leagues', dashboard.league.id, 'market']">Ver mercado</a>
-    ·
-    <a [routerLink]="['/fantasy/leagues', dashboard.league.id, 'team']">Gestionar equipo</a>
-  </header>
-  <app-fantasy-mvp-card [player]="store.mvp()" />
-  <section>
-    <h2>Top 5 ranking</h2>
-    <app-fantasy-ranking-table [entries]="dashboard.ranking.slice(0, 5)" />
+  <p aria-live="polite" role="status">Cargando dashboard fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [actions]="missingLeagueActions"
+    [description]="store.errorMessage() ?? ''"
+    [icon]="shieldAlert"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="No hemos podido cargar esta liga"
+  />
+} @else if (store.viewModel(); as viewModel) {
+  <section class="fantasy-dashboard-page__hero">
+    <div class="fantasy-dashboard-page__hero-copy">
+      <p class="fantasy-dashboard-page__eyebrow">{{ viewModel.phaseLabel }}</p>
+      <h1>{{ viewModel.leagueName }}</h1>
+      <p class="fantasy-dashboard-page__hero-description">{{ viewModel.phaseDescription }}</p>
+
+      <nav aria-label="Acciones de la liga fantasy" class="fantasy-dashboard-page__actions">
+        <a
+          class="fantasy-dashboard-page__action fantasy-dashboard-page__action--primary"
+          [routerLink]="viewModel.marketLink"
+        >
+          Ir al mercado
+        </a>
+        <a class="fantasy-dashboard-page__action" [routerLink]="viewModel.teamLink">
+          Gestionar equipo
+        </a>
+        <a class="fantasy-dashboard-page__action" [routerLink]="viewModel.rankingLink">
+          Clasificación
+        </a>
+      </nav>
+    </div>
+
+    <dl class="fantasy-dashboard-page__hero-facts">
+      <div class="fantasy-dashboard-page__fact">
+        <dt>Código</dt>
+        <dd>{{ viewModel.inviteCode }}</dd>
+      </div>
+      <div class="fantasy-dashboard-page__fact">
+        <dt>Posición</dt>
+        <dd>{{ viewModel.myRankLabel }}</dd>
+      </div>
+      <div class="fantasy-dashboard-page__fact">
+        <dt>Puntos</dt>
+        <dd>{{ viewModel.myPointsLabel }}</dd>
+      </div>
+    </dl>
   </section>
+
+  <div class="fantasy-dashboard-page__grid">
+    <app-fantasy-mvp-card [player]="viewModel.spotlight" />
+
+    <section
+      class="fantasy-dashboard-page__panel c-surface-card"
+      aria-labelledby="fantasy-dashboard-ranking"
+    >
+      <header class="fantasy-dashboard-page__panel-header">
+        <div>
+          <p class="fantasy-dashboard-page__section-kicker">
+            <lucide-angular [img]="rankingIcon" [size]="16" aria-hidden="true" />
+            <span>Ranking</span>
+          </p>
+          <h2 id="fantasy-dashboard-ranking">{{ viewModel.rankingTitle }}</h2>
+          <p>{{ viewModel.rankingDescription }}</p>
+        </div>
+      </header>
+
+      <app-fantasy-ranking-table [entries]="viewModel.topRankingEntries" />
+    </section>
+
+    <section
+      class="fantasy-dashboard-page__panel c-surface-card"
+      aria-labelledby="fantasy-dashboard-market"
+    >
+      <header class="fantasy-dashboard-page__panel-header">
+        <div>
+          <p class="fantasy-dashboard-page__section-kicker">
+            <lucide-angular [img]="walletIcon" [size]="16" aria-hidden="true" />
+            <span>Mercado</span>
+          </p>
+          <h2 id="fantasy-dashboard-market">{{ viewModel.marketStatusLabel }}</h2>
+          <p>{{ viewModel.marketStatusDescription }}</p>
+        </div>
+      </header>
+
+      <div class="fantasy-dashboard-page__quick-links">
+        <a [routerLink]="viewModel.marketLink">Abrir mercado</a>
+        <a [routerLink]="viewModel.teamCreationLink">Editar plantilla</a>
+        <a [routerLink]="viewModel.teamLink">Ver mi equipo</a>
+      </div>
+    </section>
+  </div>
+} @else if (store.isNotFound()) {
+  <app-empty-state
+    [actions]="missingLeagueActions"
+    [description]="'La liga que intentas abrir ya no existe o no está disponible para este usuario.'"
+    [icon]="shieldAlert"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="Liga fantasy no encontrada"
+  />
 }

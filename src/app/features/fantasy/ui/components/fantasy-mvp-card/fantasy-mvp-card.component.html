@@ -1,10 +1,38 @@
-<article class="fantasy-mvp-card__surface">
-  <p class="fantasy-mvp-card__title">MVP jornada</p>
+<article class="fantasy-mvp-card__surface c-surface-card">
   @if (player(); as featuredPlayer) {
-    <h3>{{ featuredPlayer.name }}</h3>
-    <p>{{ featuredPlayer.teamName }} · {{ featuredPlayer.pointsMatchday }} pts</p>
-    <small>Precio actual: {{ featuredPlayer.price }}</small>
+    <p class="fantasy-mvp-card__title">{{ featuredPlayer.title }}</p>
+
+    <div class="fantasy-mvp-card__body">
+      <div class="fantasy-mvp-card__identity">
+        @if (featuredPlayer.photoPath) {
+          <img
+            [ngSrc]="featuredPlayer.photoPath"
+            [alt]="featuredPlayer.name"
+            class="fantasy-mvp-card__photo"
+            decoding="async"
+            height="80"
+            width="80"
+          />
+        } @else {
+          <span aria-hidden="true" class="fantasy-mvp-card__avatar">
+            {{ featuredPlayer.avatarLabel }}
+          </span>
+        }
+
+        <div class="fantasy-mvp-card__copy">
+          <span class="fantasy-mvp-card__badge">{{ featuredPlayer.badgeLabel }}</span>
+          <h2>{{ featuredPlayer.name }}</h2>
+          <p>{{ featuredPlayer.teamName }}</p>
+        </div>
+      </div>
+
+      <div class="fantasy-mvp-card__meta">
+        <p>{{ featuredPlayer.priceLabel }}</p>
+        <small>{{ featuredPlayer.supportingLabel }}</small>
+      </div>
+    </div>
   } @else {
-    <p>No hay datos de jornada para calcular el MVP.</p>
+    <p class="fantasy-mvp-card__title">Jugador destacado</p>
+    <p>No hay suficiente información para destacar un perfil ahora mismo.</p>
   }
 </article>

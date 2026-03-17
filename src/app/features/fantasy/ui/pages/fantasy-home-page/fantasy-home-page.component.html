@@ -1,17 +1,53 @@
-<header>
-  <h1>Fantasy Kings Padel League</h1>
-  <p>Compite por ligas con equipo independiente por cada competición.</p>
-  <a routerLink="/fantasy/leagues/create">Crear liga</a> ·
-  <a routerLink="/fantasy/leagues/join">Unirse</a>
+<header class="fantasy-home-page__hero">
+  <p class="fantasy-home-page__eyebrow">Fantasy KingsPadelLeague</p>
+  <h1>Prepara tu plantilla antes de que empiece la liga.</h1>
+  <p>
+    Trabaja con el roster real del proyecto, abre ligas privadas y afina el mercado y tu equipo
+    desde pretemporada.
+  </p>
+  <nav aria-label="Acciones principales de fantasy" class="fantasy-home-page__actions">
+    <a
+      class="fantasy-home-page__action fantasy-home-page__action--primary"
+      routerLink="/fantasy/leagues/create"
+    >
+      Crear liga
+    </a>
+    <a class="fantasy-home-page__action" routerLink="/fantasy/leagues/join">Unirse a una liga</a>
+  </nav>
 </header>
+
 @if (store.isLoading()) {
-  <p>Cargando ligas...</p>
+  <p aria-live="polite" role="status">Cargando tus ligas fantasy...</p>
+} @else if (store.errorMessage()) {
+  <app-empty-state
+    [actions]="emptyStateActions"
+    [description]="store.errorMessage() ?? ''"
+    [icon]="trophyIcon"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="No hemos podido cargar tus ligas"
+  />
+} @else if (store.hasLeagues()) {
+  <section aria-labelledby="fantasy-home-leagues" class="o-stack o-stack--compact">
+    <h2 id="fantasy-home-leagues">Tus ligas activas</h2>
+    <div class="fantasy-home-page__leagues-grid o-grid o-grid--cards">
+      @for (league of store.leagues(); track league.id) {
+        <app-fantasy-league-card [league]="league" />
+      }
+    </div>
+  </section>
+} @else {
+  <app-empty-state
+    [actions]="emptyStateActions"
+    [description]="'Empieza creando una liga privada o únete con un código para activar tu experiencia fantasy.'"
+    [highlights]="[
+      'Una plantilla por liga',
+      'Mercado con precios dinámicos',
+      'Ranking por jornada y total',
+    ]"
+    [icon]="trophyIcon"
+    eyebrow="Fantasy"
+    layout="feature"
+    title="Todavía no participas en ninguna liga"
+  />
 }
-@if (store.errorMessage()) {
-  <p>{{ store.errorMessage() }}</p>
-}
-<div class="o-grid o-grid--cards">
-  @for (league of store.leagues(); track league.id) {
-    <app-fantasy-league-card [league]="league" />
-  }
-</div>
