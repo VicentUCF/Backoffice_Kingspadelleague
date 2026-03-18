@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -412,7 +414,62 @@
   &__primary-summary,
   &__market-snapshot,
   &__spotlight {
+    display: block;
     min-width: 0;
+  }
+
+  &__hero,
+  &__panel,
+  &__lineup-panel,
+  &__lineup-side,
+  &__market-snapshot,
+  &__spotlight {
+    @include fantasy-motion.reveal(440ms, 40ms, 60ms, 14px);
+  }
+
+  &__hero-copy > * {
+    @include fantasy-motion.reveal(360ms, 90ms, 55ms, 12px);
+  }
+
+  &__hero-copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__hero-copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__actions > *,
+  &__inline-actions > * {
+    @include fantasy-motion.reveal(320ms, 170ms, 44ms, 10px);
+  }
+
+  &__fact,
+  &__command-card,
+  &__starter-card,
+  &__bench-card,
+  &__ranking-item,
+  &__onboarding-list li {
+    @include fantasy-motion.reveal(380ms, 150ms, 48ms, 12px);
+  }
+
+  &__action,
+  &__inline-action,
+  &__panel-link,
+  &__player-copy a {
+    @include fantasy-motion.interactive-lift(-2px, rgb(201 162 39 / 0.18));
+  }
+
+  &__action--primary,
+  &__inline-action--primary,
+  &__captain-badge,
+  &__ranking-chip,
+  &__command-card--accent {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.26), rgb(255 255 255 / 0.05));
   }
 }
 

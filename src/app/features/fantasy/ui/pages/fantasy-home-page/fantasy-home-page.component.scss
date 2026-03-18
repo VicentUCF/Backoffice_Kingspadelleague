@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -49,7 +51,6 @@
       font-size: clamp(2.2rem, 5vw, 4.4rem);
       letter-spacing: -0.06em;
       line-height: 0.92;
-      animation: fantasy-home-score-pop 0.45s ease-out;
     }
   }
 
@@ -100,8 +101,6 @@
   }
 
   &__badge {
-    animation: fantasy-home-pulse 2.4s ease-in-out infinite;
-
     &[data-urgent='true'] {
       border-color: rgb(226 80 73 / 0.55);
       background: rgb(226 80 73 / 0.18);
@@ -161,7 +160,6 @@
     gap: var(--space-4);
     padding: var(--space-5);
     border-radius: 1.75rem;
-    animation: fantasy-home-surface-in 0.45s ease-out;
   }
 
   &__team-summary,
@@ -526,6 +524,69 @@
       letter-spacing: -0.04em;
     }
   }
+
+  &__hero,
+  &__countdown-bar,
+  &__panel,
+  &__hero-panel {
+    @include fantasy-motion.reveal(440ms, 40ms, 60ms, 14px);
+  }
+
+  &__hero-copy > * {
+    @include fantasy-motion.reveal(360ms, 80ms, 55ms, 12px);
+  }
+
+  &__hero-copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__hero-copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__hero-copy > :nth-child(4) {
+    --fantasy-motion-index: 3;
+  }
+
+  &__hero-meta > * {
+    @include fantasy-motion.reveal(300ms, 180ms, 50ms, 10px);
+  }
+
+  &__hero-meta > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-meta > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__impact-card,
+  &__prediction-card,
+  &__market-section,
+  &__mover-card,
+  &__feed-item,
+  &__countdown-wrapper,
+  app-fantasy-league-card[data-motion='stagger-item'] {
+    @include fantasy-motion.reveal(380ms, 150ms, 48ms, 12px);
+  }
+
+  app-fantasy-league-card[data-motion='stagger-item'] {
+    display: block;
+  }
+
+  &__actions > * {
+    @include fantasy-motion.reveal(320ms, 190ms, 46ms, 10px);
+  }
+
+  &__action,
+  &__inline-link,
+  &__mover-copy a {
+    @include fantasy-motion.interactive-lift(-2px, rgb(201 162 39 / 0.18));
+  }
 }
 
 @media (max-width: 47.999rem) {
@@ -613,56 +674,5 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
       align-items: start;
     }
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .fantasy-home-page {
-    &__hero-copy h1,
-    &__hero-panel,
-    &__countdown-bar,
-    &__panel,
-    &__badge,
-    &__action,
-    &__inline-link,
-    app-fantasy-live-countdown {
-      animation: none;
-      transition: none;
-    }
-  }
-}
-
-@keyframes fantasy-home-surface-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fantasy-home-score-pop {
-  from {
-    opacity: 0;
-    transform: translateY(10px) scale(0.98);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-@keyframes fantasy-home-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 0 0 rgb(226 80 73 / 0);
-  }
-
-  50% {
-    box-shadow: 0 0 0 10px rgb(226 80 73 / 0.08);
   }
 }

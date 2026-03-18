@@ -12,7 +12,7 @@ describe('FantasyPlayerProfilePageComponent', () => {
   it('renders the selected fantasy player with market guidance and value history', async () => {
     const { viewportScroller } = createNavigationMocks();
 
-    await render(FantasyPlayerProfilePageComponent, {
+    const { container } = await render(FantasyPlayerProfilePageComponent, {
       providers: [
         provideFantasyFeature(),
         provideLocationMocks(),
@@ -31,6 +31,13 @@ describe('FantasyPlayerProfilePageComponent', () => {
     expect(screen.queryByRole('button', { name: /Comprar jugador/i })).toBeNull();
     expect(screen.queryByRole('button', { name: /Vender jugador/i })).toBeNull();
     expect(viewportScroller.scrollToPosition).toHaveBeenCalledWith([0, 0]);
+    expect(
+      screen.getByRole('heading', { name: /Vicent Ciscar/i }).closest('[data-motion="hero"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-motion="surface-panel"]')).not.toBeNull();
+    expect(
+      container.querySelector('.fantasy-player-profile-page__metric[data-motion="stagger-item"]'),
+    ).toHaveAttribute('style', expect.stringContaining('--fantasy-motion-index: 0'));
   });
 
   it('uses browser back navigation instead of linking to leagues', async () => {

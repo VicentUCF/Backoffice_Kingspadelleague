@@ -1,4 +1,9 @@
-<button type="button" class="fantasy-player-profile-page__back-button" (click)="goBack()">
+<button
+  type="button"
+  class="fantasy-player-profile-page__back-button"
+  data-motion="surface-panel"
+  (click)="goBack()"
+>
   <lucide-angular [img]="arrowLeftIcon" [size]="18" aria-hidden="true" />
   <span>Volver atrás</span>
 </button>
@@ -16,8 +21,8 @@
     />
   </section>
 } @else if (store.player(); as player) {
-  <article class="fantasy-player-profile-page__panel c-surface-card">
-    <header class="fantasy-player-profile-page__hero">
+  <article class="fantasy-player-profile-page__panel c-surface-card" data-motion="surface-panel">
+    <header class="fantasy-player-profile-page__hero" data-motion="hero">
       <div class="fantasy-player-profile-page__identity">
         <app-fantasy-player-avatar
           [altText]="player.name"
@@ -47,7 +52,11 @@
         </div>
       </div>
 
-      <aside class="fantasy-player-profile-page__decision" [attr.data-tone]="player.decisionTone">
+      <aside
+        class="fantasy-player-profile-page__decision"
+        data-motion="surface-panel"
+        [attr.data-tone]="player.decisionTone"
+      >
         <p class="fantasy-player-profile-page__eyebrow">Señal de fichaje</p>
         <span class="fantasy-player-profile-page__decision-badge">{{ player.decisionLabel }}</span>
         <h2>{{ player.decisionTitle }}</h2>
@@ -57,7 +66,12 @@
 
     <dl class="fantasy-player-profile-page__metrics">
       @for (metric of player.keyMetrics; track metric.id) {
-        <div class="fantasy-player-profile-page__metric" [attr.data-tone]="metric.tone">
+        <div
+          class="fantasy-player-profile-page__metric"
+          data-motion="stagger-item"
+          [attr.data-tone]="metric.tone"
+          [style.--fantasy-motion-index]="$index"
+        >
           <dt>{{ metric.label }}</dt>
           <dd>{{ metric.value }}</dd>
           <p>{{ metric.supportingText }}</p>
@@ -66,7 +80,7 @@
     </dl>
 
     <div class="fantasy-player-profile-page__analysis-grid">
-      <section class="fantasy-player-profile-page__history-card">
+      <section class="fantasy-player-profile-page__history-card" data-motion="surface-panel">
         <header class="fantasy-player-profile-page__section-header">
           <p class="fantasy-player-profile-page__eyebrow">Historial de valor</p>
           <h2>Historial de valor</h2>
@@ -74,15 +88,15 @@
         </header>
 
         <dl class="fantasy-player-profile-page__history-summary">
-          <div>
+          <div data-motion="stagger-item" [style.--fantasy-motion-index]="0">
             <dt>Actual</dt>
             <dd>{{ player.priceLabel }}</dd>
           </div>
-          <div>
+          <div data-motion="stagger-item" [style.--fantasy-motion-index]="1">
             <dt>Rango</dt>
             <dd>{{ player.valueHistory.lowLabel }} · {{ player.valueHistory.highLabel }}</dd>
           </div>
-          <div>
+          <div data-motion="stagger-item" [style.--fantasy-motion-index]="2">
             <dt>Tramo</dt>
             <dd>{{ player.valueHistory.deltaLabel }}</dd>
           </div>
@@ -106,6 +120,7 @@
                 [attr.r]="point.isCurrent ? 2.8 : 2.1"
                 class="fantasy-player-profile-page__history-point"
                 [attr.data-current]="point.isCurrent"
+                [style.--fantasy-motion-index]="$index"
               />
             }
           </svg>
@@ -113,7 +128,11 @@
 
         <ol class="fantasy-player-profile-page__history-list">
           @for (point of player.valueHistory.points; track point.id) {
-            <li [attr.data-current]="point.isCurrent">
+            <li
+              data-motion="stagger-item"
+              [attr.data-current]="point.isCurrent"
+              [style.--fantasy-motion-index]="$index"
+            >
               <span>{{ point.label }}</span>
               <strong>{{ point.priceLabel }}</strong>
             </li>
@@ -121,7 +140,7 @@
         </ol>
       </section>
 
-      <section class="fantasy-player-profile-page__signals">
+      <section class="fantasy-player-profile-page__signals" data-motion="surface-panel">
         <header class="fantasy-player-profile-page__section-header">
           <p class="fantasy-player-profile-page__eyebrow">Decisión rápida</p>
           <h2>Qué mirar antes de ficharlo</h2>
@@ -130,7 +149,12 @@
 
         <div class="fantasy-player-profile-page__signal-grid">
           @for (signal of player.signals; track signal.id) {
-            <article class="fantasy-player-profile-page__signal" [attr.data-tone]="signal.tone">
+            <article
+              class="fantasy-player-profile-page__signal"
+              data-motion="stagger-item"
+              [attr.data-tone]="signal.tone"
+              [style.--fantasy-motion-index]="$index"
+            >
               <span>{{ signal.title }}</span>
               <strong>{{ signal.value }}</strong>
               <p>{{ signal.description }}</p>
@@ -141,12 +165,12 @@
     </div>
 
     <section class="fantasy-player-profile-page__notes">
-      <article>
+      <article data-motion="surface-panel" [style.--fantasy-motion-index]="0">
         <h2>Situación de mercado</h2>
         <p>{{ player.marketTrendLabel }}</p>
         <p>{{ player.marketGuidance }}</p>
       </article>
-      <article>
+      <article data-motion="surface-panel" [style.--fantasy-motion-index]="1">
         <h2>Scouting</h2>
         <p>{{ player.scoutingNote }}</p>
       </article>

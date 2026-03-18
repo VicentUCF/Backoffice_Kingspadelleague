@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -24,6 +26,9 @@
       outline: 2px solid color-mix(in srgb, var(--color-brand) 70%, white 30%);
       outline-offset: 4px;
     }
+
+    @include fantasy-motion.reveal(320ms, 30ms, 50ms, 10px);
+    @include fantasy-motion.interactive-lift(-1px, rgb(201 162 39 / 0.14));
   }
 
   &__panel {
@@ -422,6 +427,55 @@
 
   &__empty {
     width: 100%;
+  }
+
+  &__panel,
+  &__hero,
+  &__decision,
+  &__history-card,
+  &__signals,
+  &__notes article {
+    @include fantasy-motion.reveal(440ms, 60ms, 60ms, 14px);
+  }
+
+  &__copy > * {
+    @include fantasy-motion.reveal(360ms, 100ms, 55ms, 12px);
+  }
+
+  &__copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__copy > :nth-child(4) {
+    --fantasy-motion-index: 3;
+  }
+
+  &__metric,
+  &__history-summary div,
+  &__history-list li,
+  &__signal {
+    @include fantasy-motion.reveal(380ms, 150ms, 48ms, 12px);
+  }
+
+  &__history-line {
+    @include fantasy-motion.draw-stroke(240, 860ms, 200ms);
+  }
+
+  &__history-point {
+    @include fantasy-motion.pop-in(420ms, calc(240ms + (var(--fantasy-motion-index, 0) * 46ms)));
+  }
+
+  &__decision-badge,
+  &__history-list li[data-current='true'] {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.22), rgb(255 255 255 / 0.04));
   }
 }
 

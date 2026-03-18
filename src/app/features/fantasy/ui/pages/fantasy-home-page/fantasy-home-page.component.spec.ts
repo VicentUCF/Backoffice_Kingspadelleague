@@ -14,7 +14,7 @@ import { FantasyHomePageComponent } from './fantasy-home-page.component';
 
 describe('FantasyHomePageComponent', () => {
   it('renders the post-friday home with bonus de porra and edit CTA', async () => {
-    await render(FantasyHomePageComponent, {
+    const { container } = await render(FantasyHomePageComponent, {
       providers: [provideFantasyFeature(), provideRouter([])],
     });
 
@@ -35,6 +35,16 @@ describe('FantasyHomePageComponent', () => {
       '/fantasy/leagues/league-1/create-team',
     );
     expect(screen.getByText(/Colegas pádel/i)).toBeVisible();
+    expect(
+      screen
+        .getByRole('heading', { name: /Tu porra ya está cerrada/i })
+        .closest('[data-motion="hero"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-motion="section-nav"]')).not.toBeNull();
+    expect(screen.getByText('Aciertos').closest('[data-motion="stagger-item"]')).toHaveAttribute(
+      'style',
+      expect.stringContaining('--fantasy-motion-index: 0'),
+    );
   });
 
   it('renders the prediction-open home with the plantilla-first porra CTA', async () => {

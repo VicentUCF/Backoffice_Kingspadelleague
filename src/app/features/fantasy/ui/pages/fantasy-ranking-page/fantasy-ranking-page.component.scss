@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -268,6 +270,43 @@
       font-weight: 700;
       line-height: 1.4;
     }
+  }
+
+  &__hero,
+  &__podium,
+  &__table-panel {
+    @include fantasy-motion.reveal(440ms, 40ms, 60ms, 14px);
+  }
+
+  &__hero-copy > * {
+    @include fantasy-motion.reveal(360ms, 90ms, 55ms, 12px);
+  }
+
+  &__hero-copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__hero-copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__fact,
+  &__summary-card,
+  &__podium-card {
+    @include fantasy-motion.reveal(380ms, 150ms, 48ms, 12px);
+  }
+
+  &__podium-card[data-rank='1'] {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.26), rgb(255 255 255 / 0.05));
+  }
+
+  &__podium-rank,
+  &__podium-chip {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.18), rgb(255 255 255 / 0.04));
   }
 }
 

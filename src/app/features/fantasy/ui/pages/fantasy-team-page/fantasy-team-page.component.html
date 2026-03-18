@@ -9,20 +9,28 @@
     title="No hemos podido cargar tu equipo"
   />
 } @else if (store.viewModel(); as viewModel) {
-  <section class="fantasy-team-page__hero">
+  <section class="fantasy-team-page__hero" data-motion="hero">
     <div class="fantasy-team-page__hero-copy">
       <p class="fantasy-team-page__eyebrow">{{ viewModel.phaseLabel }}</p>
       <h1>Mi equipo · {{ viewModel.leagueName }}</h1>
       <p class="fantasy-team-page__hero-description">{{ viewModel.phaseDescription }}</p>
 
-      <nav aria-label="Acciones del equipo fantasy" class="fantasy-team-page__actions">
+      <nav
+        aria-label="Acciones del equipo fantasy"
+        class="fantasy-team-page__actions"
+        data-motion="cta-group"
+      >
         <a
           class="fantasy-team-page__action fantasy-team-page__action--primary"
+          [style.--fantasy-motion-index]="0"
           [routerLink]="viewModel.teamCreationLink"
         >
           Ajustar alineación
         </a>
-        <a class="fantasy-team-page__action" [routerLink]="viewModel.marketLink"
+        <a
+          class="fantasy-team-page__action"
+          [style.--fantasy-motion-index]="1"
+          [routerLink]="viewModel.marketLink"
           >Explorar mercado</a
         >
       </nav>
@@ -30,15 +38,27 @@
 
     @if (viewModel.team; as team) {
       <dl class="fantasy-team-page__hero-facts">
-        <div class="fantasy-team-page__fact">
+        <div
+          class="fantasy-team-page__fact"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="0"
+        >
           <dt>Presupuesto restante</dt>
           <dd>{{ team.budgetRemainingLabel }}</dd>
         </div>
-        <div class="fantasy-team-page__fact">
+        <div
+          class="fantasy-team-page__fact"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="1"
+        >
           <dt>Invertido</dt>
           <dd>{{ team.budgetSpentLabel }}</dd>
         </div>
-        <div class="fantasy-team-page__fact">
+        <div
+          class="fantasy-team-page__fact"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="2"
+        >
           <dt>Composición</dt>
           <dd>{{ team.compositionLabel }}</dd>
         </div>
@@ -58,7 +78,7 @@
   />
 
   @if (viewModel.team; as team) {
-    <section class="fantasy-team-page__planner c-surface-card">
+    <section class="fantasy-team-page__planner c-surface-card" data-motion="surface-panel">
       <header class="fantasy-team-page__planner-header">
         <div>
           <p class="fantasy-team-page__section-kicker">
@@ -75,7 +95,10 @@
       </header>
 
       <div class="fantasy-team-page__planner-grid">
-        <article class="fantasy-team-page__panel fantasy-team-page__panel--starters">
+        <article
+          class="fantasy-team-page__panel fantasy-team-page__panel--starters"
+          data-motion="surface-panel"
+        >
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Titulares</p>
@@ -85,17 +108,29 @@
           </header>
 
           <div class="fantasy-team-page__starter-summary">
-            <article class="fantasy-team-page__summary-card">
+            <article
+              class="fantasy-team-page__summary-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="0"
+            >
               <span>Capitán</span>
               <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
               <small>El jugador que puntúa doble</small>
             </article>
-            <article class="fantasy-team-page__summary-card">
+            <article
+              class="fantasy-team-page__summary-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="1"
+            >
               <span>Valor</span>
               <strong>{{ team.teamValueLabel }}</strong>
               <small>{{ team.budgetRemainingLabel }} disponibles</small>
             </article>
-            <article class="fantasy-team-page__summary-card">
+            <article
+              class="fantasy-team-page__summary-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="2"
+            >
               <span>Estructura</span>
               <strong>{{ team.formationLabel }}</strong>
               <small>{{ team.compositionLabel }}</small>
@@ -104,7 +139,11 @@
 
           <ul aria-label="Titulares fantasy" class="fantasy-team-page__starter-grid">
             @for (player of team.starters; track player.id) {
-              <li class="fantasy-team-page__roster-card">
+              <li
+                class="fantasy-team-page__roster-card"
+                data-motion="stagger-item"
+                [style.--fantasy-motion-index]="$index"
+              >
                 <div class="fantasy-team-page__roster-main">
                   <app-fantasy-player-avatar
                     [altText]="player.name"
@@ -156,7 +195,10 @@
           </ul>
         </article>
 
-        <article class="fantasy-team-page__panel fantasy-team-page__panel--rotation">
+        <article
+          class="fantasy-team-page__panel fantasy-team-page__panel--rotation"
+          data-motion="surface-panel"
+        >
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Rotación</p>
@@ -172,7 +214,11 @@
 
           <ul aria-label="Suplentes fantasy" class="fantasy-team-page__bench-list">
             @for (player of team.bench; track player.id) {
-              <li class="fantasy-team-page__roster-card fantasy-team-page__roster-card--bench">
+              <li
+                class="fantasy-team-page__roster-card fantasy-team-page__roster-card--bench"
+                data-motion="stagger-item"
+                [style.--fantasy-motion-index]="$index"
+              >
                 <div class="fantasy-team-page__roster-main">
                   <app-fantasy-player-avatar
                     [altText]="player.name"
@@ -217,15 +263,15 @@
           </ul>
 
           <dl class="fantasy-team-page__rotation-metrics">
-            <div>
+            <div data-motion="stagger-item" [style.--fantasy-motion-index]="0">
               <dt>Puntos</dt>
               <dd>{{ team.totalPointsLabel }}</dd>
             </div>
-            <div>
+            <div data-motion="stagger-item" [style.--fantasy-motion-index]="1">
               <dt>Jornada</dt>
               <dd>{{ team.matchdayPointsLabel }}</dd>
             </div>
-            <div>
+            <div data-motion="stagger-item" [style.--fantasy-motion-index]="2">
               <dt>Invertido</dt>
               <dd>{{ team.budgetSpentLabel }}</dd>
             </div>

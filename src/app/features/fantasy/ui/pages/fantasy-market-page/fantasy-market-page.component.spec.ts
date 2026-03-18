@@ -9,7 +9,7 @@ import { FantasyMarketPageComponent } from './fantasy-market-page.component';
 
 describe('FantasyMarketPageComponent', () => {
   it('renders the market page and filters by player name', async () => {
-    await render(FantasyMarketPageComponent, {
+    const { container } = await render(FantasyMarketPageComponent, {
       providers: [
         provideFantasyFeature(),
         provideRouter([]),
@@ -20,6 +20,16 @@ describe('FantasyMarketPageComponent', () => {
     expect(
       await screen.findByRole('heading', { name: /Mercado · Amigos del curro/i }),
     ).toBeVisible();
+    expect(
+      screen
+        .getByRole('heading', { name: /Mercado · Amigos del curro/i })
+        .closest('[data-motion="hero"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-motion="section-nav"]')).not.toBeNull();
+    expect(container.querySelector('[data-motion="market-results"]')).toHaveAttribute(
+      'data-motion-key',
+      '0',
+    );
 
     fireEvent.input(screen.getByRole('searchbox', { name: /Buscar jugador/i }), {
       target: { value: 'vicent' },
@@ -27,6 +37,15 @@ describe('FantasyMarketPageComponent', () => {
 
     expect(screen.getByRole('link', { name: /Abrir ficha de Vicent Ciscar/i })).toBeVisible();
     expect(screen.queryByRole('link', { name: /Abrir ficha de Adri Alvarez/i })).toBeNull();
+    await waitFor(() => {
+      expect(container.querySelector('[data-motion="market-results"]')).toHaveAttribute(
+        'data-motion-key',
+        '1',
+      );
+    });
+    expect(
+      container.querySelector('[data-motion="market-results"] [data-motion="stagger-item"]'),
+    ).toHaveAttribute('style', expect.stringContaining('--fantasy-motion-index: 0'));
   });
 
   it('shows a toast when a player sale is confirmed', async () => {

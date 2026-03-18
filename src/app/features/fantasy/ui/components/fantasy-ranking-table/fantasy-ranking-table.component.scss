@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   display: block;
   min-width: 0;
@@ -14,6 +16,7 @@
     background:
       linear-gradient(180deg, rgb(255 255 255 / 0.04), rgb(255 255 255 / 0.015)),
       var(--color-surface-raised);
+    @include fantasy-motion.reveal(400ms, 180ms, 60ms, 12px);
   }
 
   &__table {
@@ -43,6 +46,7 @@
   &__row {
     padding-inline: var(--space-4);
     transition: background-color 160ms ease;
+    @include fantasy-motion.reveal(360ms, 220ms, 44ms, 12px);
 
     &:not(:last-child) {
       border-bottom: 1px solid var(--color-border-subtle);
@@ -55,6 +59,7 @@
     &[data-podium='1'] .fantasy-ranking-table__rank-pill {
       background: rgb(201 162 39 / 0.18);
       color: var(--color-brand-strong);
+      @include fantasy-motion.glow(rgb(201 162 39 / 0.2), rgb(255 255 255 / 0.04));
     }
 
     &[data-podium='2'] .fantasy-ranking-table__rank-pill {
@@ -165,6 +170,7 @@
     background: rgb(201 162 39 / 0.12);
     color: var(--color-text-strong);
     cursor: pointer;
+    @include fantasy-motion.interactive-lift(-2px, rgb(201 162 39 / 0.18));
 
     &:focus-visible {
       outline: 2px solid color-mix(in srgb, var(--color-brand) 80%, white);

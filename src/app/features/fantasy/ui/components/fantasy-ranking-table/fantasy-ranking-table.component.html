@@ -1,4 +1,4 @@
-<div class="fantasy-ranking-table__wrap">
+<div class="fantasy-ranking-table__wrap" data-motion="ranking-table">
   <div
     aria-label="Clasificación fantasy de la liga"
     class="fantasy-ranking-table__table"
@@ -55,8 +55,10 @@
       @for (entry of entries(); track entry.teamId; let position = $index) {
         <div
           class="fantasy-ranking-table__row"
+          data-motion="stagger-item"
           [attr.data-podium]="position < 3 ? position + 1 : null"
           [class.fantasy-ranking-table__row--mine]="entry.isMe"
+          [style.--fantasy-motion-index]="position"
           role="row"
         >
           <div

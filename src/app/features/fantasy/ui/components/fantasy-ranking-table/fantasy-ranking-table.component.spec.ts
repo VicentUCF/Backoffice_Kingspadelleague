@@ -7,7 +7,7 @@ import { FantasyRankingTableComponent } from './fantasy-ranking-table.component'
 
 describe('FantasyRankingTableComponent', () => {
   it('renders the ranking as an accessible grid-like table and emits the selected team', async () => {
-    const { fixture } = await render(FantasyRankingTableComponent, {
+    const { container, fixture } = await render(FantasyRankingTableComponent, {
       componentInputs: {
         entries: createRankingEntries(),
       },
@@ -20,6 +20,11 @@ describe('FantasyRankingTableComponent', () => {
 
     expect(screen.getByRole('table', { name: /Clasificación fantasy de la liga/i })).toBeVisible();
     expect(screen.getAllByRole('row')).toHaveLength(3);
+    expect(container.querySelector('[data-motion="ranking-table"]')).not.toBeNull();
+    expect(container.querySelector('[data-motion="stagger-item"]')).toHaveAttribute(
+      'style',
+      expect.stringContaining('--fantasy-motion-index: 0'),
+    );
 
     await fireEvent.click(screen.getByRole('button', { name: /Ver equipo de Previa Imperial/i }));
 

@@ -8,7 +8,7 @@ import { FantasyLeagueResultsPageComponent } from './fantasy-league-results-page
 
 describe('FantasyLeagueResultsPageComponent', () => {
   it('renders the weekly results with ranking, awards and market analysis', async () => {
-    await render(FantasyLeagueResultsPageComponent, {
+    const { container } = await render(FantasyLeagueResultsPageComponent, {
       providers: [
         provideFantasyFeature(),
         provideRouter([]),
@@ -25,6 +25,16 @@ describe('FantasyLeagueResultsPageComponent', () => {
     expect(screen.getByText(/Rivales directos/i)).toBeVisible();
     expect(screen.getByText(/Mercado post-jornada/i)).toBeVisible();
     expect(screen.getAllByRole('link', { name: /Resultados/i }).length).toBeGreaterThan(0);
+    expect(
+      screen
+        .getByRole('heading', { name: /Resultados jornada disponibles/i })
+        .closest('[data-motion="hero"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-motion="section-nav"]')).not.toBeNull();
+    expect(screen.getByText(/^Fantasy$/i).closest('[data-motion="stagger-item"]')).toHaveAttribute(
+      'style',
+      expect.stringContaining('--fantasy-motion-index: 0'),
+    );
   });
 
   it('renders a not available state when the league has no weekly results', async () => {

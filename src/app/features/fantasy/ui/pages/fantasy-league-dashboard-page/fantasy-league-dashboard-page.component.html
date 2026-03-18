@@ -10,7 +10,7 @@
     title="No hemos podido cargar esta liga"
   />
 } @else if (store.viewModel(); as viewModel) {
-  <section class="fantasy-dashboard-page__hero">
+  <section class="fantasy-dashboard-page__hero" data-motion="hero">
     <div class="fantasy-dashboard-page__hero-copy">
       <p class="fantasy-dashboard-page__eyebrow">{{ viewModel.phaseLabel }}</p>
       <h1>{{ viewModel.leagueName }}</h1>
@@ -19,21 +19,36 @@
       </p>
     </div>
 
-    <nav aria-label="Acciones de la liga fantasy" class="fantasy-dashboard-page__actions">
+    <nav
+      aria-label="Acciones de la liga fantasy"
+      class="fantasy-dashboard-page__actions"
+      data-motion="cta-group"
+    >
       <a
         class="fantasy-dashboard-page__action fantasy-dashboard-page__action--primary"
+        [style.--fantasy-motion-index]="0"
         [routerLink]="viewModel.heroSummary.primaryAction.href"
       >
         {{ viewModel.heroSummary.primaryAction.label }}
       </a>
       @for (action of viewModel.heroSummary.secondaryActions; track action.href) {
-        <a class="fantasy-dashboard-page__action" [routerLink]="action.href">{{ action.label }}</a>
+        <a
+          class="fantasy-dashboard-page__action"
+          [style.--fantasy-motion-index]="$index + 1"
+          [routerLink]="action.href"
+        >
+          {{ action.label }}
+        </a>
       }
     </nav>
 
     <dl class="fantasy-dashboard-page__hero-facts">
       @for (fact of viewModel.heroSummary.facts; track fact.label) {
-        <div class="fantasy-dashboard-page__fact">
+        <div
+          class="fantasy-dashboard-page__fact"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="$index"
+        >
           <dt>{{ fact.label }}</dt>
           <dd>
             <span class="fantasy-dashboard-page__fact-value">{{ fact.value }}</span>
@@ -59,6 +74,7 @@
     <section
       class="fantasy-dashboard-page__panel fantasy-dashboard-page__panel--command c-surface-card"
       aria-labelledby="fantasy-dashboard-command-center"
+      data-motion="surface-panel"
     >
       <header class="fantasy-dashboard-page__panel-header">
         <div>
@@ -74,22 +90,36 @@
         <div class="fantasy-dashboard-page__command-grid">
           <article
             class="fantasy-dashboard-page__command-card fantasy-dashboard-page__command-card--accent"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="0"
           >
             <span>Equipo activo</span>
             <strong>{{ team.name }}</strong>
             <small>{{ team.playersCountLabel }} · {{ team.formationLabel }}</small>
           </article>
-          <article class="fantasy-dashboard-page__command-card">
+          <article
+            class="fantasy-dashboard-page__command-card"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="1"
+          >
             <span>Capitán</span>
             <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
             <small>Tu jugador que puntúa doble</small>
           </article>
-          <article class="fantasy-dashboard-page__command-card">
+          <article
+            class="fantasy-dashboard-page__command-card"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="2"
+          >
             <span>Valor</span>
             <strong>{{ team.teamValueLabel }}</strong>
             <small>{{ team.budgetRemainingLabel }} de margen</small>
           </article>
-          <article class="fantasy-dashboard-page__command-card">
+          <article
+            class="fantasy-dashboard-page__command-card"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="3"
+          >
             <span>Composición</span>
             <strong>{{ team.compositionLabel }}</strong>
             <small>{{ team.matchdayPointsLabel }} en jornada</small>
@@ -97,7 +127,7 @@
         </div>
 
         <div class="fantasy-dashboard-page__lineup-shell">
-          <section class="fantasy-dashboard-page__lineup-panel">
+          <section class="fantasy-dashboard-page__lineup-panel" data-motion="surface-panel">
             <header class="fantasy-dashboard-page__mini-header">
               <div>
                 <p class="fantasy-dashboard-page__mini-kicker">Titulares</p>
@@ -109,7 +139,11 @@
             <ul class="fantasy-dashboard-page__starter-grid" role="list">
               @for (player of team.starters; track player.id) {
                 <li>
-                  <article class="fantasy-dashboard-page__starter-card">
+                  <article
+                    class="fantasy-dashboard-page__starter-card"
+                    data-motion="stagger-item"
+                    [style.--fantasy-motion-index]="$index"
+                  >
                     <div class="fantasy-dashboard-page__player-main">
                       <app-fantasy-player-avatar
                         [altText]="player.name"
@@ -141,7 +175,7 @@
             </ul>
           </section>
 
-          <div class="fantasy-dashboard-page__lineup-side">
+          <div class="fantasy-dashboard-page__lineup-side" data-motion="surface-panel">
             <header class="fantasy-dashboard-page__mini-header">
               <div>
                 <p class="fantasy-dashboard-page__mini-kicker">Rotación</p>
@@ -153,7 +187,11 @@
             <ul class="fantasy-dashboard-page__bench-list" role="list">
               @for (player of team.bench; track player.id) {
                 <li>
-                  <article class="fantasy-dashboard-page__bench-card">
+                  <article
+                    class="fantasy-dashboard-page__bench-card"
+                    data-motion="stagger-item"
+                    [style.--fantasy-motion-index]="$index"
+                  >
                     <div class="fantasy-dashboard-page__player-main">
                       <app-fantasy-player-avatar
                         [altText]="player.name"
@@ -179,15 +217,18 @@
             <nav
               aria-label="Acciones rápidas de la plantilla"
               class="fantasy-dashboard-page__inline-actions"
+              data-motion="cta-group"
             >
               <a
                 class="fantasy-dashboard-page__inline-action fantasy-dashboard-page__inline-action--primary"
+                [style.--fantasy-motion-index]="0"
                 [routerLink]="viewModel.teamLink"
               >
                 Gestionar equipo
               </a>
               <a
                 class="fantasy-dashboard-page__inline-action"
+                [style.--fantasy-motion-index]="1"
                 [routerLink]="viewModel.teamCreationLink"
               >
                 Editar plantilla
@@ -202,22 +243,28 @@
             aria-label="Checklist de pretemporada"
           >
             @for (item of viewModel.primarySummary.checklist; track item) {
-              <li>{{ item }}</li>
+              <li data-motion="stagger-item" [style.--fantasy-motion-index]="$index">{{ item }}</li>
             }
           </ul>
 
           <nav
             aria-label="Acciones para crear equipo"
             class="fantasy-dashboard-page__inline-actions"
+            data-motion="cta-group"
           >
             <a
               class="fantasy-dashboard-page__inline-action fantasy-dashboard-page__inline-action--primary"
+              [style.--fantasy-motion-index]="0"
               [routerLink]="viewModel.primarySummary.primaryAction.href"
             >
               {{ viewModel.primarySummary.primaryAction.label }}
             </a>
             @for (action of viewModel.primarySummary.secondaryActions; track action.href) {
-              <a class="fantasy-dashboard-page__inline-action" [routerLink]="action.href">
+              <a
+                class="fantasy-dashboard-page__inline-action"
+                [style.--fantasy-motion-index]="$index + 1"
+                [routerLink]="action.href"
+              >
                 {{ action.label }}
               </a>
             }
@@ -229,6 +276,7 @@
     <section
       class="fantasy-dashboard-page__panel fantasy-dashboard-page__panel--ranking c-surface-card"
       aria-labelledby="fantasy-dashboard-ranking"
+      data-motion="surface-panel"
     >
       <header class="fantasy-dashboard-page__panel-header">
         <div>
@@ -246,7 +294,11 @@
 
       <ol class="fantasy-dashboard-page__ranking-list">
         @for (entry of viewModel.topRankingEntries; track entry.teamId) {
-          <li class="fantasy-dashboard-page__ranking-item">
+          <li
+            class="fantasy-dashboard-page__ranking-item"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="$index"
+          >
             <div class="fantasy-dashboard-page__ranking-main">
               <span class="fantasy-dashboard-page__ranking-rank">{{ entry.rankLabel }}</span>
               <div>
@@ -275,11 +327,13 @@
 
     <app-fantasy-dashboard-market-snapshot-card
       class="fantasy-dashboard-page__market-snapshot"
+      data-motion="surface-panel"
       [snapshot]="viewModel.marketSnapshot"
     />
 
     <app-fantasy-mvp-card
       class="fantasy-dashboard-page__spotlight"
+      data-motion="surface-panel"
       [player]="viewModel.spotlight"
     />
   </div>

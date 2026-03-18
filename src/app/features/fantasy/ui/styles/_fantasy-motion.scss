@@ -1,0 +1,123 @@
+$fantasy-motion-curve: cubic-bezier(0.22, 1, 0.36, 1);
+
+@mixin reduce-motion {
+  @media (prefers-reduced-motion: reduce) {
+    animation: none !important;
+    transition: none !important;
+    transform: none !important;
+    filter: none !important;
+  }
+}
+
+@mixin reveal($duration: 420ms, $base-delay: 0ms, $step: 60ms, $distance: 14px, $scale: 0.985) {
+  --fantasy-motion-duration: #{$duration};
+  --fantasy-motion-base-delay: #{$base-delay};
+  --fantasy-motion-step: #{$step};
+  --fantasy-motion-distance: #{$distance};
+  --fantasy-motion-scale: #{$scale};
+  animation: fantasy-motion-reveal var(--fantasy-motion-duration) $fantasy-motion-curve both;
+  animation-delay: calc(
+    var(--fantasy-motion-base-delay) + (var(--fantasy-motion-index, 0) * var(--fantasy-motion-step))
+  );
+  transform-origin: 50% 100%;
+  will-change: opacity, transform;
+
+  @include reduce-motion;
+}
+
+@mixin interactive-lift($lift: -2px, $shadow: rgb(201 162 39 / 0.2)) {
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    box-shadow 160ms ease,
+    opacity 160ms ease;
+
+  &:hover:not(:disabled),
+  &:focus-visible {
+    transform: translateY($lift);
+    box-shadow: 0 1rem 2rem -1.4rem $shadow;
+  }
+
+  @include reduce-motion;
+}
+
+@mixin glow($shadow: rgb(201 162 39 / 0.24), $ring: rgb(255 255 255 / 0.05)) {
+  box-shadow:
+    0 1.2rem 2.8rem -1.6rem $shadow,
+    inset 0 1px 0 $ring;
+}
+
+@mixin pulse($shadow: rgb(226 80 73 / 0.18), $duration: 2.1s) {
+  --fantasy-motion-pulse-shadow: #{$shadow};
+  animation: fantasy-motion-pulse $duration ease-in-out infinite;
+
+  @include reduce-motion;
+}
+
+@mixin draw-stroke($length: 140, $duration: 820ms, $delay: 140ms) {
+  stroke-dasharray: $length;
+  stroke-dashoffset: $length;
+  animation: fantasy-motion-draw $duration $fantasy-motion-curve forwards;
+  animation-delay: $delay;
+
+  @include reduce-motion;
+}
+
+@mixin pop-in($duration: 480ms, $delay: 180ms) {
+  animation: fantasy-motion-pop $duration $fantasy-motion-curve both;
+  animation-delay: $delay;
+
+  @include reduce-motion;
+}
+
+@keyframes fantasy-motion-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(var(--fantasy-motion-distance)) scale(var(--fantasy-motion-scale));
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fantasy-motion-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgb(226 80 73 / 0),
+      inset 0 1px 0 rgb(255 255 255 / 0.03);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 10px var(--fantasy-motion-pulse-shadow),
+      inset 0 1px 0 rgb(255 255 255 / 0.03);
+  }
+}
+
+@keyframes fantasy-motion-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fantasy-motion-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+
+  70% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

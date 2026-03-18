@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -394,6 +396,52 @@
     justify-content: space-between;
     color: var(--color-text-strong);
     font-weight: 700;
+  }
+
+  &__hero,
+  &__planner,
+  &__panel {
+    @include fantasy-motion.reveal(440ms, 40ms, 60ms, 14px);
+  }
+
+  &__hero-copy > * {
+    @include fantasy-motion.reveal(360ms, 90ms, 55ms, 12px);
+  }
+
+  &__hero-copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__hero-copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__actions > * {
+    @include fantasy-motion.reveal(320ms, 170ms, 44ms, 10px);
+  }
+
+  &__fact,
+  &__summary-card,
+  &__roster-card,
+  &__rotation-metrics div {
+    @include fantasy-motion.reveal(380ms, 150ms, 48ms, 12px);
+  }
+
+  &__action,
+  &__planner-link,
+  &__roster-copy a {
+    @include fantasy-motion.interactive-lift(-2px, rgb(201 162 39 / 0.18));
+  }
+
+  &__action--primary,
+  &__planner-link,
+  &__captain-badge,
+  &__panel-chip {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.26), rgb(255 255 255 / 0.05));
   }
 }
 

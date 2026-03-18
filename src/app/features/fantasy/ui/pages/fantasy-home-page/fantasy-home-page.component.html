@@ -11,7 +11,11 @@
       title="No hemos podido cargar tu semana fantasy"
     />
   } @else if (store.viewModel(); as viewModel) {
-    <section class="fantasy-home-page__hero" [attr.data-phase]="viewModel.primaryLeague.phase">
+    <section
+      class="fantasy-home-page__hero"
+      data-motion="hero"
+      [attr.data-phase]="viewModel.primaryLeague.phase"
+    >
       <div class="fantasy-home-page__hero-copy">
         <p class="fantasy-home-page__eyebrow">
           {{ viewModel.primaryLeague.phaseLabel }} · {{ viewModel.primaryLeague.leagueName }}
@@ -19,7 +23,7 @@
         <h1>{{ viewModel.primaryLeague.title }}</h1>
         <p class="fantasy-home-page__hero-description">{{ viewModel.primaryLeague.summary }}</p>
 
-        <div class="fantasy-home-page__hero-meta">
+        <div class="fantasy-home-page__hero-meta" data-motion="cta-group">
           <span class="fantasy-home-page__badge">{{ viewModel.primaryLeague.leagueCode }}</span>
           @if (viewModel.primaryLeague.countdown; as countdown) {
             <app-fantasy-live-countdown
@@ -30,11 +34,16 @@
           }
         </div>
 
-        <nav aria-label="Acciones principales fantasy" class="fantasy-home-page__actions">
+        <nav
+          aria-label="Acciones principales fantasy"
+          class="fantasy-home-page__actions"
+          data-motion="cta-group"
+        >
           @for (action of viewModel.primaryLeague.actions; track action.href) {
             <a
               class="fantasy-home-page__action"
               [class.fantasy-home-page__action--primary]="action.tone === 'primary'"
+              [style.--fantasy-motion-index]="$index"
               [routerLink]="action.href"
             >
               {{ action.label }}
@@ -45,6 +54,7 @@
 
       <article
         class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--status c-surface-card"
+        data-motion="surface-panel"
       >
         <header class="fantasy-home-page__panel-header">
           <div>
@@ -55,7 +65,12 @@
 
         <div class="fantasy-home-page__impact-grid">
           @for (metric of viewModel.primaryLeague.statusMetrics; track metric.label) {
-            <article class="fantasy-home-page__impact-card" [attr.data-tone]="metric.tone">
+            <article
+              class="fantasy-home-page__impact-card"
+              data-motion="stagger-item"
+              [attr.data-tone]="metric.tone"
+              [style.--fantasy-motion-index]="$index"
+            >
               <span>{{ metric.label }}</span>
               <strong>{{ metric.value }}</strong>
               <small>{{ metric.supportingText }}</small>
@@ -72,6 +87,7 @@
       @if (viewModel.primaryLeague.predictionOutcome; as predictionOutcome) {
         <article
           class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--prediction c-surface-card"
+          data-motion="surface-panel"
         >
           <header class="fantasy-home-page__panel-header">
             <div>
@@ -81,11 +97,19 @@
           </header>
 
           <div class="fantasy-home-page__prediction-grid">
-            <article class="fantasy-home-page__prediction-card">
+            <article
+              class="fantasy-home-page__prediction-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="0"
+            >
               <span>Aciertos</span>
               <strong>{{ predictionOutcome.hitsLabel }}</strong>
             </article>
-            <article class="fantasy-home-page__prediction-card">
+            <article
+              class="fantasy-home-page__prediction-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="1"
+            >
               <span>Bonus</span>
               <strong>{{ predictionOutcome.bonusLabel }}</strong>
             </article>
@@ -99,6 +123,7 @@
       } @else if (viewModel.primaryLeague.countdown; as countdown) {
         <article
           class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--countdown c-surface-card"
+          data-motion="surface-panel"
         >
           <header class="fantasy-home-page__panel-header">
             <div>
@@ -131,7 +156,7 @@
     />
 
     @if (viewModel.primaryLeague.countdown && viewModel.primaryLeague.predictionOutcome) {
-      <section class="fantasy-home-page__countdown-bar c-surface-card">
+      <section class="fantasy-home-page__countdown-bar c-surface-card" data-motion="surface-panel">
         <div class="fantasy-home-page__countdown-wrapper">
           <p class="fantasy-home-page__section-kicker">
             {{ viewModel.primaryLeague.countdown.label }}
@@ -147,7 +172,10 @@
     }
 
     <div class="fantasy-home-page__content-grid">
-      <section class="fantasy-home-page__panel fantasy-home-page__panel--market c-surface-card">
+      <section
+        class="fantasy-home-page__panel fantasy-home-page__panel--market c-surface-card"
+        data-motion="surface-panel"
+      >
         <header class="fantasy-home-page__panel-header">
           <div>
             <p class="fantasy-home-page__section-kicker">
@@ -169,7 +197,11 @@
 
         <div class="fantasy-home-page__market-sections">
           @for (section of viewModel.primaryLeague.marketSections; track section.id) {
-            <article class="fantasy-home-page__market-section">
+            <article
+              class="fantasy-home-page__market-section"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="$index"
+            >
               <header class="fantasy-home-page__market-header">
                 <div>
                   <h3>{{ section.title }}</h3>
@@ -180,7 +212,11 @@
               <ul class="fantasy-home-page__mover-list" role="list">
                 @for (mover of section.movers; track mover.detailLink) {
                   <li>
-                    <article class="fantasy-home-page__mover-card">
+                    <article
+                      class="fantasy-home-page__mover-card"
+                      data-motion="stagger-item"
+                      [style.--fantasy-motion-index]="$index"
+                    >
                       <div class="fantasy-home-page__mover-main">
                         <app-fantasy-player-avatar
                           [altText]="mover.name"
@@ -212,7 +248,10 @@
         </div>
       </section>
 
-      <section class="fantasy-home-page__panel fantasy-home-page__panel--feed c-surface-card">
+      <section
+        class="fantasy-home-page__panel fantasy-home-page__panel--feed c-surface-card"
+        data-motion="surface-panel"
+      >
         <header class="fantasy-home-page__panel-header">
           <div>
             <p class="fantasy-home-page__section-kicker">Actividad de la liga</p>
@@ -222,7 +261,12 @@
 
         <ol class="fantasy-home-page__feed-list">
           @for (entry of viewModel.primaryLeague.weeklyFeed; track entry.id) {
-            <li class="fantasy-home-page__feed-item" [attr.data-tone]="entry.tone">
+            <li
+              class="fantasy-home-page__feed-item"
+              data-motion="stagger-item"
+              [attr.data-tone]="entry.tone"
+              [style.--fantasy-motion-index]="$index"
+            >
               <div class="fantasy-home-page__feed-meta">
                 <span class="fantasy-home-page__feed-chip">{{ entry.accentLabel }}</span>
                 <span>{{ entry.relativeTimeLabel }}</span>
@@ -237,7 +281,11 @@
     </div>
 
     @if (viewModel.secondaryLeagues.length) {
-      <section aria-labelledby="fantasy-home-leagues" class="o-stack o-stack--compact">
+      <section
+        aria-labelledby="fantasy-home-leagues"
+        class="o-stack o-stack--compact"
+        data-motion="surface-panel"
+      >
         <div class="fantasy-home-page__section-heading">
           <div>
             <p class="fantasy-home-page__section-kicker">Más ligas</p>
@@ -246,7 +294,11 @@
         </div>
         <div class="fantasy-home-page__leagues-grid o-grid o-grid--cards">
           @for (league of viewModel.secondaryLeagues; track league.id) {
-            <app-fantasy-league-card [league]="league" />
+            <app-fantasy-league-card
+              data-motion="stagger-item"
+              [league]="league"
+              [style.--fantasy-motion-index]="$index"
+            />
           }
         </div>
       </section>

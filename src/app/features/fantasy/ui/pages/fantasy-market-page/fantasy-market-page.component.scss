@@ -1,3 +1,5 @@
+@use '../../styles/fantasy-motion' as fantasy-motion;
+
 :host {
   padding-block: var(--space-7) var(--space-10);
 }
@@ -538,6 +540,88 @@
     color: var(--color-text-muted);
     font-size: 0.82rem;
     line-height: 1.45;
+  }
+
+  &__hero,
+  &__cockpit,
+  &__filters {
+    @include fantasy-motion.reveal(440ms, 40ms, 60ms, 14px);
+  }
+
+  &__hero-copy > * {
+    @include fantasy-motion.reveal(360ms, 90ms, 55ms, 12px);
+  }
+
+  &__hero-copy > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__hero-copy > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__hero-copy > :nth-child(3) {
+    --fantasy-motion-index: 2;
+  }
+
+  &__hero-copy > :nth-child(4) {
+    --fantasy-motion-index: 3;
+  }
+
+  &__fact,
+  &__cockpit-card,
+  &__roster-card,
+  &__player-card {
+    @include fantasy-motion.reveal(380ms, 140ms, 48ms, 12px);
+  }
+
+  &__action,
+  &__inline-link,
+  &__inline-button,
+  &__micro-action,
+  &__action-button,
+  &__player-copy a,
+  &__player-actions a,
+  &__roster-actions a {
+    @include fantasy-motion.interactive-lift(-2px, rgb(201 162 39 / 0.18));
+  }
+
+  &__action,
+  &__action-button,
+  &__inline-link,
+  &__micro-action {
+    &:first-child {
+      --fantasy-motion-index: 0;
+    }
+  }
+
+  &__actions > * {
+    @include fantasy-motion.reveal(320ms, 180ms, 46ms, 10px);
+  }
+
+  &__actions > :nth-child(1) {
+    --fantasy-motion-index: 0;
+  }
+
+  &__actions > :nth-child(2) {
+    --fantasy-motion-index: 1;
+  }
+
+  &__action--primary,
+  &__action-button--primary,
+  &__status-chip[data-tone='positive'] {
+    @include fantasy-motion.glow(rgb(201 162 39 / 0.26), rgb(255 255 255 / 0.06));
+  }
+
+  &__action-button--danger,
+  &__micro-action--danger,
+  &__status-chip[data-tone='warning'] {
+    @include fantasy-motion.glow(rgb(248 113 113 / 0.2), rgb(255 255 255 / 0.04));
+  }
+
+  app-fantasy-mvp-card[data-motion='surface-panel'] {
+    display: block;
+    @include fantasy-motion.reveal(420ms, 190ms, 60ms, 14px);
   }
 }
 

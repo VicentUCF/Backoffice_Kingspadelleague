@@ -10,7 +10,7 @@
     title="No hemos podido cargar el ranking"
   />
 } @else if (store.viewModel(); as viewModel) {
-  <header class="fantasy-ranking-page__hero">
+  <header class="fantasy-ranking-page__hero" data-motion="hero">
     <div class="fantasy-ranking-page__hero-copy">
       <p class="fantasy-ranking-page__eyebrow">{{ viewModel.phaseLabel }}</p>
       <h1>{{ viewModel.rankingTitle }} · {{ viewModel.leagueName }}</h1>
@@ -18,15 +18,27 @@
     </div>
 
     <dl class="fantasy-ranking-page__hero-facts">
-      <div class="fantasy-ranking-page__fact">
+      <div
+        class="fantasy-ranking-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="0"
+      >
         <dt>Participantes</dt>
         <dd>{{ viewModel.memberCountLabel }}</dd>
       </div>
-      <div class="fantasy-ranking-page__fact">
+      <div
+        class="fantasy-ranking-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="1"
+      >
         <dt>Tu puesto</dt>
         <dd>{{ viewModel.myRankLabel }}</dd>
       </div>
-      <div class="fantasy-ranking-page__fact">
+      <div
+        class="fantasy-ranking-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="2"
+      >
         <dt>Tus puntos</dt>
         <dd>{{ viewModel.myPointsLabel }}</dd>
       </div>
@@ -46,22 +58,38 @@
 
   <div class="fantasy-ranking-page__overview">
     <section class="fantasy-ranking-page__summary-grid" aria-label="Indicadores de clasificación">
-      <article class="fantasy-ranking-page__summary-card">
+      <article
+        class="fantasy-ranking-page__summary-card"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="0"
+      >
         <p class="fantasy-ranking-page__summary-label">Participantes</p>
         <strong>{{ viewModel.memberCountLabel }}</strong>
         <span>Todos los managers que están compitiendo ahora mismo.</span>
       </article>
-      <article class="fantasy-ranking-page__summary-card">
+      <article
+        class="fantasy-ranking-page__summary-card"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="1"
+      >
         <p class="fantasy-ranking-page__summary-label">Tu posición</p>
         <strong>{{ viewModel.myRankLabel }}</strong>
         <span>Una referencia rápida para saber si estás peleando arriba.</span>
       </article>
-      <article class="fantasy-ranking-page__summary-card">
+      <article
+        class="fantasy-ranking-page__summary-card"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="2"
+      >
         <p class="fantasy-ranking-page__summary-label">Tus puntos</p>
         <strong>{{ viewModel.myPointsLabel }}</strong>
         <span>Ahora mismo pesan los puntos y cómo está construida tu plantilla.</span>
       </article>
-      <article class="fantasy-ranking-page__summary-card">
+      <article
+        class="fantasy-ranking-page__summary-card"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="3"
+      >
         <p class="fantasy-ranking-page__summary-label">Líder actual</p>
         <strong>{{ leadingEntry()?.teamName ?? 'Pendiente' }}</strong>
         <span>{{ leadingEntry()?.totalPointsLabel ?? 'Sin datos disponibles' }}</span>
@@ -71,6 +99,7 @@
     <section
       class="fantasy-ranking-page__podium c-surface-card"
       aria-labelledby="fantasy-ranking-podium"
+      data-motion="surface-panel"
     >
       <header class="fantasy-ranking-page__section-header">
         <div>
@@ -82,7 +111,12 @@
 
       <div class="fantasy-ranking-page__podium-grid">
         @for (entry of podiumEntries(); track entry.teamId; let position = $index) {
-          <article class="fantasy-ranking-page__podium-card" [attr.data-rank]="position + 1">
+          <article
+            class="fantasy-ranking-page__podium-card"
+            data-motion="stagger-item"
+            [attr.data-rank]="position + 1"
+            [style.--fantasy-motion-index]="position"
+          >
             <div class="fantasy-ranking-page__podium-topline">
               <span class="fantasy-ranking-page__podium-rank">{{ entry.rankLabel }}</span>
               @if (entry.isMe) {
@@ -114,6 +148,7 @@
   <section
     class="fantasy-ranking-page__table-panel c-surface-card"
     aria-labelledby="fantasy-ranking-table"
+    data-motion="surface-panel"
   >
     <header class="fantasy-ranking-page__section-header">
       <div>

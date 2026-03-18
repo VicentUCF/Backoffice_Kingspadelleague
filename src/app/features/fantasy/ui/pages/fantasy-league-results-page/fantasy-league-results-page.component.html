@@ -11,7 +11,7 @@
       title="No hemos podido cargar esta jornada"
     />
   } @else if (store.viewModel(); as viewModel) {
-    <section class="fantasy-league-results-page__hero">
+    <section class="fantasy-league-results-page__hero" data-motion="hero">
       <div class="fantasy-league-results-page__hero-copy">
         <p class="fantasy-league-results-page__eyebrow">
           {{ viewModel.hero.weekLabel }} · {{ viewModel.leagueName }}
@@ -22,35 +22,56 @@
         <nav
           aria-label="Acciones de resultados fantasy"
           class="fantasy-league-results-page__actions"
+          data-motion="cta-group"
         >
           @for (action of viewModel.hero.actions; track action.href) {
-            <a class="fantasy-league-results-page__action" [routerLink]="action.href">{{
-              action.label
-            }}</a>
+            <a
+              class="fantasy-league-results-page__action"
+              [style.--fantasy-motion-index]="$index"
+              [routerLink]="action.href"
+            >
+              {{ action.label }}
+            </a>
           }
         </nav>
       </div>
 
       <div class="fantasy-league-results-page__hero-stats">
-        <article class="fantasy-league-results-page__hero-card c-surface-card">
+        <article
+          class="fantasy-league-results-page__hero-card c-surface-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="0"
+        >
           <span>Fantasy</span>
           <strong>{{ viewModel.hero.matchdayPointsLabel }}</strong>
           <small>Puntos que sumó tu equipo en la jornada</small>
         </article>
 
-        <article class="fantasy-league-results-page__hero-card c-surface-card">
+        <article
+          class="fantasy-league-results-page__hero-card c-surface-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="1"
+        >
           <span>Bonus de porra</span>
           <strong>{{ viewModel.hero.predictionBonusLabel }}</strong>
           <small>{{ viewModel.hero.predictionHitsLabel }}</small>
         </article>
 
-        <article class="fantasy-league-results-page__hero-card c-surface-card">
+        <article
+          class="fantasy-league-results-page__hero-card c-surface-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="2"
+        >
           <span>Total final</span>
           <strong>{{ viewModel.hero.totalPointsLabel }}</strong>
           <small>Puntos de jornada más bonus de porra</small>
         </article>
 
-        <article class="fantasy-league-results-page__hero-card c-surface-card">
+        <article
+          class="fantasy-league-results-page__hero-card c-surface-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="3"
+        >
           <span>Posición</span>
           <strong>{{ viewModel.hero.rankLabel }}</strong>
           <small [attr.data-tone]="viewModel.hero.rankChangeTone">{{
@@ -61,6 +82,8 @@
         @if (viewModel.hero.captainName && viewModel.hero.captainPointsLabel) {
           <article
             class="fantasy-league-results-page__hero-card fantasy-league-results-page__hero-card--captain c-surface-card"
+            data-motion="stagger-item"
+            [style.--fantasy-motion-index]="4"
           >
             <span>Capitán destacado</span>
             <strong>{{ viewModel.hero.captainName }}</strong>
@@ -69,7 +92,10 @@
         }
       </div>
 
-      <article class="fantasy-league-results-page__hero-note c-surface-card">
+      <article
+        class="fantasy-league-results-page__hero-note c-surface-card"
+        data-motion="surface-panel"
+      >
         <strong>{{ viewModel.hero.predictionLockedMessage }}</strong>
         @if (viewModel.hero.sundayChangeNote; as sundayChangeNote) {
           <p>{{ sundayChangeNote }}</p>
@@ -89,7 +115,10 @@
     />
 
     <div class="fantasy-league-results-page__grid">
-      <section class="fantasy-league-results-page__panel c-surface-card">
+      <section
+        class="fantasy-league-results-page__panel c-surface-card"
+        data-motion="surface-panel"
+      >
         <header class="fantasy-league-results-page__panel-header">
           <div>
             <p class="fantasy-league-results-page__section-kicker">Clasificación de la jornada</p>
@@ -101,7 +130,9 @@
           @for (entry of viewModel.ranking; track entry.rankLabel + entry.teamName) {
             <li
               class="fantasy-league-results-page__ranking-row"
+              data-motion="stagger-item"
               [attr.data-me]="entry.isMe ? 'true' : null"
+              [style.--fantasy-motion-index]="$index"
             >
               <span class="fantasy-league-results-page__ranking-rank">{{ entry.rankLabel }}</span>
 
@@ -119,7 +150,10 @@
         </ul>
       </section>
 
-      <section class="fantasy-league-results-page__panel c-surface-card">
+      <section
+        class="fantasy-league-results-page__panel c-surface-card"
+        data-motion="surface-panel"
+      >
         <header class="fantasy-league-results-page__panel-header">
           <div>
             <p class="fantasy-league-results-page__section-kicker">Premios</p>
@@ -129,7 +163,12 @@
 
         <div class="fantasy-league-results-page__awards-grid">
           @for (award of viewModel.awards; track award.id) {
-            <article class="fantasy-league-results-page__award-card" [attr.data-tone]="award.tone">
+            <article
+              class="fantasy-league-results-page__award-card"
+              data-motion="stagger-item"
+              [attr.data-tone]="award.tone"
+              [style.--fantasy-motion-index]="$index"
+            >
               <p>{{ award.title }}</p>
               <strong>{{ award.winnerName }}</strong>
               <span>{{ award.highlight }}</span>
@@ -141,6 +180,7 @@
 
       <section
         class="fantasy-league-results-page__panel fantasy-league-results-page__panel--team c-surface-card"
+        data-motion="surface-panel"
       >
         <header class="fantasy-league-results-page__panel-header">
           <div>
@@ -151,7 +191,11 @@
 
         <ul class="fantasy-league-results-page__player-list" role="list">
           @for (player of viewModel.playerLines; track player.detailLink) {
-            <li class="fantasy-league-results-page__player-row">
+            <li
+              class="fantasy-league-results-page__player-row"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="$index"
+            >
               <div class="fantasy-league-results-page__player-main">
                 <app-fantasy-player-avatar
                   [altText]="player.name"
@@ -180,7 +224,10 @@
         </ul>
       </section>
 
-      <section class="fantasy-league-results-page__panel c-surface-card">
+      <section
+        class="fantasy-league-results-page__panel c-surface-card"
+        data-motion="surface-panel"
+      >
         <header class="fantasy-league-results-page__panel-header">
           <div>
             <p class="fantasy-league-results-page__section-kicker">Cara a cara</p>
@@ -190,7 +237,11 @@
 
         <div class="fantasy-league-results-page__rivals">
           @for (comparison of viewModel.rivalComparisons; track comparison.rivalManagerName) {
-            <article class="fantasy-league-results-page__rival-card">
+            <article
+              class="fantasy-league-results-page__rival-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="$index"
+            >
               <strong>{{ comparison.rivalManagerName }} · {{ comparison.rivalTeamName }}</strong>
               <span [attr.data-tone]="comparison.pointsDeltaTone">{{
                 comparison.pointsDeltaLabel
@@ -203,6 +254,7 @@
 
       <section
         class="fantasy-league-results-page__panel fantasy-league-results-page__panel--market c-surface-card"
+        data-motion="surface-panel"
       >
         <header class="fantasy-league-results-page__panel-header">
           <div>
@@ -213,7 +265,11 @@
 
         <div class="fantasy-league-results-page__market-sections">
           @for (section of viewModel.marketSections; track section.id) {
-            <article class="fantasy-league-results-page__market-section">
+            <article
+              class="fantasy-league-results-page__market-section"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="$index"
+            >
               <header>
                 <h3>{{ section.title }}</h3>
                 <p>{{ section.description }}</p>
@@ -221,7 +277,11 @@
 
               <ul class="fantasy-league-results-page__market-list" role="list">
                 @for (mover of section.movers; track mover.detailLink) {
-                  <li class="fantasy-league-results-page__market-row">
+                  <li
+                    class="fantasy-league-results-page__market-row"
+                    data-motion="stagger-item"
+                    [style.--fantasy-motion-index]="$index"
+                  >
                     <div class="fantasy-league-results-page__player-main">
                       <app-fantasy-player-avatar
                         [altText]="mover.name"

@@ -16,7 +16,7 @@ import { FantasyLeagueDashboardPageComponent } from './fantasy-league-dashboard-
 
 describe('FantasyLeagueDashboardPageComponent', () => {
   it('renders the league dashboard as a manager cockpit when the user already has a team', async () => {
-    await render(FantasyLeagueDashboardPageComponent, {
+    const { container } = await render(FantasyLeagueDashboardPageComponent, {
       providers: [
         provideFantasyFeature(),
         provideRouter([]),
@@ -36,6 +36,13 @@ describe('FantasyLeagueDashboardPageComponent', () => {
         .getAllByRole('link', { name: /Gestionar equipo/i })
         .some((link) => link.getAttribute('href') === '/fantasy/leagues/league-1/team'),
     ).toBe(true);
+    expect(
+      screen.getByRole('heading', { name: /Amigos del curro/i }).closest('[data-motion="hero"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-motion="section-nav"]')).not.toBeNull();
+    expect(
+      screen.getByText(/Equipo activo/i).closest('[data-motion="stagger-item"]'),
+    ).toHaveAttribute('style', expect.stringContaining('--fantasy-motion-index: 0'));
   });
 
   it('renders the onboarding variant and derived market snapshot when the user has no team yet', async () => {

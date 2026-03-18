@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   effect,
   inject,
   signal,
@@ -72,6 +73,16 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
   protected readonly filtersIcon = SlidersHorizontal;
   protected readonly shieldAlert = ShieldAlert;
   protected readonly confirmState = signal<MarketTransactionConfirmationState | null>(null);
+  protected readonly marketResultsMotionKey = signal(0);
+  protected readonly marketListEntries = computed(() => {
+    const motionKey = this.marketResultsMotionKey();
+
+    return this.store.marketPlayers().map((player, index) => ({
+      motionIndex: index,
+      motionTrackId: `${motionKey}-${player.id}`,
+      player,
+    }));
+  });
 
   constructor() {
     effect(() => {
@@ -187,5 +198,35 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
 
   protected resetFilters(): void {
     this.store.resetFilters();
+    this.refreshMarketResultsMotion();
+  }
+
+  protected setSearchQuery(query: string): void {
+    this.store.setSearchQuery(query);
+    this.refreshMarketResultsMotion();
+  }
+
+  protected setSelectedTeamId(teamId: string): void {
+    this.store.setSelectedTeamId(teamId);
+    this.refreshMarketResultsMotion();
+  }
+
+  protected setSelectedSide(side: string): void {
+    this.store.setSelectedSide(side);
+    this.refreshMarketResultsMotion();
+  }
+
+  protected setSelectedAvailability(availability: string): void {
+    this.store.setSelectedAvailability(availability);
+    this.refreshMarketResultsMotion();
+  }
+
+  protected setSelectedSort(sort: string): void {
+    this.store.setSelectedSort(sort);
+    this.refreshMarketResultsMotion();
+  }
+
+  private refreshMarketResultsMotion(): void {
+    this.marketResultsMotionKey.update((value) => value + 1);
   }
 }

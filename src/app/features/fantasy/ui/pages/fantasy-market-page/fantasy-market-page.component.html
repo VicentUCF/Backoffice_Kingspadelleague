@@ -9,13 +9,17 @@
     title="No hemos podido cargar el mercado"
   />
 } @else if (store.viewModel(); as viewModel) {
-  <section class="fantasy-market-page__hero">
+  <section class="fantasy-market-page__hero" data-motion="hero">
     <div class="fantasy-market-page__hero-copy">
       <p class="fantasy-market-page__eyebrow">{{ viewModel.phaseLabel }}</p>
       <h1>Mercado · {{ viewModel.leagueName }}</h1>
       <p class="fantasy-market-page__hero-description">{{ viewModel.phaseDescription }}</p>
 
-      <nav aria-label="Acciones del mercado fantasy" class="fantasy-market-page__actions">
+      <nav
+        aria-label="Acciones del mercado fantasy"
+        class="fantasy-market-page__actions"
+        data-motion="cta-group"
+      >
         <a
           class="fantasy-market-page__action fantasy-market-page__action--primary"
           [attr.aria-label]="'Ver mi equipo de ' + viewModel.leagueName"
@@ -34,15 +38,27 @@
     </div>
 
     <dl class="fantasy-market-page__hero-facts">
-      <div class="fantasy-market-page__fact">
+      <div
+        class="fantasy-market-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="0"
+      >
         <dt>Presupuesto</dt>
         <dd>{{ store.budgetRemainingLabel() }}</dd>
       </div>
-      <div class="fantasy-market-page__fact">
+      <div
+        class="fantasy-market-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="1"
+      >
         <dt>Mercado</dt>
         <dd>{{ viewModel.marketStatusLabel }}</dd>
       </div>
-      <div class="fantasy-market-page__fact">
+      <div
+        class="fantasy-market-page__fact"
+        data-motion="stagger-item"
+        [style.--fantasy-motion-index]="2"
+      >
         <dt>Huecos</dt>
         <dd>{{ store.teamSlotsLabel() }}</dd>
       </div>
@@ -64,6 +80,7 @@
     <section
       class="fantasy-market-page__cockpit c-surface-card"
       aria-labelledby="fantasy-market-cockpit"
+      data-motion="surface-panel"
     >
       <header class="fantasy-market-page__cockpit-header">
         <div>
@@ -92,22 +109,38 @@
       </header>
 
       <div class="fantasy-market-page__cockpit-grid">
-        <article class="fantasy-market-page__cockpit-card">
+        <article
+          class="fantasy-market-page__cockpit-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="0"
+        >
           <span>Presupuesto</span>
           <strong>{{ store.budgetRemainingLabel() }}</strong>
           <small>Saldo disponible para fichar</small>
         </article>
-        <article class="fantasy-market-page__cockpit-card">
+        <article
+          class="fantasy-market-page__cockpit-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="1"
+        >
           <span>Plantilla</span>
           <strong>{{ store.teamSlotsLabel() }}</strong>
           <small>{{ store.ownedPlayersCountLabel() }}</small>
         </article>
-        <article class="fantasy-market-page__cockpit-card">
+        <article
+          class="fantasy-market-page__cockpit-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="2"
+        >
           <span>Asequibles</span>
           <strong>{{ store.affordablePlayersCountLabel() }}</strong>
           <small>Con los filtros activos</small>
         </article>
-        <article class="fantasy-market-page__cockpit-card">
+        <article
+          class="fantasy-market-page__cockpit-card"
+          data-motion="stagger-item"
+          [style.--fantasy-motion-index]="3"
+        >
           <span>Mercado</span>
           <strong>{{ viewModel.marketStatusLabel }}</strong>
           <small>{{ viewModel.marketStatusDescription }}</small>
@@ -128,7 +161,11 @@
           <ul class="fantasy-market-page__roster-list" role="list">
             @for (player of store.ownedPlayers(); track player.id) {
               <li>
-                <article class="fantasy-market-page__roster-card">
+                <article
+                  class="fantasy-market-page__roster-card"
+                  data-motion="stagger-item"
+                  [style.--fantasy-motion-index]="$index"
+                >
                   <div class="fantasy-market-page__roster-main">
                     <app-fantasy-player-avatar
                       [altText]="player.name"
@@ -172,6 +209,7 @@
     <section
       class="fantasy-market-page__filters c-surface-card"
       aria-labelledby="fantasy-market-filters"
+      data-motion="surface-panel"
     >
       <div class="fantasy-market-page__filters-header">
         <div>
@@ -202,14 +240,14 @@
           placeholder="Nombre, equipo o rol"
           type="search"
           [ngModel]="store.searchQuery()"
-          (ngModelChange)="store.setSearchQuery($event)"
+          (ngModelChange)="setSearchQuery($event)"
         />
 
         <app-base-select
           label="Equipo"
           name="teamFilter"
           [ngModel]="store.selectedTeamId()"
-          (ngModelChange)="store.setSelectedTeamId($event)"
+          (ngModelChange)="setSelectedTeamId($event)"
         >
           @for (option of store.teamOptions(); track option.value) {
             <option [value]="option.value">{{ option.label }}</option>
@@ -220,7 +258,7 @@
           label="Lado"
           name="sideFilter"
           [ngModel]="store.selectedSide()"
-          (ngModelChange)="store.setSelectedSide($event)"
+          (ngModelChange)="setSelectedSide($event)"
         >
           @for (option of store.sideOptions; track option.value) {
             <option [value]="option.value">{{ option.label }}</option>
@@ -231,7 +269,7 @@
           label="Estado"
           name="statusFilter"
           [ngModel]="store.selectedAvailability()"
-          (ngModelChange)="store.setSelectedAvailability($event)"
+          (ngModelChange)="setSelectedAvailability($event)"
         >
           @for (option of store.statusOptions; track option.value) {
             <option [value]="option.value">{{ option.label }}</option>
@@ -242,7 +280,7 @@
           label="Orden"
           name="sortFilter"
           [ngModel]="store.selectedSort()"
-          (ngModelChange)="store.setSelectedSort($event)"
+          (ngModelChange)="setSelectedSort($event)"
         >
           @for (option of store.sortOptions; track option.value) {
             <option [value]="option.value">{{ option.label }}</option>
@@ -251,23 +289,29 @@
       </div>
     </section>
 
-    <app-fantasy-mvp-card [player]="viewModel.spotlight" />
+    <app-fantasy-mvp-card [player]="viewModel.spotlight" data-motion="surface-panel" />
 
     @if (store.hasPlayers()) {
       <ul
         aria-label="Jugadores disponibles en el mercado"
         class="fantasy-market-page__player-grid"
+        data-motion="market-results"
+        [attr.data-motion-key]="marketResultsMotionKey()"
         role="list"
       >
-        @for (player of store.marketPlayers(); track player.id) {
+        @for (entry of marketListEntries(); track entry.motionTrackId) {
           <li>
-            <article class="fantasy-market-page__player-card c-surface-card">
+            <article
+              class="fantasy-market-page__player-card c-surface-card"
+              data-motion="stagger-item"
+              [style.--fantasy-motion-index]="entry.motionIndex"
+            >
               <div class="fantasy-market-page__player-header">
                 <div class="fantasy-market-page__player-identity">
                   <app-fantasy-player-avatar
-                    [altText]="player.name"
-                    [initials]="player.avatar"
-                    [photoPath]="player.photoPath"
+                    [altText]="entry.player.name"
+                    [initials]="entry.player.avatar"
+                    [photoPath]="entry.player.photoPath"
                     size="lg"
                   />
 
@@ -275,24 +319,24 @@
                     <div class="fantasy-market-page__player-heading">
                       <h2>
                         <a
-                          [attr.aria-label]="'Abrir ficha de ' + player.name"
-                          [routerLink]="player.detailLink"
+                          [attr.aria-label]="'Abrir ficha de ' + entry.player.name"
+                          [routerLink]="entry.player.detailLink"
                         >
-                          {{ player.name }}
+                          {{ entry.player.name }}
                         </a>
                       </h2>
                       <span
                         class="fantasy-market-page__status-chip"
-                        [attr.data-tone]="player.statusTone"
+                        [attr.data-tone]="entry.player.statusTone"
                       >
-                        {{ player.statusLabel }}
+                        {{ entry.player.statusLabel }}
                       </span>
                     </div>
 
                     <p class="fantasy-market-page__player-meta">
-                      @if (player.teamLogoPath) {
+                      @if (entry.player.teamLogoPath) {
                         <img
-                          [ngSrc]="player.teamLogoPath"
+                          [ngSrc]="entry.player.teamLogoPath"
                           alt=""
                           class="fantasy-market-page__team-logo"
                           decoding="async"
@@ -300,44 +344,46 @@
                           width="18"
                         />
                       }
-                      <span>{{ player.teamName }}</span>
-                      <span class="fantasy-market-page__side-badge">{{ player.sideLabel }}</span>
+                      <span>{{ entry.player.teamName }}</span>
+                      <span class="fantasy-market-page__side-badge">{{
+                        entry.player.sideLabel
+                      }}</span>
                     </p>
-                    <p class="fantasy-market-page__player-role">{{ player.roleLabel }}</p>
+                    <p class="fantasy-market-page__player-role">{{ entry.player.roleLabel }}</p>
                   </div>
                 </div>
               </div>
 
-              <p class="fantasy-market-page__player-note">{{ player.scoutingNote }}</p>
+              <p class="fantasy-market-page__player-note">{{ entry.player.scoutingNote }}</p>
 
               <dl class="fantasy-market-page__player-stats">
                 <div>
                   <dt>Precio</dt>
-                  <dd>{{ player.priceLabel }}</dd>
+                  <dd>{{ entry.player.priceLabel }}</dd>
                 </div>
                 <div>
                   <dt>Tendencia</dt>
-                  <dd>{{ player.priceChangeLabel }}</dd>
+                  <dd>{{ entry.player.priceChangeLabel }}</dd>
                 </div>
                 <div>
                   <dt>Mercado</dt>
-                  <dd>{{ player.affordabilityLabel }}</dd>
+                  <dd>{{ entry.player.affordabilityLabel }}</dd>
                 </div>
               </dl>
 
               <div class="fantasy-market-page__player-actions">
-                @if (player.isInMyTeam) {
+                @if (entry.player.isInMyTeam) {
                   <button
                     type="button"
                     class="fantasy-market-page__action-button fantasy-market-page__action-button--danger"
-                    [disabled]="player.actionDisabled"
-                    [attr.aria-label]="player.actionLabel + ' a ' + player.name"
-                    (click)="requestSellPlayer(player)"
+                    [disabled]="entry.player.actionDisabled"
+                    [attr.aria-label]="entry.player.actionLabel + ' a ' + entry.player.name"
+                    (click)="requestSellPlayer(entry.player)"
                   >
-                    {{ player.actionLabel }}
+                    {{ entry.player.actionLabel }}
                   </button>
                   <a
-                    [attr.aria-label]="'Ver a ' + player.name + ' en mi equipo'"
+                    [attr.aria-label]="'Ver a ' + entry.player.name + ' en mi equipo'"
                     [routerLink]="viewModel.teamLink"
                   >
                     Ver en mi equipo
@@ -346,22 +392,22 @@
                   <button
                     type="button"
                     class="fantasy-market-page__action-button fantasy-market-page__action-button--primary"
-                    [disabled]="player.actionDisabled"
-                    [attr.aria-label]="player.actionLabel + ' a ' + player.name"
-                    (click)="requestBuyPlayer(player)"
+                    [disabled]="entry.player.actionDisabled"
+                    [attr.aria-label]="entry.player.actionLabel + ' a ' + entry.player.name"
+                    (click)="requestBuyPlayer(entry.player)"
                   >
-                    {{ player.actionLabel }}
+                    {{ entry.player.actionLabel }}
                   </button>
                 }
                 <a
-                  [attr.aria-label]="'Ver ficha de ' + player.name"
-                  [routerLink]="player.detailLink"
+                  [attr.aria-label]="'Ver ficha de ' + entry.player.name"
+                  [routerLink]="entry.player.detailLink"
                 >
                   Ver ficha
                 </a>
               </div>
 
-              @if (player.actionHint; as actionHint) {
+              @if (entry.player.actionHint; as actionHint) {
                 <p class="fantasy-market-page__action-hint">{{ actionHint }}</p>
               }
             </article>
