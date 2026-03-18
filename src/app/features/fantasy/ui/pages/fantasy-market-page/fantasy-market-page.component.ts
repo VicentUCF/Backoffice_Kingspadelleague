@@ -14,6 +14,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LucideAngularModule, ShieldAlert, SlidersHorizontal } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
+import { ActionToastStore } from '@core/state/action-toast.store';
 import { BaseInputComponent } from '@shared/ui/base-input/base-input.component';
 import { BaseSelectComponent } from '@shared/ui/base-select/base-select.component';
 import { ConfirmActionDialogComponent } from '@shared/ui/confirm-action-dialog/confirm-action-dialog.component';
@@ -35,6 +36,7 @@ interface MarketTransactionConfirmationState {
   readonly confirmTone: 'danger' | 'neutral';
   readonly description: string;
   readonly playerId: string;
+  readonly playerName: string;
   readonly title: string;
 }
 
@@ -63,6 +65,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly route = inject(ActivatedRoute);
+  private readonly toastStore = inject(ActionToastStore);
   private readonly routeSubscription = new Subscription();
 
   protected readonly store = inject(FantasyMarketStore);
@@ -130,6 +133,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
       confirmTone: 'neutral',
       description: `Ficharás a ${player.name} por ${player.priceLabel}. Tu presupuesto bajará a ${formatFantasyMoney(nextBudget)} y pasarás a ${nextSlots}/6 plazas ocupadas.`,
       playerId: player.id,
+      playerName: player.name,
       title: `Fichar a ${player.name}`,
     });
   }
@@ -147,6 +151,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
       confirmTone: 'danger',
       description: `Venderás a ${player.name} y recuperarás ${player.priceLabel}. Tu presupuesto subirá a ${formatFantasyMoney(nextBudget)} y te quedarás con ${nextSlots}/6 plazas ocupadas.`,
       playerId: player.id,
+      playerName: player.name,
       title: `Vender a ${player.name}`,
     });
   }
@@ -162,10 +167,20 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
       return;
     }
 
-    if (confirmation.action === 'buy') {
-      await this.store.buyPlayer(confirmation.playerId);
-    } else {
-      await this.store.sellPlayer(confirmation.playerId);
+    const wasSuccessful =
+      confirmation.action === 'buy'
+        ? await this.store.buyPlayer(confirmation.playerId)
+        : await this.store.sellPlayer(confirmation.playerId);
+
+    if (wasSuccessful) {
+      this.toastStore.success(
+        confirmation.action === 'buy'
+          ? `Has comprado a ${confirmation.playerName}.`
+          : `Has vendido a ${confirmation.playerName}.`,
+        confirmation.action === 'buy' ? 'Fichaje completado' : 'Venta completada',
+      );
+    } else if (this.store.errorMessage()) {
+      this.toastStore.error(this.store.errorMessage()!, 'No se ha podido completar el movimiento');
     }
 
     this.confirmState.set(null);

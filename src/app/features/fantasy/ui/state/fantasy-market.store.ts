@@ -45,7 +45,6 @@ export class FantasyMarketStore {
   readonly isLoading = signal(false);
   readonly isSaving = signal(false);
   readonly errorMessage = signal<string | null>(null);
-  readonly transactionMessage = signal<string | null>(null);
 
   readonly viewModel = computed<FantasyLeagueDashboardViewModel | null>(() => {
     const dashboard = this.dashboard();
@@ -173,62 +172,65 @@ export class FantasyMarketStore {
     this.selectedTeamId.set(ALL_FANTASY_MARKET_TEAMS);
   }
 
-  async buyPlayer(playerId: string): Promise<void> {
+  async buyPlayer(playerId: string): Promise<boolean> {
     const dashboard = this.dashboard();
 
     if (!dashboard) {
-      return;
+      return false;
     }
 
     const currentPlayerIds = dashboard.myTeam?.players.map((player) => player.playerId) ?? [];
 
     if (currentPlayerIds.includes(playerId) || currentPlayerIds.length >= 6) {
-      return;
+      return false;
     }
 
     const player = dashboard.players.find((candidate) => candidate.id === playerId);
 
     if (!player) {
-      return;
+      return false;
     }
 
     const nextDashboard = await this.persistMarketTeam(
       [...currentPlayerIds, playerId],
       dashboard.myTeam?.name ?? 'Mi equipo fantasy',
-      `Has comprado a ${player.name}.`,
     );
 
     if (nextDashboard) {
       this.dashboard.set(nextDashboard);
+      return true;
     }
+
+    return false;
   }
 
-  async sellPlayer(playerId: string): Promise<void> {
+  async sellPlayer(playerId: string): Promise<boolean> {
     const dashboard = this.dashboard();
 
     if (!dashboard?.myTeam) {
-      return;
+      return false;
     }
 
     const currentPlayerIds = dashboard.myTeam.players.map((player) => player.playerId);
 
     if (!currentPlayerIds.includes(playerId)) {
-      return;
+      return false;
     }
 
-    const player = dashboard.players.find((candidate) => candidate.id === playerId);
     const nextSelectedPlayerIds = currentPlayerIds.filter(
       (selectedPlayerId) => selectedPlayerId !== playerId,
     );
     const nextDashboard = await this.persistMarketTeam(
       nextSelectedPlayerIds,
       dashboard.myTeam.name,
-      player ? `Has vendido a ${player.name}.` : 'Has actualizado tu plantilla desde el mercado.',
     );
 
     if (nextDashboard) {
       this.dashboard.set(nextDashboard);
+      return true;
     }
+
+    return false;
   }
 
   async load(leagueId: string | null): Promise<void> {
@@ -240,7 +242,6 @@ export class FantasyMarketStore {
     this.selectedSort.set('price-desc');
     this.selectedTeamId.set(ALL_FANTASY_MARKET_TEAMS);
     this.errorMessage.set(null);
-    this.transactionMessage.set(null);
 
     if (!leagueId) {
       return;
@@ -260,7 +261,6 @@ export class FantasyMarketStore {
   private async persistMarketTeam(
     selectedPlayerIds: readonly string[],
     teamName: string,
-    successMessage: string,
   ): Promise<FantasyLeagueDashboard | null> {
     const dashboard = this.dashboard();
 
@@ -270,7 +270,6 @@ export class FantasyMarketStore {
 
     this.isSaving.set(true);
     this.errorMessage.set(null);
-    this.transactionMessage.set(null);
 
     try {
       const currentCaptainId =
@@ -291,7 +290,6 @@ export class FantasyMarketStore {
         return null;
       }
 
-      this.transactionMessage.set(successMessage);
       return nextDashboard;
     } catch {
       this.errorMessage.set('No pudimos actualizar la plantilla desde el mercado.');

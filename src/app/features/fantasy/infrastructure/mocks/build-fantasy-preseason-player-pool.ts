@@ -2,7 +2,10 @@ import {
   UNASSIGNED_PLAYER_TEAM_ID,
   UNASSIGNED_PLAYER_TEAM_NAME,
 } from '@features/players/domain/entities/player.entity';
-import { type FantasyPlayer } from '@features/fantasy/domain/entities/fantasy.models';
+import {
+  type FantasyPlayer,
+  type FantasyPlayerValueHistoryPoint,
+} from '@features/fantasy/domain/entities/fantasy.models';
 import {
   PUBLIC_LEAGUE_PLAYER_CATALOG,
   PUBLIC_LEAGUE_TEAM_CATALOG,
@@ -46,8 +49,10 @@ function toFantasyPlayer(player: PublicLeaguePlayerCatalogEntry, index: number):
   const previousPrice = resolvePreviousPrice(price, index, teamId);
   const pointsTotal = resolveTotalPoints(player, index, team);
   const pointsMatchday = resolveMatchdayPoints(player, index, team);
+  const priceHistory = resolvePriceHistory(price, previousPrice, index);
 
   return {
+    priceHistory,
     id: player.id,
     slug: player.slug,
     name: player.displayName,
@@ -99,6 +104,40 @@ function resolvePreviousPrice(currentPrice: number, index: number, teamId: strin
   const currentMovement = movementByIndex[index % movementByIndex.length] ?? 0;
 
   return currentPrice - currentMovement;
+}
+
+function resolvePriceHistory(
+  currentPrice: number,
+  previousPrice: number,
+  index: number,
+): readonly FantasyPlayerValueHistoryPoint[] {
+  const priceChange = currentPrice - previousPrice;
+  const movementDirection = priceChange === 0 ? (index % 2 === 0 ? 1 : -1) : Math.sign(priceChange);
+  const volatilitySeed = ((index % 5) - 2) * 40_000;
+  const shortSwingSeed = ((index % 3) - 1) * 30_000;
+
+  return [
+    {
+      label: 'D-4',
+      value: roundFantasyMoney(previousPrice - movementDirection * 450_000 + volatilitySeed),
+    },
+    {
+      label: 'D-3',
+      value: roundFantasyMoney(previousPrice - movementDirection * 260_000 + shortSwingSeed),
+    },
+    {
+      label: 'D-2',
+      value: roundFantasyMoney(previousPrice - movementDirection * 110_000 - shortSwingSeed),
+    },
+    {
+      label: 'Ayer',
+      value: previousPrice,
+    },
+    {
+      label: 'Hoy',
+      value: currentPrice,
+    },
+  ];
 }
 
 function resolveTotalPoints(

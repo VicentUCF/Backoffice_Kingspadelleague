@@ -1,8 +1,9 @@
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import { fireEvent, render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen, waitFor } from '@testing-library/angular';
 import { axe } from 'jest-axe';
 import { of } from 'rxjs';
 
+import { ActionToastStore } from '@core/state/action-toast.store';
 import { provideFantasyFeature } from '../../providers/fantasy.providers';
 import { FantasyMarketPageComponent } from './fantasy-market-page.component';
 
@@ -28,25 +29,32 @@ describe('FantasyMarketPageComponent', () => {
     expect(screen.queryByRole('link', { name: /Adri Alvarez/i })).toBeNull();
   });
 
-  it('renders the market cockpit and shows a confirmation dialog before selling', async () => {
+  it('shows a toast when a player sale is confirmed', async () => {
+    const toastStore = createActionToastStoreMock();
+
     await render(FantasyMarketPageComponent, {
       providers: [
         provideFantasyFeature(),
         provideRouter([]),
         createActivatedRouteProvider('league-1'),
+        { provide: ActionToastStore, useValue: toastStore },
       ],
     });
 
     await screen.findByRole('heading', { name: /Mercado · Amigos del curro/i });
 
-    expect(screen.getByRole('heading', { name: /Cockpit de mercado/i })).toBeVisible();
-    expect(screen.getByRole('heading', { name: /Tu bloque actual/i })).toBeVisible();
-
-    fireEvent.click(screen.getAllByRole('button', { name: /Vender/i })[0]!);
+    fireEvent.click(screen.getAllByRole('button', { name: /^Vender$/i })[0]!);
 
     expect(await screen.findByRole('heading', { name: /Vender a/i })).toBeVisible();
-    expect(screen.getByText(/Tu presupuesto subirá a/i)).toBeVisible();
-    expect(screen.getByRole('button', { name: /Confirmar venta/i })).toBeVisible();
+
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar venta/i }));
+
+    await waitFor(() => {
+      expect(toastStore.success).toHaveBeenCalledWith(
+        expect.stringMatching(/^Has vendido a .+\.$/),
+        'Venta completada',
+      );
+    });
   });
 
   it('has no accessibility violations in the market page', async () => {
@@ -73,5 +81,16 @@ function createActivatedRouteProvider(leagueId: string) {
       snapshot: { paramMap },
       paramMap: of(paramMap),
     },
+  };
+}
+
+function createActionToastStoreMock() {
+  return {
+    success: jest.fn(),
+    error: jest.fn(),
+    info: jest.fn(),
+    warning: jest.fn(),
+    dismiss: jest.fn(),
+    toasts: { asReadonly: () => [] },
   };
 }

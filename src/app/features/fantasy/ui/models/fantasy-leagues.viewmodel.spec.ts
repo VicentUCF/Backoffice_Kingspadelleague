@@ -15,7 +15,7 @@ describe('toFantasyLeagueCardsViewModel', () => {
     ]);
 
     expect(league).toMatchObject({
-      dashboardLink: '/fantasy/leagues/league-1',
+      dashboardLink: '/fantasy',
       marketLink: '/fantasy/leagues/league-1/market',
       memberCountLabel: '8 participantes',
       myPointsLabel: '542 pts',

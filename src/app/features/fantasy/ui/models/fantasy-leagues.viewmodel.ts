@@ -25,7 +25,7 @@ export function toFantasyLeagueCardsViewModel(
 ): readonly FantasyLeagueCardViewModel[] {
   return leagues.map((league) => ({
     code: league.code,
-    dashboardLink: `/fantasy/leagues/${league.id}`,
+    dashboardLink: '/fantasy',
     id: league.id,
     marketLink: `/fantasy/leagues/${league.id}/market`,
     memberCountLabel: formatFantasyMemberCount(league.memberCount),

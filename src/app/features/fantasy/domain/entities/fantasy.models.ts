@@ -33,6 +33,7 @@ export interface FantasyTeam {
 }
 
 export interface FantasyPlayer {
+  readonly priceHistory: readonly FantasyPlayerValueHistoryPoint[];
   readonly id: string;
   readonly slug: string;
   readonly name: string;
@@ -49,6 +50,11 @@ export interface FantasyPlayer {
   readonly previousPrice: number;
   readonly pointsMatchday: number;
   readonly pointsTotal: number;
+}
+
+export interface FantasyPlayerValueHistoryPoint {
+  readonly label: string;
+  readonly value: number;
 }
 
 export interface FantasyRankingEntry {

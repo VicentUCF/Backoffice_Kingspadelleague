@@ -317,16 +317,6 @@
     }
   }
 
-  &__feedback {
-    margin: 0;
-    padding: var(--space-3) var(--space-4);
-    border: 1px solid color-mix(in srgb, var(--color-brand) 24%, transparent);
-    border-radius: 1rem;
-    background: rgb(201 162 39 / 0.08);
-    color: var(--color-text-strong);
-    font-weight: 700;
-  }
-
   &__filters {
     display: grid;
     gap: var(--space-4);

@@ -193,7 +193,7 @@ export function toFantasyLeagueDashboardViewModel(
   const playerDirectory = new Map(dashboard.players.map((player) => [player.id, player] as const));
   const myTeamPlayerIds = new Set(dashboard.myTeam?.players.map((player) => player.playerId) ?? []);
   const budgetRemaining = dashboard.myTeam?.budgetRemaining ?? FANTASY_TEAM_INITIAL_BUDGET;
-  const overviewLink = `/fantasy/leagues/${dashboard.league.id}`;
+  const overviewLink = '/fantasy';
   const marketLink = `/fantasy/leagues/${dashboard.league.id}/market`;
   const rankingLink = `/fantasy/leagues/${dashboard.league.id}/ranking`;
   const resultsLink = `/fantasy/leagues/${dashboard.league.id}/results`;

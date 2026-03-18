@@ -7,6 +7,7 @@ describe('toFantasyLeagueResultsPageViewModel', () => {
     const viewModel = toFantasyLeagueResultsPageViewModel(createFantasyLeagueResults());
 
     expect(viewModel.hero.weekLabel).toBe('Jornada 5 cerrada');
+    expect(viewModel.overviewLink).toBe('/fantasy');
     expect(viewModel.hero.rankLabel).toBe('#2');
     expect(viewModel.hero.captainPointsLabel).toBe('10 pts');
     expect(viewModel.ranking[1]?.isMe).toBe(true);

@@ -17,10 +17,7 @@ describe('FantasyRankingPageComponent', () => {
     });
 
     expect(await screen.findByRole('heading', { name: /Amigos del curro/i })).toBeVisible();
-    expect(screen.getByRole('link', { name: /Resumen/i })).toHaveAttribute(
-      'href',
-      '/fantasy/leagues/league-1',
-    );
+    expect(screen.getByRole('link', { name: /Resumen/i })).toHaveAttribute('href', '/fantasy');
     expect(screen.getByText(/Pulso de la liga/i)).toBeVisible();
     expect(screen.getByText(/Tu posición/i)).toBeVisible();
     expect(screen.getByText(/Clasificación con detalle/i)).toBeVisible();

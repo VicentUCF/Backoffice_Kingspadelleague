@@ -61,7 +61,7 @@ export class FantasyJoinLeaguePageComponent {
       const viewModel = toFantasyLeagueDashboardViewModel(dashboard);
 
       this.joinedLeague.set({
-        dashboardLink: `/fantasy/leagues/${dashboard.league.id}`,
+        dashboardLink: '/fantasy',
         leagueName: viewModel.leagueName,
         marketLink: viewModel.marketLink,
         memberCountLabel: viewModel.memberCountLabel,

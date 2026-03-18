@@ -120,7 +120,7 @@ export function toFantasyLeagueResultsPageViewModel(
 ): FantasyLeagueResultsPageViewModel {
   const leagueId = results.league.id;
   const rankChange = results.previousRank - results.myRank;
-  const overviewLink = `/fantasy/leagues/${leagueId}`;
+  const overviewLink = '/fantasy';
   const teamLink = `/fantasy/leagues/${leagueId}/team`;
   const marketLink = `/fantasy/leagues/${leagueId}/market`;
   const rankingLink = `/fantasy/leagues/${leagueId}/ranking`;

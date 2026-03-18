@@ -32,7 +32,8 @@ export function createFantasyLeague(overrides: Partial<FantasyLeague> = {}): Fan
 }
 
 export function createFantasyPlayer(overrides: Partial<FantasyPlayer> = {}): FantasyPlayer {
-  return {
+  const { priceHistory, ...playerOverrides } = overrides;
+  const player = {
     id: 'kings-of-favar-player-1',
     slug: 'vicent-ciscar',
     name: 'Vicent Ciscar',
@@ -50,8 +51,14 @@ export function createFantasyPlayer(overrides: Partial<FantasyPlayer> = {}): Fan
     previousPrice: 15_200_000,
     pointsMatchday: 0,
     pointsTotal: 0,
-    ...overrides,
-  };
+    ...playerOverrides,
+  } satisfies Omit<FantasyPlayer, 'priceHistory'>;
+
+  return {
+    ...player,
+    priceHistory:
+      priceHistory ?? buildFantasyPlayerValueHistory(player.previousPrice, player.price),
+  } satisfies FantasyPlayer;
 }
 
 export function createFantasyRankingEntry(
@@ -169,6 +176,16 @@ export function createFantasyMarketMover(
     recentPoints: [6, 8, 10],
     ...overrides,
   };
+}
+
+function buildFantasyPlayerValueHistory(previousPrice: number, currentPrice: number) {
+  return [
+    { label: 'D-4', value: previousPrice - 300_000 },
+    { label: 'D-3', value: previousPrice - 150_000 },
+    { label: 'D-2', value: previousPrice - 50_000 },
+    { label: 'Ayer', value: previousPrice },
+    { label: 'Hoy', value: currentPrice },
+  ];
 }
 
 export function createFantasyHomeMarketSection(

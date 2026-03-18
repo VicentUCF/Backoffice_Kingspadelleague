@@ -16,10 +16,8 @@ export const FANTASY_ROUTES: Routes = [
       },
       {
         path: 'leagues',
-        loadComponent: () =>
-          import('./pages/fantasy-leagues-page/fantasy-leagues-page.component').then(
-            (module) => module.FantasyLeaguesPageComponent,
-          ),
+        pathMatch: 'full',
+        redirectTo: '',
       },
       {
         path: 'leagues/create',
@@ -44,10 +42,8 @@ export const FANTASY_ROUTES: Routes = [
       },
       {
         path: 'leagues/:leagueId',
-        loadComponent: () =>
-          import('./pages/fantasy-league-dashboard-page/fantasy-league-dashboard-page.component').then(
-            (module) => module.FantasyLeagueDashboardPageComponent,
-          ),
+        pathMatch: 'full',
+        redirectTo: '',
       },
       {
         path: 'leagues/:leagueId/team',

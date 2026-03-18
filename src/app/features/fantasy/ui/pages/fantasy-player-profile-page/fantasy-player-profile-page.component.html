@@ -1,14 +1,20 @@
+<button type="button" class="fantasy-player-profile-page__back-button" (click)="goBack()">
+  <lucide-angular [img]="arrowLeftIcon" [size]="18" aria-hidden="true" />
+  <span>Volver atrás</span>
+</button>
+
 @if (store.isLoading()) {
   <p aria-live="polite" role="status">Cargando perfil fantasy...</p>
 } @else if (store.errorMessage()) {
-  <app-empty-state
-    [actions]="backToLeaguesActions"
-    [description]="store.errorMessage() ?? ''"
-    [icon]="shieldAlert"
-    eyebrow="Jugador fantasy"
-    layout="feature"
-    title="No hemos podido cargar este perfil"
-  />
+  <section class="fantasy-player-profile-page__empty">
+    <app-empty-state
+      [description]="store.errorMessage() ?? ''"
+      [icon]="shieldAlert"
+      eyebrow="Jugador fantasy"
+      layout="feature"
+      title="No hemos podido cargar este perfil"
+    />
+  </section>
 } @else if (store.player(); as player) {
   <article class="fantasy-player-profile-page__panel c-surface-card">
     <header class="fantasy-player-profile-page__hero">
@@ -40,46 +46,124 @@
           <p class="fantasy-player-profile-page__role">{{ player.roleLabel }}</p>
         </div>
       </div>
+
+      <aside class="fantasy-player-profile-page__decision" [attr.data-tone]="player.decisionTone">
+        <p class="fantasy-player-profile-page__eyebrow">Lectura de compra</p>
+        <span class="fantasy-player-profile-page__decision-badge">{{ player.decisionLabel }}</span>
+        <h2>{{ player.decisionTitle }}</h2>
+        <p>{{ player.decisionSummary }}</p>
+      </aside>
     </header>
 
-    <dl class="fantasy-player-profile-page__stats o-grid o-grid--metrics">
-      <div class="c-metric">
-        <span class="c-metric__label">Precio actual</span>
-        <strong class="c-metric__value">{{ player.priceLabel }}</strong>
-      </div>
-      <div class="c-metric">
-        <span class="c-metric__label">Precio anterior</span>
-        <strong class="c-metric__value">{{ player.previousPriceLabel }}</strong>
-      </div>
-      <div class="c-metric">
-        <span class="c-metric__label">Variación</span>
-        <strong class="c-metric__value">{{ player.priceChangeLabel }}</strong>
-      </div>
+    <dl class="fantasy-player-profile-page__metrics">
+      @for (metric of player.keyMetrics; track metric.id) {
+        <div class="fantasy-player-profile-page__metric" [attr.data-tone]="metric.tone">
+          <dt>{{ metric.label }}</dt>
+          <dd>{{ metric.value }}</dd>
+          <p>{{ metric.supportingText }}</p>
+        </div>
+      }
     </dl>
 
+    <div class="fantasy-player-profile-page__analysis-grid">
+      <section class="fantasy-player-profile-page__history-card">
+        <header class="fantasy-player-profile-page__section-header">
+          <p class="fantasy-player-profile-page__eyebrow">Historial de valor</p>
+          <h2>Historial de valor</h2>
+          <p>
+            Últimos movimientos de mercado para ver si llegas en subida, corrección o tramo plano.
+          </p>
+        </header>
+
+        <dl class="fantasy-player-profile-page__history-summary">
+          <div>
+            <dt>Actual</dt>
+            <dd>{{ player.priceLabel }}</dd>
+          </div>
+          <div>
+            <dt>Rango</dt>
+            <dd>{{ player.valueHistory.lowLabel }} · {{ player.valueHistory.highLabel }}</dd>
+          </div>
+          <div>
+            <dt>Tramo</dt>
+            <dd>{{ player.valueHistory.deltaLabel }}</dd>
+          </div>
+        </dl>
+
+        <div aria-hidden="true" class="fantasy-player-profile-page__history-chart">
+          <svg viewBox="0 0 100 56">
+            <polygon
+              [attr.points]="player.valueHistory.areaPoints"
+              class="fantasy-player-profile-page__history-area"
+            />
+            <polyline
+              [attr.points]="player.valueHistory.linePoints"
+              class="fantasy-player-profile-page__history-line"
+            />
+
+            @for (point of player.valueHistory.points; track point.id) {
+              <circle
+                [attr.cx]="point.x"
+                [attr.cy]="point.y"
+                [attr.r]="point.isCurrent ? 2.8 : 2.1"
+                class="fantasy-player-profile-page__history-point"
+                [attr.data-current]="point.isCurrent"
+              />
+            }
+          </svg>
+        </div>
+
+        <ol class="fantasy-player-profile-page__history-list">
+          @for (point of player.valueHistory.points; track point.id) {
+            <li [attr.data-current]="point.isCurrent">
+              <span>{{ point.label }}</span>
+              <strong>{{ point.priceLabel }}</strong>
+            </li>
+          }
+        </ol>
+      </section>
+
+      <section class="fantasy-player-profile-page__signals">
+        <header class="fantasy-player-profile-page__section-header">
+          <p class="fantasy-player-profile-page__eyebrow">Decisión rápida</p>
+          <h2>Qué mirar antes de ficharlo</h2>
+          <p>
+            Tres señales para decidir si compras ahora, esperas una corrección o lo dejas pasar.
+          </p>
+        </header>
+
+        <div class="fantasy-player-profile-page__signal-grid">
+          @for (signal of player.signals; track signal.id) {
+            <article class="fantasy-player-profile-page__signal" [attr.data-tone]="signal.tone">
+              <span>{{ signal.title }}</span>
+              <strong>{{ signal.value }}</strong>
+              <p>{{ signal.description }}</p>
+            </article>
+          }
+        </div>
+      </section>
+    </div>
+
     <section class="fantasy-player-profile-page__notes">
-      <div>
+      <article>
         <h2>Situación de mercado</h2>
         <p>{{ player.marketTrendLabel }}</p>
         <p>{{ player.marketGuidance }}</p>
-      </div>
-      <div>
+      </article>
+      <article>
         <h2>Scouting</h2>
         <p>{{ player.scoutingNote }}</p>
-      </div>
+      </article>
     </section>
-
-    <div class="fantasy-player-profile-page__actions">
-      <a routerLink="/fantasy/leagues">Volver a mis ligas</a>
-    </div>
   </article>
 } @else if (store.isNotFound()) {
-  <app-empty-state
-    [actions]="backToLeaguesActions"
-    [description]="'No hemos encontrado este jugador fantasy. Revisa el mercado de una de tus ligas para abrir otro perfil.'"
-    [icon]="searchIcon"
-    eyebrow="Jugador fantasy"
-    layout="feature"
-    title="No hemos encontrado este jugador fantasy"
-  />
+  <section class="fantasy-player-profile-page__empty">
+    <app-empty-state
+      [description]="'No hemos encontrado este jugador fantasy. Vuelve a la pantalla anterior para revisar otro perfil.'"
+      [icon]="searchIcon"
+      eyebrow="Jugador fantasy"
+      layout="feature"
+      title="No hemos encontrado este jugador fantasy"
+    />
+  </section>
 }

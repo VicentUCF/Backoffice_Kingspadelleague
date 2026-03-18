@@ -49,8 +49,8 @@ export class FantasyLeagueDashboardPageComponent implements OnDestroy, OnInit {
   protected readonly shieldAlert = ShieldAlert;
   protected readonly missingLeagueActions: readonly EmptyStateAction[] = [
     {
-      label: 'Volver a mis ligas',
-      href: '/fantasy/leagues',
+      label: 'Volver a fantasy',
+      href: '/fantasy',
       tone: 'primary',
     },
   ];

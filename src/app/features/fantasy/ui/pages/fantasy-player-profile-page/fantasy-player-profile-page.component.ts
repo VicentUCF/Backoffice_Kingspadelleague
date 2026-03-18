@@ -1,4 +1,4 @@
-import { NgOptimizedImage } from '@angular/common';
+import { Location, NgOptimizedImage, ViewportScroller } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,16 +8,13 @@ import {
   type OnInit,
 } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { LucideAngularModule, Search, ShieldAlert } from 'lucide-angular';
+import { ActivatedRoute } from '@angular/router';
+import { ArrowLeft, LucideAngularModule, Search, ShieldAlert } from 'lucide-angular';
 import { Subscription } from 'rxjs';
 
 import { FantasyPlayerAvatarComponent } from '@features/fantasy/ui/components/fantasy-player-avatar/fantasy-player-avatar.component';
 import { FantasyPlayerProfileStore } from '@features/fantasy/ui/state/fantasy-player-profile.store';
-import {
-  EmptyStateComponent,
-  type EmptyStateAction,
-} from '@shared/ui/empty-state/empty-state.component';
+import { EmptyStateComponent } from '@shared/ui/empty-state/empty-state.component';
 
 @Component({
   selector: 'app-fantasy-player-profile-page',
@@ -27,7 +24,6 @@ import {
     FantasyPlayerAvatarComponent,
     LucideAngularModule,
     NgOptimizedImage,
-    RouterLink,
   ],
   providers: [FantasyPlayerProfileStore],
   host: { class: 'fantasy-page fantasy-player-profile-page o-container o-stack' },
@@ -38,18 +34,14 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
   private readonly route = inject(ActivatedRoute);
+  private readonly location = inject(Location);
+  private readonly viewportScroller = inject(ViewportScroller);
   private readonly routeSubscription = new Subscription();
 
   protected readonly store = inject(FantasyPlayerProfileStore);
+  protected readonly arrowLeftIcon = ArrowLeft;
   protected readonly searchIcon = Search;
   protected readonly shieldAlert = ShieldAlert;
-  protected readonly backToLeaguesActions: readonly EmptyStateAction[] = [
-    {
-      label: 'Volver a mis ligas',
-      href: '/fantasy/leagues',
-      tone: 'primary',
-    },
-  ];
 
   constructor() {
     effect(() => {
@@ -70,7 +62,7 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
         this.meta.updateTag({
           name: 'description',
           content:
-            'El jugador fantasy solicitado no está disponible. Vuelve a una de tus ligas para seguir explorando el mercado.',
+            'El jugador fantasy solicitado no está disponible. Vuelve a la pantalla anterior para seguir explorando el mercado.',
         });
 
         return;
@@ -80,7 +72,7 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Consulta el valor, el rol y la información de mercado de un jugador dentro del fantasy de KingsPadelLeague.',
+          'Consulta valor, historial de precio, señales de compra y contexto fantasy de un jugador en KingsPadelLeague.',
       });
     });
   }
@@ -88,6 +80,7 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.routeSubscription.add(
       this.route.paramMap.subscribe((paramMap) => {
+        this.viewportScroller.scrollToPosition([0, 0]);
         void this.store.load(paramMap.get('playerId'));
       }),
     );
@@ -95,5 +88,9 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
 
   ngOnDestroy(): void {
     this.routeSubscription.unsubscribe();
+  }
+
+  protected goBack(): void {
+    this.location.back();
   }
 }

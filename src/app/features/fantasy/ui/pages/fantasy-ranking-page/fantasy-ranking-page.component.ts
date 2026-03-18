@@ -47,8 +47,8 @@ export class FantasyRankingPageComponent implements OnDestroy, OnInit {
   protected readonly selectedTeamId = signal<string | null>(null);
   protected readonly missingLeagueActions: readonly EmptyStateAction[] = [
     {
-      label: 'Volver a mis ligas',
-      href: '/fantasy/leagues',
+      label: 'Volver a fantasy',
+      href: '/fantasy',
       tone: 'primary',
     },
   ];

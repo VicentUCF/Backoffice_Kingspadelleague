@@ -19,6 +19,7 @@ describe('toFantasyLeagueDashboardViewModel', () => {
     expect(viewModel.phaseLabel).toBe('Mercado abierto');
     expect(viewModel.marketStatusLabel).toBe('Mercado abierto y equipo editable.');
     expect(viewModel.rankingTitle).toBe('Clasificación fantasy');
+    expect(viewModel.overviewLink).toBe('/fantasy');
     expect(viewModel.team?.formationLabel).toBe('4 titulares · 2 rotaciones');
     expect(viewModel.team?.playersCountLabel).toBe('6 jugadores');
     expect(viewModel.team?.starters).toHaveLength(4);

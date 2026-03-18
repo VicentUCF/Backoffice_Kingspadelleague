@@ -99,7 +99,7 @@ export class InMemoryFantasyRepository implements FantasyRepository {
   async loadPlayerProfile(playerId: string): Promise<FantasyPlayer | null> {
     const player = this.players.find((candidate) => candidate.id === playerId);
 
-    return player ? { ...player } : null;
+    return player ? clonePlayer(player) : null;
   }
 
   async createLeague(command: CreateFantasyLeagueCommand): Promise<FantasyLeagueDashboard> {
@@ -131,7 +131,7 @@ export class InMemoryFantasyRepository implements FantasyRepository {
           isMe: true,
         },
       ],
-      players: this.players.map((player) => ({ ...player })),
+      players: this.players.map((player) => clonePlayer(player)),
       marketLocked: false,
       weeklyCycle: buildFallbackWeeklyCycle(null),
     };
@@ -769,7 +769,7 @@ function cloneDashboard(dashboard: FantasyLeagueDashboard): FantasyLeagueDashboa
     myTeam: dashboard.myTeam ? cloneTeam(dashboard.myTeam) : null,
     teams: dashboard.teams.map((team) => cloneTeam(team)),
     ranking: dashboard.ranking.map((entry) => ({ ...entry })),
-    players: dashboard.players.map((player) => ({ ...player })),
+    players: dashboard.players.map((player) => clonePlayer(player)),
     weeklyCycle: cloneWeeklyCycle(dashboard.weeklyCycle),
   };
 }
@@ -793,6 +793,13 @@ function cloneTeam(team: FantasyTeam): FantasyTeam {
     ...team,
     submittedStarterPlayerIds: [...team.submittedStarterPlayerIds],
     players: team.players.map((player) => ({ ...player })),
+  };
+}
+
+function clonePlayer(player: FantasyPlayer): FantasyPlayer {
+  return {
+    ...player,
+    priceHistory: player.priceHistory.map((point) => ({ ...point })),
   };
 }
 

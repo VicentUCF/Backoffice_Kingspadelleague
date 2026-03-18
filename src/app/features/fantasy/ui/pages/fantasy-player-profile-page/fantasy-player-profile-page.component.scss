@@ -3,13 +3,40 @@
 }
 
 .fantasy-player-profile-page {
+  &__back-button {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    width: fit-content;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--color-text-muted);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color 160ms ease;
+
+    &:hover {
+      color: var(--color-text-strong);
+    }
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--color-brand) 70%, white 30%);
+      outline-offset: 4px;
+    }
+  }
+
   &__panel {
     display: grid;
     gap: var(--space-5);
-    padding: var(--space-6);
+    padding: clamp(1.5rem, 1.1rem + 1vw, 2rem);
   }
 
-  &__hero,
+  &__hero {
+    display: grid;
+    gap: var(--space-4);
+  }
+
   &__identity {
     display: flex;
     gap: var(--space-4);
@@ -36,8 +63,9 @@
   }
 
   &__eyebrow {
+    margin: 0;
     color: var(--color-brand);
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     font-weight: 800;
     letter-spacing: 0.12em;
     text-transform: uppercase;
@@ -65,6 +93,307 @@
     font-weight: 700;
   }
 
+  &__decision,
+  &__history-card,
+  &__signals,
+  &__notes article {
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.5rem;
+    background:
+      linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.02)),
+      var(--color-surface-raised);
+  }
+
+  &__decision {
+    display: grid;
+    gap: var(--space-3);
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--color-text-strong);
+      font-size: clamp(1.4rem, 2.3vw, 1.9rem);
+      letter-spacing: -0.04em;
+    }
+
+    p:last-child {
+      color: var(--color-text-default);
+      line-height: 1.65;
+    }
+
+    &[data-tone='positive'] {
+      border-color: rgb(74 222 128 / 0.28);
+      background:
+        radial-gradient(circle at top right, rgb(74 222 128 / 0.12), transparent 36%),
+        linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.02)),
+        var(--color-surface-raised);
+    }
+
+    &[data-tone='warning'] {
+      border-color: rgb(248 113 113 / 0.24);
+      background:
+        radial-gradient(circle at top right, rgb(248 113 113 / 0.1), transparent 36%),
+        linear-gradient(180deg, rgb(255 255 255 / 0.05), rgb(255 255 255 / 0.02)),
+        var(--color-surface-raised);
+    }
+  }
+
+  &__decision-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 2rem;
+    padding-inline: var(--space-3);
+    border-radius: 999px;
+    background: rgb(201 162 39 / 0.12);
+    color: var(--color-brand-strong);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr));
+    gap: var(--space-3);
+    margin: 0;
+  }
+
+  &__metric {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.025);
+
+    dt,
+    dd,
+    p {
+      margin: 0;
+    }
+
+    dt {
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    dd {
+      color: var(--color-text-strong);
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+    }
+
+    p {
+      color: var(--color-text-muted);
+      line-height: 1.55;
+    }
+
+    &[data-tone='positive'] dd {
+      color: #4ade80;
+    }
+
+    &[data-tone='negative'] dd {
+      color: #f87171;
+    }
+  }
+
+  &__section-header {
+    display: grid;
+    gap: var(--space-2);
+
+    h2,
+    p {
+      margin: 0;
+    }
+
+    h2 {
+      color: var(--color-text-strong);
+      font-size: 1.35rem;
+      letter-spacing: -0.04em;
+    }
+
+    p:last-child {
+      color: var(--color-text-muted);
+      line-height: 1.6;
+    }
+  }
+
+  &__history-card,
+  &__signals {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  &__history-summary {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+    gap: var(--space-3);
+    margin: 0;
+
+    div {
+      display: grid;
+      gap: var(--space-1);
+      padding: var(--space-3);
+      border-radius: 1rem;
+      background: rgb(255 255 255 / 0.03);
+    }
+
+    dt,
+    dd {
+      margin: 0;
+    }
+
+    dt {
+      color: var(--color-text-muted);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    dd {
+      color: var(--color-text-strong);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+  }
+
+  &__history-chart {
+    padding: var(--space-2);
+    border-radius: 1.25rem;
+    background:
+      linear-gradient(180deg, rgb(201 162 39 / 0.08), transparent 60%), rgb(255 255 255 / 0.02);
+    overflow: hidden;
+
+    svg {
+      display: block;
+      width: 100%;
+      height: clamp(9rem, 20vw, 12rem);
+    }
+  }
+
+  &__history-area {
+    fill: rgb(201 162 39 / 0.14);
+  }
+
+  &__history-line {
+    fill: none;
+    stroke: color-mix(in srgb, var(--color-brand) 84%, white 16%);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+  }
+
+  &__history-point {
+    fill: var(--color-surface-raised);
+    stroke: rgb(201 162 39 / 0.8);
+    stroke-width: 1.8;
+
+    &[data-current='true'] {
+      fill: color-mix(in srgb, var(--color-brand) 88%, white 12%);
+      stroke: rgb(255 255 255 / 0.9);
+    }
+  }
+
+  &__history-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 6rem), 1fr));
+    gap: var(--space-2);
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      gap: var(--space-1);
+      padding: var(--space-3);
+      border: 1px solid rgb(255 255 255 / 0.08);
+      border-radius: 1rem;
+      background: rgb(255 255 255 / 0.025);
+    }
+
+    span,
+    strong {
+      margin: 0;
+    }
+
+    span {
+      color: var(--color-text-muted);
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+      font-size: 0.92rem;
+    }
+
+    li[data-current='true'] {
+      border-color: rgb(201 162 39 / 0.24);
+      background: rgb(201 162 39 / 0.08);
+    }
+  }
+
+  &__signal-grid {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  &__signal {
+    display: grid;
+    gap: var(--space-2);
+    padding: var(--space-4);
+    border: 1px solid rgb(255 255 255 / 0.08);
+    border-radius: 1.25rem;
+    background: rgb(255 255 255 / 0.025);
+
+    span,
+    strong,
+    p {
+      margin: 0;
+    }
+
+    span {
+      color: var(--color-text-muted);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    strong {
+      color: var(--color-text-strong);
+      font-size: 1.3rem;
+      letter-spacing: -0.04em;
+    }
+
+    p {
+      color: var(--color-text-default);
+      line-height: 1.65;
+    }
+
+    &[data-tone='positive'] strong {
+      color: #4ade80;
+    }
+
+    &[data-tone='warning'] strong {
+      color: #fbbf24;
+    }
+  }
+
   &__notes {
     display: grid;
     gap: var(--space-4);
@@ -74,13 +403,9 @@
       margin: 0;
     }
 
-    div {
+    article {
       display: grid;
       gap: var(--space-2);
-      padding: var(--space-4);
-      border: 1px solid var(--color-border-subtle);
-      border-radius: 1.25rem;
-      background: rgb(255 255 255 / 0.03);
     }
 
     h2 {
@@ -91,14 +416,12 @@
 
     p {
       color: var(--color-text-default);
-      line-height: 1.6;
+      line-height: 1.65;
     }
   }
 
-  &__actions a {
-    color: var(--color-text-strong);
-    font-weight: 700;
-    text-decoration: none;
+  &__empty {
+    width: 100%;
   }
 }
 
@@ -106,10 +429,40 @@
   :host {
     padding-block-start: var(--space-5);
   }
+
+  .fantasy-player-profile-page {
+    &__identity {
+      flex-direction: column;
+    }
+
+    &__history-chart svg {
+      height: clamp(8rem, 34vw, 10rem);
+    }
+  }
 }
 
 @media (min-width: 48rem) {
-  .fantasy-player-profile-page__notes {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .fantasy-player-profile-page {
+    &__hero {
+      grid-template-columns: minmax(0, 1.5fr) minmax(18rem, 1fr);
+      align-items: start;
+    }
+
+    &__signal-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    &__notes {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+}
+
+@media (min-width: 70rem) {
+  .fantasy-player-profile-page {
+    &__analysis-grid {
+      grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+      align-items: start;
+    }
   }
 }

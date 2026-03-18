@@ -57,7 +57,7 @@ export class FantasyCreateLeaguePageComponent {
 
       this.createdLeague.set({
         code: dashboard.league.code,
-        dashboardLink: `/fantasy/leagues/${dashboard.league.id}`,
+        dashboardLink: '/fantasy',
         leagueName: dashboard.league.name,
         marketLink: `/fantasy/leagues/${dashboard.league.id}/market`,
         memberCountLabel: `${dashboard.league.memberCount} participante${

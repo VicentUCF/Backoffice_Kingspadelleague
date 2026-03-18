@@ -20,7 +20,11 @@ describe('FantasyHomePageComponent', () => {
 
     expect(await screen.findByRole('heading', { name: /Tu porra ya está cerrada/i })).toBeVisible();
     expect(screen.getAllByText(/Bonus de porra/i).length).toBeGreaterThan(0);
-    expect(screen.getByRole('link', { name: /Resumen/i })).toHaveAttribute('href', '/fantasy');
+    expect(
+      screen
+        .getAllByRole('link', { name: /Resumen/i })
+        .some((link) => link.getAttribute('href') === '/fantasy'),
+    ).toBe(true);
     expect(
       screen
         .getAllByRole('link', { name: /^Mercado$/i })
