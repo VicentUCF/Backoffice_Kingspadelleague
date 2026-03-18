@@ -600,7 +600,7 @@
     }
 
     &__hero-facts {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
     }
 
     &__filters-grid {
@@ -623,6 +623,10 @@
 
 @media (min-width: 80rem) {
   .fantasy-market-page {
+    &__hero {
+      grid-template-columns: minmax(0, 1.1fr) minmax(18rem, 22rem);
+    }
+
     &__content {
       grid-template-columns: minmax(0, 1fr);
     }

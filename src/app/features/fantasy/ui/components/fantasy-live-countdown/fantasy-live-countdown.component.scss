@@ -1,0 +1,18 @@
+:host {
+  display: inline-flex;
+  min-width: 0;
+}
+
+.fantasy-live-countdown__label {
+  min-width: 0;
+  color: inherit;
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host,
+  .fantasy-live-countdown__label {
+    animation: none;
+    transition: none;
+  }
+}

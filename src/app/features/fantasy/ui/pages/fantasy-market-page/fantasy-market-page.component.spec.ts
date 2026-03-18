@@ -25,8 +25,8 @@ describe('FantasyMarketPageComponent', () => {
       target: { value: 'vicent' },
     });
 
-    expect(screen.getByRole('link', { name: /Vicent Ciscar/i })).toBeVisible();
-    expect(screen.queryByRole('link', { name: /Adri Alvarez/i })).toBeNull();
+    expect(screen.getByRole('link', { name: /Abrir ficha de Vicent Ciscar/i })).toBeVisible();
+    expect(screen.queryByRole('link', { name: /Abrir ficha de Adri Alvarez/i })).toBeNull();
   });
 
   it('shows a toast when a player sale is confirmed', async () => {
@@ -43,7 +43,7 @@ describe('FantasyMarketPageComponent', () => {
 
     await screen.findByRole('heading', { name: /Mercado · Amigos del curro/i });
 
-    fireEvent.click(screen.getAllByRole('button', { name: /^Vender$/i })[0]!);
+    fireEvent.click(screen.getAllByRole('button', { name: /^Vender a /i })[0]!);
 
     expect(await screen.findByRole('heading', { name: /Vender a/i })).toBeVisible();
 

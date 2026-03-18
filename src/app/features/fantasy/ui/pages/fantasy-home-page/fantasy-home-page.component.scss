@@ -140,6 +140,11 @@
     &:hover {
       transform: translateY(-1px);
     }
+
+    &:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--color-brand) 70%, white 30%);
+      outline-offset: 3px;
+    }
   }
 
   &__action--primary,
@@ -247,8 +252,12 @@
     }
   }
 
+  &__countdown-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+
   &__countdown-bar {
-    grid-template-columns: minmax(0, auto) minmax(0, 1fr);
     align-items: center;
     border: 1px solid color-mix(in srgb, var(--color-brand) 18%, rgb(255 255 255 / 10%));
 
@@ -340,6 +349,11 @@
       color: var(--color-brand);
       font-weight: 700;
       text-decoration: none;
+
+      &:focus-visible {
+        outline: 2px solid color-mix(in srgb, var(--color-brand) 70%, white 30%);
+        outline-offset: 3px;
+      }
     }
   }
 
@@ -553,16 +567,67 @@
   }
 }
 
-@media (min-width: 80rem) {
+@media (min-width: 64rem) {
   .fantasy-home-page {
     &__hero {
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.9fr) minmax(18rem, 0.85fr);
+      grid-template-columns: minmax(0, 1.2fr) minmax(22rem, 0.9fr);
       align-items: start;
     }
 
+    &__hero-copy {
+      grid-column: 1;
+      grid-row: 1 / span 2;
+      align-content: start;
+    }
+
+    &__hero-panel--status {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    &__hero-panel--prediction,
+    &__hero-panel--countdown {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
     &__content-grid {
-      grid-template-columns: minmax(0, 1.2fr) minmax(20rem, 0.8fr);
+      grid-template-columns: minmax(0, 1.15fr) minmax(20rem, 0.85fr);
       align-items: start;
+    }
+  }
+}
+
+@media (min-width: 80rem) {
+  .fantasy-home-page {
+    &__hero {
+      grid-template-columns: minmax(0, 1.3fr) minmax(24rem, 0.85fr);
+    }
+
+    &__content-grid {
+      grid-template-columns: minmax(0, 1.2fr) minmax(22rem, 0.8fr);
+      align-items: start;
+    }
+
+    &__market-sections {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fantasy-home-page {
+    &__hero-copy h1,
+    &__hero-panel,
+    &__countdown-bar,
+    &__panel,
+    &__badge,
+    &__action,
+    &__inline-link,
+    app-fantasy-live-countdown {
+      animation: none;
+      transition: none;
     }
   }
 }

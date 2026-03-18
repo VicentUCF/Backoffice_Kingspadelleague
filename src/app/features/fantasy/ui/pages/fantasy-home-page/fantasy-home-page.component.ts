@@ -1,16 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  effect,
-  inject,
-  signal,
-  type OnDestroy,
-  type OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, type OnInit } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 import { CirclePlus, LogIn, Trophy } from 'lucide-angular';
 
+import { FantasyLiveCountdownComponent } from '@features/fantasy/ui/components/fantasy-live-countdown/fantasy-live-countdown.component';
 import { FantasyLeagueCardComponent } from '@features/fantasy/ui/components/fantasy-league-card/fantasy-league-card.component';
 import { FantasyLeagueSectionNavComponent } from '@features/fantasy/ui/components/fantasy-league-section-nav/fantasy-league-section-nav.component';
 import { FantasyPlayerAvatarComponent } from '@features/fantasy/ui/components/fantasy-player-avatar/fantasy-player-avatar.component';
@@ -25,6 +18,7 @@ import {
   selector: 'app-fantasy-home-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
+    FantasyLiveCountdownComponent,
     RouterLink,
     EmptyStateComponent,
     FantasyLeagueCardComponent,
@@ -36,14 +30,12 @@ import {
   templateUrl: './fantasy-home-page.component.html',
   styleUrl: './fantasy-home-page.component.scss',
 })
-export class FantasyHomePageComponent implements OnDestroy, OnInit {
+export class FantasyHomePageComponent implements OnInit {
   private readonly title = inject(Title);
   private readonly meta = inject(Meta);
-  private countdownIntervalId: number | null = null;
 
   protected readonly store = inject(FantasyHomeStore);
   protected readonly trophyIcon = Trophy;
-  protected readonly now = signal(Date.now());
   protected readonly emptyStateActions: readonly EmptyStateAction[] = [
     {
       label: 'Crear liga',
@@ -90,41 +82,6 @@ export class FantasyHomePageComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit(): void {
-    this.countdownIntervalId = window.setInterval(() => {
-      this.now.set(Date.now());
-    }, 1_000);
     void this.store.load();
   }
-
-  ngOnDestroy(): void {
-    if (this.countdownIntervalId !== null) {
-      window.clearInterval(this.countdownIntervalId);
-    }
-  }
-
-  protected formatCountdown(targetIso: string | null): string {
-    if (!targetIso) {
-      return 'Sin hora confirmada';
-    }
-
-    const remainingMilliseconds = new Date(targetIso).getTime() - this.now();
-
-    if (remainingMilliseconds <= 0) {
-      return '00h 00m 00s';
-    }
-
-    const totalSeconds = Math.floor(remainingMilliseconds / 1_000);
-    const days = Math.floor(totalSeconds / 86_400);
-    const hours = Math.floor((totalSeconds % 86_400) / 3_600);
-    const minutes = Math.floor((totalSeconds % 3_600) / 60);
-    const seconds = totalSeconds % 60;
-
-    const timeLabel = `${padCountdownValue(hours)}h ${padCountdownValue(minutes)}m ${padCountdownValue(seconds)}s`;
-
-    return days > 0 ? `${days}d ${timeLabel}` : timeLabel;
-  }
-}
-
-function padCountdownValue(value: number): string {
-  return `${value}`.padStart(2, '0');
 }

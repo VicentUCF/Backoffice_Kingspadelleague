@@ -21,7 +21,7 @@ describe('FantasyRankingTableComponent', () => {
     expect(screen.getByRole('table', { name: /Clasificación fantasy de la liga/i })).toBeVisible();
     expect(screen.getAllByRole('row')).toHaveLength(3);
 
-    await fireEvent.click(screen.getByRole('button', { name: /Ver mi equipo/i }));
+    await fireEvent.click(screen.getByRole('button', { name: /Ver equipo de Previa Imperial/i }));
 
     expect(viewedTeams).toEqual(['team-league-1']);
   });

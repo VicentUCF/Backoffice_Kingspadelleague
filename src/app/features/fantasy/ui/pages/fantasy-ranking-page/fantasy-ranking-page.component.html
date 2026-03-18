@@ -81,7 +81,7 @@
       </header>
 
       <div class="fantasy-ranking-page__podium-grid">
-        @for (entry of podiumEntries(); track entry.rankLabel; let position = $index) {
+        @for (entry of podiumEntries(); track entry.teamId; let position = $index) {
           <article class="fantasy-ranking-page__podium-card" [attr.data-rank]="position + 1">
             <div class="fantasy-ranking-page__podium-topline">
               <span class="fantasy-ranking-page__podium-rank">{{ entry.rankLabel }}</span>
@@ -99,10 +99,6 @@
               <div>
                 <dt>Total</dt>
                 <dd>{{ entry.totalPointsLabel }}</dd>
-              </div>
-              <div>
-                <dt>Jornada</dt>
-                <dd>{{ entry.matchdayPointsLabel }}</dd>
               </div>
               <div>
                 <dt>Valor</dt>

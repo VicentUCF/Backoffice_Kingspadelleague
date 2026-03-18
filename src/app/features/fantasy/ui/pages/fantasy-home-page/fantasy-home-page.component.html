@@ -22,12 +22,11 @@
         <div class="fantasy-home-page__hero-meta">
           <span class="fantasy-home-page__badge">{{ viewModel.primaryLeague.leagueCode }}</span>
           @if (viewModel.primaryLeague.countdown; as countdown) {
-            <span
+            <app-fantasy-live-countdown
               class="fantasy-home-page__badge fantasy-home-page__badge--countdown"
-              [attr.data-urgent]="countdown.isUrgent ? 'true' : null"
-            >
-              {{ countdown.label }}
-            </span>
+              [targetIso]="countdown.targetIso"
+              [urgent]="countdown.isUrgent"
+            />
           }
         </div>
 
@@ -44,7 +43,9 @@
         </nav>
       </div>
 
-      <article class="fantasy-home-page__hero-panel c-surface-card">
+      <article
+        class="fantasy-home-page__hero-panel fantasy-home-page__hero-panel--status c-surface-card"
+      >
         <header class="fantasy-home-page__panel-header">
           <div>
             <p class="fantasy-home-page__section-kicker">Estado actual</p>
@@ -106,12 +107,11 @@
             </div>
           </header>
 
-          <p
+          <app-fantasy-live-countdown
             class="fantasy-home-page__countdown"
-            [attr.data-urgent]="countdown.isUrgent ? 'true' : null"
-          >
-            {{ formatCountdown(countdown.targetIso) }}
-          </p>
+            [targetIso]="countdown.targetIso"
+            [urgent]="countdown.isUrgent"
+          />
           <p class="fantasy-home-page__countdown-supporting">
             {{ viewModel.primaryLeague.secondaryNote }}
           </p>
@@ -132,11 +132,15 @@
 
     @if (viewModel.primaryLeague.countdown && viewModel.primaryLeague.predictionOutcome) {
       <section class="fantasy-home-page__countdown-bar c-surface-card">
-        <div>
+        <div class="fantasy-home-page__countdown-wrapper">
           <p class="fantasy-home-page__section-kicker">
             {{ viewModel.primaryLeague.countdown.label }}
           </p>
-          <strong>{{ formatCountdown(viewModel.primaryLeague.countdown.targetIso) }}</strong>
+          <app-fantasy-live-countdown
+            class="fantasy-home-page__countdown"
+            [targetIso]="viewModel.primaryLeague.countdown.targetIso"
+            [urgent]="viewModel.primaryLeague.countdown.isUrgent"
+          />
         </div>
         <p>{{ viewModel.primaryLeague.secondaryNote }}</p>
       </section>

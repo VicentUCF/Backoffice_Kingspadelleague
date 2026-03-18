@@ -116,7 +116,12 @@
                   <div class="fantasy-team-page__roster-copy">
                     <div class="fantasy-team-page__roster-heading">
                       <h4>
-                        <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                        <a
+                          [attr.aria-label]="'Abrir ficha de ' + player.name"
+                          [routerLink]="player.detailLink"
+                        >
+                          {{ player.name }}
+                        </a>
                       </h4>
                       @if (player.captainLabel; as captainLabel) {
                         <span class="fantasy-team-page__captain-badge">{{ captainLabel }}</span>
@@ -126,7 +131,7 @@
                       @if (player.teamLogoPath) {
                         <img
                           [ngSrc]="player.teamLogoPath"
-                          [alt]="player.teamName"
+                          alt=""
                           class="fantasy-team-page__team-logo"
                           decoding="async"
                           height="18"
@@ -178,13 +183,18 @@
 
                   <div class="fantasy-team-page__roster-copy">
                     <h4>
-                      <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                      <a
+                        [attr.aria-label]="'Abrir ficha de ' + player.name"
+                        [routerLink]="player.detailLink"
+                      >
+                        {{ player.name }}
+                      </a>
                     </h4>
                     <p class="fantasy-team-page__roster-meta">
                       @if (player.teamLogoPath) {
                         <img
                           [ngSrc]="player.teamLogoPath"
-                          [alt]="player.teamName"
+                          alt=""
                           class="fantasy-team-page__team-logo"
                           decoding="async"
                           height="18"

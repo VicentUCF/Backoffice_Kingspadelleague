@@ -52,7 +52,7 @@
     </div>
 
     <div class="fantasy-ranking-table__body" role="rowgroup">
-      @for (entry of entries(); track entry.rankLabel; let position = $index) {
+      @for (entry of entries(); track entry.teamId; let position = $index) {
         <div
           class="fantasy-ranking-table__row"
           [attr.data-podium]="position < 3 ? position + 1 : null"
@@ -121,6 +121,7 @@
               <button
                 type="button"
                 class="fantasy-ranking-table__inspect-button"
+                [attr.aria-label]="'Ver equipo de ' + entry.teamName"
                 (click)="viewTeam(entry.teamId)"
               >
                 {{ entry.inspectLabel }}

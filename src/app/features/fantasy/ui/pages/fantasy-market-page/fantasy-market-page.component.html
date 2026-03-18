@@ -18,11 +18,16 @@
       <nav aria-label="Acciones del mercado fantasy" class="fantasy-market-page__actions">
         <a
           class="fantasy-market-page__action fantasy-market-page__action--primary"
+          [attr.aria-label]="'Ver mi equipo de ' + viewModel.leagueName"
           [routerLink]="viewModel.teamLink"
         >
           Ver mi equipo
         </a>
-        <a class="fantasy-market-page__action" [routerLink]="viewModel.rankingLink">
+        <a
+          class="fantasy-market-page__action"
+          [attr.aria-label]="'Ver clasificación de ' + viewModel.leagueName"
+          [routerLink]="viewModel.rankingLink"
+        >
           Ver clasificación
         </a>
       </nav>
@@ -68,7 +73,11 @@
         </div>
 
         <div class="fantasy-market-page__cockpit-actions">
-          <a class="fantasy-market-page__inline-link" [routerLink]="viewModel.teamLink">
+          <a
+            class="fantasy-market-page__inline-link"
+            [attr.aria-label]="'Ver mi equipo de ' + viewModel.leagueName"
+            [routerLink]="viewModel.teamLink"
+          >
             Ver mi equipo
           </a>
           <button
@@ -140,11 +149,17 @@
                       type="button"
                       class="fantasy-market-page__micro-action fantasy-market-page__micro-action--danger"
                       [disabled]="player.actionDisabled"
+                      [attr.aria-label]="'Vender a ' + player.name"
                       (click)="requestSellPlayer(player)"
                     >
                       Vender
                     </button>
-                    <a [routerLink]="player.detailLink">Perfil</a>
+                    <a
+                      [attr.aria-label]="'Ver ficha de ' + player.name"
+                      [routerLink]="player.detailLink"
+                    >
+                      Perfil
+                    </a>
                   </div>
                 </article>
               </li>
@@ -167,7 +182,7 @@
           <h2 id="fantasy-market-filters">Filtra el mercado</h2>
         </div>
         <div class="fantasy-market-page__filters-meta">
-          <p role="status">{{ store.resultsLabel() }}</p>
+          <p>{{ store.resultsLabel() }}</p>
           @if (store.canResetFilters()) {
             <button
               type="button"
@@ -259,7 +274,12 @@
                   <div class="fantasy-market-page__player-copy">
                     <div class="fantasy-market-page__player-heading">
                       <h2>
-                        <a [routerLink]="player.detailLink">{{ player.name }}</a>
+                        <a
+                          [attr.aria-label]="'Abrir ficha de ' + player.name"
+                          [routerLink]="player.detailLink"
+                        >
+                          {{ player.name }}
+                        </a>
                       </h2>
                       <span
                         class="fantasy-market-page__status-chip"
@@ -273,7 +293,7 @@
                       @if (player.teamLogoPath) {
                         <img
                           [ngSrc]="player.teamLogoPath"
-                          [alt]="player.teamName"
+                          alt=""
                           class="fantasy-market-page__team-logo"
                           decoding="async"
                           height="18"
@@ -311,22 +331,34 @@
                     type="button"
                     class="fantasy-market-page__action-button fantasy-market-page__action-button--danger"
                     [disabled]="player.actionDisabled"
+                    [attr.aria-label]="player.actionLabel + ' a ' + player.name"
                     (click)="requestSellPlayer(player)"
                   >
                     {{ player.actionLabel }}
                   </button>
-                  <a [routerLink]="viewModel.teamLink">Ver en mi equipo</a>
+                  <a
+                    [attr.aria-label]="'Ver a ' + player.name + ' en mi equipo'"
+                    [routerLink]="viewModel.teamLink"
+                  >
+                    Ver en mi equipo
+                  </a>
                 } @else {
                   <button
                     type="button"
                     class="fantasy-market-page__action-button fantasy-market-page__action-button--primary"
                     [disabled]="player.actionDisabled"
+                    [attr.aria-label]="player.actionLabel + ' a ' + player.name"
                     (click)="requestBuyPlayer(player)"
                   >
                     {{ player.actionLabel }}
                   </button>
                 }
-                <a [routerLink]="player.detailLink">Ver ficha</a>
+                <a
+                  [attr.aria-label]="'Ver ficha de ' + player.name"
+                  [routerLink]="player.detailLink"
+                >
+                  Ver ficha
+                </a>
               </div>
 
               @if (player.actionHint; as actionHint) {

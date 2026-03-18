@@ -54,6 +54,10 @@
     gap: var(--space-3);
   }
 
+  &__summary-grid {
+    height: 100%;
+  }
+
   &__hero-facts {
     margin: 0;
   }
@@ -108,7 +112,15 @@
     gap: var(--space-4);
   }
 
-  &__podium,
+  &__podium {
+    gap: var(--space-4);
+    padding: var(--space-5);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
+
   &__table-panel {
     display: grid;
     gap: var(--space-4);
@@ -282,7 +294,7 @@
     }
 
     &__hero-facts {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
     }
 
     &__summary-grid {
@@ -291,16 +303,20 @@
 
     &__podium-grid,
     &__podium-stats {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
   }
 }
 
-@media (min-width: 80rem) {
+@media (min-width: 64rem) {
   .fantasy-ranking-page {
     &__overview {
-      grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 24rem) minmax(0, 1fr);
       align-items: start;
+    }
+
+    &__summary-grid {
+      grid-template-columns: 1fr;
     }
   }
 }
