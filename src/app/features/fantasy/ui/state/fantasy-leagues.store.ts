@@ -22,7 +22,7 @@ export class FantasyLeaguesStore {
     try {
       this.leagues.set(toFantasyLeagueCardsViewModel(await this.loadMyLeaguesUseCase.execute()));
     } catch {
-      this.errorMessage.set('No pudimos cargar tus ligas fantasy.');
+      this.errorMessage.set('No hemos podido cargar tus ligas fantasy.');
     } finally {
       this.isLoading.set(false);
     }

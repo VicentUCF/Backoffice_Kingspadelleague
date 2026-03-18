@@ -44,7 +44,7 @@ export class FantasyLeagueDashboardStore {
     try {
       this.dashboard.set(await this.loadLeagueDashboardUseCase.execute(leagueId));
     } catch {
-      this.errorMessage.set('No pudimos cargar la información de la liga.');
+      this.errorMessage.set('No hemos podido cargar los datos de esta liga.');
     } finally {
       this.isLoading.set(false);
     }

@@ -252,7 +252,7 @@ export class FantasyMarketStore {
     try {
       this.dashboard.set(await this.loadLeagueDashboardUseCase.execute(leagueId));
     } catch {
-      this.errorMessage.set('No pudimos cargar el mercado fantasy.');
+      this.errorMessage.set('No hemos podido cargar el mercado fantasy.');
     } finally {
       this.isLoading.set(false);
     }
@@ -286,13 +286,13 @@ export class FantasyMarketStore {
       });
 
       if (!nextDashboard) {
-        this.errorMessage.set('No pudimos actualizar la plantilla desde el mercado.');
+        this.errorMessage.set('No hemos podido actualizar tu plantilla desde el mercado.');
         return null;
       }
 
       return nextDashboard;
     } catch {
-      this.errorMessage.set('No pudimos actualizar la plantilla desde el mercado.');
+      this.errorMessage.set('No hemos podido actualizar tu plantilla desde el mercado.');
       return null;
     } finally {
       this.isSaving.set(false);

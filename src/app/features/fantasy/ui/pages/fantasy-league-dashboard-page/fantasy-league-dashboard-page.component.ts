@@ -63,7 +63,7 @@ export class FantasyLeagueDashboardPageComponent implements OnDestroy, OnInit {
         this.title.setTitle(`${viewModel.leagueName} | Fantasy | KingsPadelLeague`);
         this.meta.updateTag({
           name: 'description',
-          content: `${viewModel.leagueName}: sigue el estado de pretemporada, el mercado y el valor de tu plantilla fantasy.`,
+          content: `${viewModel.leagueName}: revisa el estado de la liga, tu plantilla y las decisiones clave del fantasy.`,
         });
 
         return;
@@ -74,7 +74,7 @@ export class FantasyLeagueDashboardPageComponent implements OnDestroy, OnInit {
         this.meta.updateTag({
           name: 'description',
           content:
-            'La liga fantasy solicitada no está disponible. Revisa tus ligas activas o vuelve al inicio del fantasy.',
+            'La liga fantasy solicitada no está disponible. Revisa tus ligas activas o vuelve al inicio.',
         });
 
         return;
@@ -83,8 +83,7 @@ export class FantasyLeagueDashboardPageComponent implements OnDestroy, OnInit {
       this.title.setTitle('Fantasy | KingsPadelLeague');
       this.meta.updateTag({
         name: 'description',
-        content:
-          'Consulta el estado de tus ligas fantasy, el mercado y la construcción de plantilla.',
+        content: 'Consulta el estado de tus ligas fantasy, el mercado y la situación de tu equipo.',
       });
     });
   }

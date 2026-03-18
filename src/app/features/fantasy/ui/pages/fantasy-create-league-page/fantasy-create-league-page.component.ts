@@ -40,7 +40,7 @@ export class FantasyCreateLeaguePageComponent {
     this.meta.updateTag({
       name: 'description',
       content:
-        'Crea una nueva liga fantasy privada y genera su código de invitación para compartirlo con tus rivales.',
+        'Crea una liga fantasy privada, comparte el código de invitación y empieza a montar tu plantilla.',
     });
   }
 

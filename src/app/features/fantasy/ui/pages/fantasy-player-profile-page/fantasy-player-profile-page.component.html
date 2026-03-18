@@ -12,7 +12,7 @@
       [icon]="shieldAlert"
       eyebrow="Jugador fantasy"
       layout="feature"
-      title="No hemos podido cargar este perfil"
+      title="No hemos podido cargar este jugador"
     />
   </section>
 } @else if (store.player(); as player) {
@@ -48,7 +48,7 @@
       </div>
 
       <aside class="fantasy-player-profile-page__decision" [attr.data-tone]="player.decisionTone">
-        <p class="fantasy-player-profile-page__eyebrow">Lectura de compra</p>
+        <p class="fantasy-player-profile-page__eyebrow">Señal de fichaje</p>
         <span class="fantasy-player-profile-page__decision-badge">{{ player.decisionLabel }}</span>
         <h2>{{ player.decisionTitle }}</h2>
         <p>{{ player.decisionSummary }}</p>
@@ -70,9 +70,7 @@
         <header class="fantasy-player-profile-page__section-header">
           <p class="fantasy-player-profile-page__eyebrow">Historial de valor</p>
           <h2>Historial de valor</h2>
-          <p>
-            Últimos movimientos de mercado para ver si llegas en subida, corrección o tramo plano.
-          </p>
+          <p>Revisa cómo se ha movido su precio en los últimos cortes de mercado.</p>
         </header>
 
         <dl class="fantasy-player-profile-page__history-summary">
@@ -127,9 +125,7 @@
         <header class="fantasy-player-profile-page__section-header">
           <p class="fantasy-player-profile-page__eyebrow">Decisión rápida</p>
           <h2>Qué mirar antes de ficharlo</h2>
-          <p>
-            Tres señales para decidir si compras ahora, esperas una corrección o lo dejas pasar.
-          </p>
+          <p>Tres señales rápidas para decidir si entrar, esperar o pasar.</p>
         </header>
 
         <div class="fantasy-player-profile-page__signal-grid">
@@ -159,7 +155,7 @@
 } @else if (store.isNotFound()) {
   <section class="fantasy-player-profile-page__empty">
     <app-empty-state
-      [description]="'No hemos encontrado este jugador fantasy. Vuelve a la pantalla anterior para revisar otro perfil.'"
+      [description]="'No hemos encontrado este jugador fantasy. Vuelve atrás para revisar otro perfil.'"
       [icon]="searchIcon"
       eyebrow="Jugador fantasy"
       layout="feature"

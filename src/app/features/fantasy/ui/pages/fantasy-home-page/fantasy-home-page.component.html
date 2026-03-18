@@ -1,6 +1,6 @@
 <div class="fantasy-home-page o-container o-stack">
   @if (store.isLoading()) {
-    <p aria-live="polite" role="status">Cargando experiencia semanal fantasy...</p>
+    <p aria-live="polite" role="status">Cargando tu semana fantasy...</p>
   } @else if (store.errorMessage()) {
     <app-empty-state
       [actions]="emptyStateActions"
@@ -102,7 +102,7 @@
           <header class="fantasy-home-page__panel-header">
             <div>
               <p class="fantasy-home-page__section-kicker">{{ countdown.label }}</p>
-              <h2>La ventana de decisión sigue abierta</h2>
+              <h2>Todavía puedes ajustar la semana</h2>
             </div>
           </header>
 
@@ -157,7 +157,7 @@
               {{
                 viewModel.primaryLeague.phase === 'matchday-finished'
                   ? 'El nuevo meta ya está en marcha'
-                  : 'Jugadores que pueden mover tu decisión'
+                  : 'Jugadores que pueden cambiar tu jornada'
               }}
             </h2>
           </div>
@@ -211,8 +211,8 @@
       <section class="fantasy-home-page__panel fantasy-home-page__panel--feed c-surface-card">
         <header class="fantasy-home-page__panel-header">
           <div>
-            <p class="fantasy-home-page__section-kicker">Feed social</p>
-            <h2>Lo que pasa en tu liga entre cierres</h2>
+            <p class="fantasy-home-page__section-kicker">Actividad de la liga</p>
+            <h2>Lo que se mueve entre cierres</h2>
           </div>
         </header>
 

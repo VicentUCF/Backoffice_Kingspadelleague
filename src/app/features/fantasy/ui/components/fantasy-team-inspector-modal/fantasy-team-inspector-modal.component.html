@@ -14,7 +14,7 @@
         <article class="fantasy-team-inspector-modal__summary-card">
           <span>Manager</span>
           <strong>{{ team.managerName }}</strong>
-          <small>{{ team.isMe ? 'Tu plantilla actual' : 'Rival directo de la liga' }}</small>
+          <small>{{ team.isMe ? 'Tu equipo ahora mismo' : 'Uno de tus rivales directos' }}</small>
         </article>
         <article class="fantasy-team-inspector-modal__summary-card">
           <span>Posición</span>
@@ -89,7 +89,7 @@
           <header class="fantasy-team-inspector-modal__panel-header">
             <div>
               <p class="fantasy-team-inspector-modal__eyebrow">Rotación</p>
-              <h3>Banquillo corto</h3>
+              <h3>Rotación disponible</h3>
             </div>
             <span>{{ team.bench.length }}</span>
           </header>

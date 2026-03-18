@@ -39,7 +39,7 @@ export class FantasyPlayerProfileStore {
 
       this.player.set(player ? toFantasyPlayerProfileViewModel(player) : null);
     } catch {
-      this.errorMessage.set('No pudimos cargar el perfil del jugador fantasy.');
+      this.errorMessage.set('No hemos podido cargar el perfil del jugador.');
     } finally {
       this.isLoading.set(false);
     }

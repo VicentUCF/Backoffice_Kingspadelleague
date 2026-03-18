@@ -74,8 +74,8 @@ export class FantasyHomePageComponent implements OnDestroy, OnInit {
         this.meta.updateTag({
           name: 'description',
           content: isResultsMode
-            ? `Consulta el cierre semanal fantasy de ${viewModel.primaryLeague.leagueName}: puntos fantasy, bonus de porra cerrado y lectura final de la jornada.`
-            : `Sigue la semana fantasy de ${viewModel.primaryLeague.leagueName}: porra sobre tu plantilla, cierre de equipo y decisiones previas al domingo.`,
+            ? `Consulta el cierre semanal de ${viewModel.primaryLeague.leagueName}: puntos fantasy, bonus de porra y lectura final de la jornada.`
+            : `Sigue la semana fantasy de ${viewModel.primaryLeague.leagueName}: porra, mercado y ajustes antes del cierre definitivo.`,
         });
 
         return;
@@ -84,7 +84,7 @@ export class FantasyHomePageComponent implements OnDestroy, OnInit {
       this.title.setTitle('Fantasy | KingsPadelLeague');
       this.meta.updateTag({
         name: 'description',
-        content: `${applicationMetadata.name} Fantasy: crea ligas privadas, construye tu plantilla de pretemporada y trabaja el mercado con el roster real de la liga.`,
+        content: `${applicationMetadata.name} Fantasy: crea ligas privadas, prepara tu plantilla y mueve el mercado antes de cada jornada.`,
       });
     });
   }

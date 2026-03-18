@@ -6,7 +6,7 @@
     [icon]="shieldAlert"
     eyebrow="Mi equipo"
     layout="feature"
-    title="No hemos podido cargar tu roster"
+    title="No hemos podido cargar tu equipo"
   />
 } @else if (store.viewModel(); as viewModel) {
   <section class="fantasy-team-page__hero">
@@ -20,7 +20,7 @@
           class="fantasy-team-page__action fantasy-team-page__action--primary"
           [routerLink]="viewModel.teamCreationLink"
         >
-          Editar alineación fantasy
+          Ajustar alineación
         </a>
         <a class="fantasy-team-page__action" [routerLink]="viewModel.marketLink"
           >Explorar mercado</a
@@ -63,13 +63,13 @@
         <div>
           <p class="fantasy-team-page__section-kicker">
             <lucide-angular [img]="rosterIcon" [size]="16" aria-hidden="true" />
-            <span>Gestión de equipo</span>
+            <span>Resumen del equipo</span>
           </p>
           <h2>{{ team.name }}</h2>
           <p>{{ team.formationLabel }} · {{ team.playersCountLabel }}</p>
         </div>
         <a class="fantasy-team-page__planner-link" [routerLink]="viewModel.teamCreationLink">
-          Ajustar plantilla
+          Editar plantilla
           <lucide-angular [img]="arrowRightIcon" [size]="16" aria-hidden="true" />
         </a>
       </header>
@@ -79,7 +79,7 @@
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Titulares</p>
-              <h3>Bloque principal</h3>
+              <h3>Cuarteto titular</h3>
             </div>
             <span class="fantasy-team-page__panel-chip">{{ team.starters.length }}</span>
           </header>
@@ -88,12 +88,12 @@
             <article class="fantasy-team-page__summary-card">
               <span>Capitán</span>
               <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
-              <small>Jugador que multiplica x2</small>
+              <small>El jugador que puntúa doble</small>
             </article>
             <article class="fantasy-team-page__summary-card">
               <span>Valor</span>
               <strong>{{ team.teamValueLabel }}</strong>
-              <small>{{ team.budgetRemainingLabel }} libres</small>
+              <small>{{ team.budgetRemainingLabel }} disponibles</small>
             </article>
             <article class="fantasy-team-page__summary-card">
               <span>Estructura</span>
@@ -155,14 +155,14 @@
           <header class="fantasy-team-page__panel-header">
             <div>
               <p class="fantasy-team-page__panel-eyebrow">Rotación</p>
-              <h3>Banquillo corto</h3>
+              <h3>Rotación disponible</h3>
             </div>
             <span class="fantasy-team-page__panel-chip">{{ team.bench.length }}</span>
           </header>
 
           <p class="fantasy-team-page__rotation-copy">
-            Aquí solo tienes dos piezas de apoyo. La idea es ver cobertura rápida y entrar a editar
-            plantilla si quieres mover jerarquías.
+            Aquí ves las dos piezas de apoyo para decidir si merece la pena tocar jerarquías o
+            mantener el bloque.
           </p>
 
           <ul aria-label="Suplentes fantasy" class="fantasy-team-page__bench-list">

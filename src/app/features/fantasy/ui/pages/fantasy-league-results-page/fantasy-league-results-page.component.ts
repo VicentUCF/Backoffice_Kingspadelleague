@@ -61,7 +61,7 @@ export class FantasyLeagueResultsPageComponent implements OnDestroy, OnInit {
         );
         this.meta.updateTag({
           name: 'description',
-          content: `Resultados fantasy de ${viewModel.leagueName}: impacto de jornada, ranking final, premios, comparación con rivales y nuevo mercado post-jornada.`,
+          content: `Resultados fantasy de ${viewModel.leagueName}: puntos de la jornada, premios, rivales directos y nuevo mercado.`,
         });
 
         return;
@@ -71,7 +71,7 @@ export class FantasyLeagueResultsPageComponent implements OnDestroy, OnInit {
         this.title.setTitle('Resultados fantasy no disponibles | KingsPadelLeague');
         this.meta.updateTag({
           name: 'description',
-          content: 'Los resultados fantasy solicitados no están disponibles para esta liga.',
+          content: 'Los resultados fantasy de esta liga no están disponibles en este momento.',
         });
 
         return;
@@ -81,7 +81,7 @@ export class FantasyLeagueResultsPageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Consulta resultados fantasy semanales con ranking, premios y análisis del mercado post-jornada.',
+          'Consulta resultados fantasy semanales con ranking, premios y mercado post-jornada.',
       });
     });
   }

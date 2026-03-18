@@ -113,7 +113,7 @@ export function toFantasyPlayerProfileViewModel(
     marketGuidance: `Se gestiona desde el mercado de tu liga. ${toMarketGuidance(priceChange)}`,
     marketTrendLabel: toMarketTrendLabel(priceChange),
     matchdayPointsLabel: formatFantasyPoints(player.pointsMatchday),
-    metaDescription: `Consulta el valor, la evolución reciente, el rendimiento fantasy y las señales de compra de ${player.name} dentro de KingsPadelLeague.`,
+    metaDescription: `Consulta el valor, la evolución reciente y las señales de compra de ${player.name} en el fantasy de KingsPadelLeague.`,
     name: player.name,
     pageTitle: `${player.name} | Fantasy | KingsPadelLeague`,
     photoPath: player.photoPath,
@@ -156,7 +156,7 @@ function buildKeyMetrics(
     {
       id: 'total-points',
       label: 'Total fantasy',
-      supportingText: 'Lectura global de lo que ya ha devuelto en puntuación.',
+      supportingText: 'Lo que ya ha devuelto en puntos a lo largo de la temporada.',
       tone: 'neutral',
       value: formatFantasyPoints(player.pointsTotal),
     },
@@ -176,7 +176,7 @@ function buildKeyMetrics(
     },
     {
       id: 'budget-share',
-      label: 'Impacto en saldo',
+      label: 'Peso en presupuesto',
       supportingText: toBudgetShareSupportingText(budgetShare),
       tone: toBudgetShareMetricTone(budgetShare),
       value: `${formatPercentage(budgetShare * 100)} %`,
@@ -193,23 +193,23 @@ function buildSignals(
   return [
     {
       id: 'market-moment',
-      title: 'Momento',
+      title: 'Precio',
       value: toMarketTrendLabel(priceChange),
       description: toMarketGuidance(priceChange),
       tone: priceChange < 0 ? 'positive' : priceChange > 0 ? 'warning' : 'neutral',
     },
     {
       id: 'profitability',
-      title: 'Retorno',
+      title: 'Rentabilidad',
       value: toReturnSignalValue(pointsPerMillion, player.pointsTotal),
       description: toReturnSignalDescription(pointsPerMillion, player.pointsTotal),
       tone: toSignalToneFromProfitability(pointsPerMillion, player.pointsTotal),
     },
     {
       id: 'budget-fit',
-      title: 'Encaje',
+      title: 'Presupuesto',
       value: toBudgetFitValue(budgetShare),
-      description: `Te consume ${formatPercentage(budgetShare * 100)} % del presupuesto inicial.`,
+      description: `Consume ${formatPercentage(budgetShare * 100)} % del presupuesto inicial.`,
       tone: toBudgetFitTone(budgetShare),
     },
   ];

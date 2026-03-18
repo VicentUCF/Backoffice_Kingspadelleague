@@ -434,7 +434,7 @@ export class FantasyTeamDraftStore {
         this.teamName.set('Nuevo equipo fantasy');
       }
     } catch {
-      this.errorMessage.set('No pudimos preparar la plantilla fantasy.');
+      this.errorMessage.set('No hemos podido preparar la plantilla fantasy.');
     } finally {
       this.isLoading.set(false);
     }
@@ -461,7 +461,7 @@ export class FantasyTeamDraftStore {
       });
 
       if (!nextDashboard) {
-        this.errorMessage.set('No pudimos guardar la plantilla fantasy.');
+        this.errorMessage.set('No hemos podido guardar la plantilla fantasy.');
         return false;
       }
 
@@ -469,7 +469,7 @@ export class FantasyTeamDraftStore {
       this.errorMessage.set(null);
       return true;
     } catch {
-      this.errorMessage.set('No pudimos guardar la plantilla fantasy.');
+      this.errorMessage.set('No hemos podido guardar la plantilla fantasy.');
       return false;
     } finally {
       this.isLoading.set(false);

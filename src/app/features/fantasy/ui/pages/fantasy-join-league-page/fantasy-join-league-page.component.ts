@@ -39,7 +39,8 @@ export class FantasyJoinLeaguePageComponent {
     this.title.setTitle('Unirse a una liga fantasy | KingsPadelLeague');
     this.meta.updateTag({
       name: 'description',
-      content: 'Accede a una liga fantasy privada usando un código de invitación válido.',
+      content:
+        'Entra en una liga fantasy privada con tu código y continúa desde el punto adecuado.',
     });
   }
 

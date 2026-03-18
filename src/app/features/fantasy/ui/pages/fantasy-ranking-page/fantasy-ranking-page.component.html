@@ -49,17 +49,17 @@
       <article class="fantasy-ranking-page__summary-card">
         <p class="fantasy-ranking-page__summary-label">Participantes</p>
         <strong>{{ viewModel.memberCountLabel }}</strong>
-        <span>La tabla arranca con todas las ligas privadas activas.</span>
+        <span>Todos los managers que están compitiendo ahora mismo.</span>
       </article>
       <article class="fantasy-ranking-page__summary-card">
         <p class="fantasy-ranking-page__summary-label">Tu posición</p>
         <strong>{{ viewModel.myRankLabel }}</strong>
-        <span>Referencia rápida para ver si estás en zona alta.</span>
+        <span>Una referencia rápida para saber si estás peleando arriba.</span>
       </article>
       <article class="fantasy-ranking-page__summary-card">
         <p class="fantasy-ranking-page__summary-label">Tus puntos</p>
         <strong>{{ viewModel.myPointsLabel }}</strong>
-        <span>En pretemporada manda el valor y la composición del roster.</span>
+        <span>Ahora mismo pesan los puntos y cómo está construida tu plantilla.</span>
       </article>
       <article class="fantasy-ranking-page__summary-card">
         <p class="fantasy-ranking-page__summary-label">Líder actual</p>
@@ -76,7 +76,7 @@
         <div>
           <p class="fantasy-ranking-page__section-kicker">Podio</p>
           <h2 id="fantasy-ranking-podium">Pulso de la liga</h2>
-          <p>Los equipos que mejor llegan por valor de plantilla y estabilidad de proyecto.</p>
+          <p>Los equipos que mejor llegan por puntos, valor y equilibrio de plantilla.</p>
         </div>
       </header>
 
@@ -123,11 +123,10 @@
       <div>
         <p class="fantasy-ranking-page__section-kicker">Tabla completa</p>
         <h2 id="fantasy-ranking-table">Clasificación con detalle</h2>
-        <p>Consulta puntos totales, jornada y valor de todos los managers sin perder contexto.</p>
+        <p>Compara puntos totales, jornada y valor de todos los managers de un vistazo.</p>
       </div>
       <p class="fantasy-ranking-page__table-hint">
-        En pantallas pequeñas la tabla se transforma en fichas legibles y mantiene todas las
-        métricas.
+        En móvil la tabla pasa a fichas para mantener la lectura clara.
       </p>
     </header>
 
@@ -145,7 +144,7 @@
 } @else if (store.isNotFound()) {
   <app-empty-state
     [actions]="missingLeagueActions"
-    [description]="'No existe una liga con ese identificador para consultar su clasificación.'"
+    [description]="'No existe una liga con ese identificador para ver su clasificación.'"
     [icon]="shieldAlert"
     eyebrow="Ranking"
     layout="feature"

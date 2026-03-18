@@ -81,7 +81,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
         this.title.setTitle(`Mercado · ${viewModel.leagueName} | Fantasy | KingsPadelLeague`);
         this.meta.updateTag({
           name: 'description',
-          content: `Mercado fantasy de ${viewModel.leagueName}: revisa el roster real de la liga, compara precios y prepara tu plantilla de pretemporada.`,
+          content: `Mercado fantasy de ${viewModel.leagueName}: compara precios, detecta oportunidades y ajusta tu plantilla.`,
         });
 
         return;
@@ -91,8 +91,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
         this.title.setTitle('Mercado fantasy no encontrado | KingsPadelLeague');
         this.meta.updateTag({
           name: 'description',
-          content:
-            'La liga fantasy solicitada no está disponible para consultar su mercado de jugadores.',
+          content: 'La liga fantasy solicitada no está disponible para consultar su mercado.',
         });
 
         return;
@@ -102,7 +101,7 @@ export class FantasyMarketPageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Consulta el mercado fantasy de KingsPadelLeague para construir plantilla con el roster real de la liga.',
+          'Consulta el mercado fantasy de KingsPadelLeague para fichar, vender y ajustar tu plantilla.',
       });
     });
   }

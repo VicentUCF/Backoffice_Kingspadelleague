@@ -1,10 +1,9 @@
 <section class="fantasy-join-league-page__hero">
   <div class="fantasy-join-league-page__hero-copy">
     <p class="fantasy-join-league-page__eyebrow">Acceso por código</p>
-    <h1>Entra en una liga privada y sigue trabajando el mercado.</h1>
+    <h1>Únete a una liga privada y retoma la partida al instante.</h1>
     <p class="fantasy-join-league-page__hero-description">
-      Validamos el código contra las ligas disponibles y te llevamos al siguiente punto lógico:
-      dashboard o configuración de equipo.
+      Comprueba el código, entra en la liga y continúa justo donde toca: resumen, equipo o mercado.
     </p>
   </div>
 
@@ -15,11 +14,11 @@
     </div>
     <div class="fantasy-join-league-page__fact">
       <dt>Validación</dt>
-      <dd>Resolución en memoria</dd>
+      <dd>Código válido</dd>
     </div>
     <div class="fantasy-join-league-page__fact">
       <dt>Destino</dt>
-      <dd>Equipo o dashboard</dd>
+      <dd>Equipo o resumen</dd>
     </div>
   </dl>
 </section>
@@ -34,9 +33,7 @@
       <div>
         <p class="fantasy-join-league-page__panel-eyebrow">Invitación</p>
         <h2>Introduce el código</h2>
-        <p>
-          Si la liga existe, abrimos el acceso correcto sin rutas hardcodeadas ni pasos muertos.
-        </p>
+        <p>Si la liga existe, te llevamos al punto correcto sin pasos de más.</p>
       </div>
     </header>
 
@@ -73,7 +70,7 @@
         <div>
           <p class="fantasy-join-league-page__panel-eyebrow">Acceso resuelto</p>
           <h2>{{ joinedLeague.leagueName }}</h2>
-          <p>La liga ya está disponible y puedes continuar exactamente donde toca.</p>
+          <p>La liga ya está disponible y puedes seguir desde el punto que toque.</p>
         </div>
         <span class="fantasy-join-league-page__phase-chip">{{ joinedLeague.phaseLabel }}</span>
       </header>
@@ -102,14 +99,14 @@
       <header class="fantasy-join-league-page__panel-header">
         <div>
           <p class="fantasy-join-league-page__panel-eyebrow">Qué valida este flujo</p>
-          <h2>Entrada útil desde pretemporada</h2>
+          <h2>Qué hace este acceso</h2>
         </div>
       </header>
 
       <ol class="fantasy-join-league-page__steps">
         <li>Comprobamos que el código corresponde a una liga real.</li>
-        <li>Recuperamos su estado actual de mercado, ranking y equipo.</li>
-        <li>Te enviamos al punto de continuidad correcto dentro del fantasy.</li>
+        <li>Recuperamos el estado actual de mercado, ranking y equipo.</li>
+        <li>Te enviamos al siguiente paso útil dentro del fantasy.</li>
       </ol>
     </section>
   }

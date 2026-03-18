@@ -20,10 +20,10 @@
           class="fantasy-market-page__action fantasy-market-page__action--primary"
           [routerLink]="viewModel.teamLink"
         >
-          Gestionar mi equipo
+          Ver mi equipo
         </a>
         <a class="fantasy-market-page__action" [routerLink]="viewModel.rankingLink">
-          Ver ranking
+          Ver clasificación
         </a>
       </nav>
     </div>
@@ -38,7 +38,7 @@
         <dd>{{ viewModel.marketStatusLabel }}</dd>
       </div>
       <div class="fantasy-market-page__fact">
-        <dt>Objetivos</dt>
+        <dt>Huecos</dt>
         <dd>{{ store.teamSlotsLabel() }}</dd>
       </div>
     </dl>
@@ -62,9 +62,9 @@
     >
       <header class="fantasy-market-page__cockpit-header">
         <div>
-          <p class="fantasy-market-page__section-kicker">Cockpit de mercado</p>
-          <h2 id="fantasy-market-cockpit">Cockpit de mercado</h2>
-          <p>Controla saldo, huecos y bloque actual antes de cerrar cada movimiento del mercado.</p>
+          <p class="fantasy-market-page__section-kicker">Panel de mercado</p>
+          <h2 id="fantasy-market-cockpit">Panel de mercado</h2>
+          <p>Controla saldo, huecos y bloque actual antes de cada movimiento.</p>
         </div>
 
         <div class="fantasy-market-page__cockpit-actions">
@@ -86,7 +86,7 @@
         <article class="fantasy-market-page__cockpit-card">
           <span>Presupuesto</span>
           <strong>{{ store.budgetRemainingLabel() }}</strong>
-          <small>Saldo real disponible para fichar</small>
+          <small>Saldo disponible para fichar</small>
         </article>
         <article class="fantasy-market-page__cockpit-card">
           <span>Plantilla</span>
@@ -96,7 +96,7 @@
         <article class="fantasy-market-page__cockpit-card">
           <span>Asequibles</span>
           <strong>{{ store.affordablePlayersCountLabel() }}</strong>
-          <small>Según los filtros activos</small>
+          <small>Con los filtros activos</small>
         </article>
         <article class="fantasy-market-page__cockpit-card">
           <span>Mercado</span>
@@ -109,9 +109,9 @@
         <section aria-labelledby="fantasy-market-roster" class="fantasy-market-page__roster-strip">
           <header class="fantasy-market-page__roster-header">
             <div>
-              <p class="fantasy-market-page__section-kicker">Tu bloque actual</p>
-              <h3 id="fantasy-market-roster">Tu bloque actual</h3>
-              <p>Jugadores que ya controlas sin salir de la vista de mercado.</p>
+              <p class="fantasy-market-page__section-kicker">Tu equipo ahora</p>
+              <h3 id="fantasy-market-roster">Tu equipo ahora</h3>
+              <p>Los jugadores que ya controlas sin salir del mercado.</p>
             </div>
             <p>{{ store.ownedPlayersCountLabel() }}</p>
           </header>
@@ -144,7 +144,7 @@
                     >
                       Vender
                     </button>
-                    <a [routerLink]="player.detailLink">Ficha</a>
+                    <a [routerLink]="player.detailLink">Perfil</a>
                   </div>
                 </article>
               </li>
@@ -164,7 +164,7 @@
             <lucide-angular [img]="filtersIcon" [size]="16" aria-hidden="true" />
             <span>Filtros</span>
           </p>
-          <h2 id="fantasy-market-filters">Ajusta tu búsqueda</h2>
+          <h2 id="fantasy-market-filters">Filtra el mercado</h2>
         </div>
         <div class="fantasy-market-page__filters-meta">
           <p role="status">{{ store.resultsLabel() }}</p>
@@ -174,7 +174,7 @@
               class="fantasy-market-page__inline-button"
               (click)="resetFilters()"
             >
-              Resetear
+              Restablecer
             </button>
           }
         </div>
@@ -338,9 +338,9 @@
       </ul>
     } @else {
       <app-empty-state
-        [description]="'Prueba con otro filtro o limpia la búsqueda para recuperar el roster completo.'"
+        [description]="'Prueba con otros filtros o limpia la búsqueda para volver a ver todo el mercado.'"
         eyebrow="Mercado"
-        title="No hay jugadores para esta búsqueda"
+        title="No hay jugadores con esos filtros"
       />
     }
 
@@ -359,7 +359,7 @@
   </div>
 } @else if (store.isNotFound()) {
   <app-empty-state
-    [description]="'La liga solicitada no está disponible para consultar su mercado.'"
+    [description]="'La liga solicitada no está disponible para ver el mercado.'"
     [icon]="shieldAlert"
     eyebrow="Mercado"
     layout="feature"

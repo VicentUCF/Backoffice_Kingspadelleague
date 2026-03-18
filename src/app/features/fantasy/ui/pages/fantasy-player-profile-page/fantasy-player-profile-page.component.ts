@@ -62,7 +62,7 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
         this.meta.updateTag({
           name: 'description',
           content:
-            'El jugador fantasy solicitado no está disponible. Vuelve a la pantalla anterior para seguir explorando el mercado.',
+            'El jugador fantasy solicitado no está disponible. Vuelve atrás para seguir revisando el mercado.',
         });
 
         return;
@@ -72,7 +72,7 @@ export class FantasyPlayerProfilePageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Consulta valor, historial de precio, señales de compra y contexto fantasy de un jugador en KingsPadelLeague.',
+          'Consulta el valor, la evolución del precio y las señales de compra de un jugador fantasy en KingsPadelLeague.',
       });
     });
   }

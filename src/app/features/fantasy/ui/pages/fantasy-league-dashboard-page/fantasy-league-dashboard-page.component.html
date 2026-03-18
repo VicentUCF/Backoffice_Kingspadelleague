@@ -1,5 +1,5 @@
 @if (store.isLoading()) {
-  <p aria-live="polite" role="status">Cargando dashboard fantasy...</p>
+  <p aria-live="polite" role="status">Cargando tu liga fantasy...</p>
 } @else if (store.errorMessage()) {
   <app-empty-state
     [actions]="missingLeagueActions"
@@ -62,7 +62,7 @@
     >
       <header class="fantasy-dashboard-page__panel-header">
         <div>
-          <p class="fantasy-dashboard-page__section-kicker">Resumen</p>
+          <p class="fantasy-dashboard-page__section-kicker">Visión general</p>
           <h2 id="fantasy-dashboard-command-center">
             {{ viewModel.hasTeam ? 'Cabina del manager' : 'Punto de arranque de la liga' }}
           </h2>
@@ -82,12 +82,12 @@
           <article class="fantasy-dashboard-page__command-card">
             <span>Capitán</span>
             <strong>{{ team.captainName ?? 'Pendiente' }}</strong>
-            <small>Tu pieza con multiplicador x2</small>
+            <small>Tu jugador que puntúa doble</small>
           </article>
           <article class="fantasy-dashboard-page__command-card">
             <span>Valor</span>
             <strong>{{ team.teamValueLabel }}</strong>
-            <small>{{ team.budgetRemainingLabel }} disponibles</small>
+            <small>{{ team.budgetRemainingLabel }} de margen</small>
           </article>
           <article class="fantasy-dashboard-page__command-card">
             <span>Composición</span>
@@ -145,7 +145,7 @@
             <header class="fantasy-dashboard-page__mini-header">
               <div>
                 <p class="fantasy-dashboard-page__mini-kicker">Rotación</p>
-                <h3>Apoyo corto</h3>
+                <h3>Rotación disponible</h3>
               </div>
               <span>{{ team.bench.length }}</span>
             </header>

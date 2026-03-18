@@ -37,7 +37,7 @@ export class FantasyHomeStore {
     try {
       this.experience.set(await this.loadFantasyHomeExperienceUseCase.execute());
     } catch {
-      this.errorMessage.set('No pudimos cargar la experiencia semanal fantasy.');
+      this.errorMessage.set('No hemos podido cargar tu semana fantasy.');
       this.experience.set(null);
     } finally {
       this.isLoading.set(false);

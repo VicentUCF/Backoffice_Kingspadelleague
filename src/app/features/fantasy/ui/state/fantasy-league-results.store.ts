@@ -44,7 +44,7 @@ export class FantasyLeagueResultsStore {
     try {
       this.results.set(await this.loadFantasyLeagueResultsUseCase.execute(leagueId));
     } catch {
-      this.errorMessage.set('No pudimos cargar los resultados fantasy de esta liga.');
+      this.errorMessage.set('No hemos podido cargar los resultados fantasy de esta liga.');
     } finally {
       this.isLoading.set(false);
     }

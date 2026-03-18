@@ -52,7 +52,7 @@ export class FantasyTeamPageComponent implements OnDestroy, OnInit {
         this.title.setTitle(`Mi equipo · ${viewModel.leagueName} | Fantasy | KingsPadelLeague`);
         this.meta.updateTag({
           name: 'description',
-          content: `Gestiona el roster fantasy de ${viewModel.leagueName}, revisa titulares, suplentes y ajusta tu equipo de pretemporada.`,
+          content: `Gestiona tu equipo fantasy en ${viewModel.leagueName}, revisa titulares, rotación y presupuesto.`,
         });
 
         return;
@@ -62,8 +62,7 @@ export class FantasyTeamPageComponent implements OnDestroy, OnInit {
         this.title.setTitle('Equipo fantasy no encontrado | KingsPadelLeague');
         this.meta.updateTag({
           name: 'description',
-          content:
-            'La liga fantasy solicitada no está disponible para consultar tu equipo o plantilla actual.',
+          content: 'La liga fantasy solicitada no está disponible para consultar tu equipo.',
         });
 
         return;
@@ -73,7 +72,7 @@ export class FantasyTeamPageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Consulta tu equipo fantasy en KingsPadelLeague con una vista completa de titulares, rotación y presupuesto.',
+          'Consulta tu equipo fantasy en KingsPadelLeague con titulares, rotación y presupuesto de un vistazo.',
       });
     });
   }

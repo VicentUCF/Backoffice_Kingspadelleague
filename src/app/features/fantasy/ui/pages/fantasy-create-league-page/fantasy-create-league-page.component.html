@@ -1,10 +1,10 @@
 <section class="fantasy-create-league-page__hero">
   <div class="fantasy-create-league-page__hero-copy">
     <p class="fantasy-create-league-page__eyebrow">Ligas privadas</p>
-    <h1>Crea una liga con identidad propia antes del arranque.</h1>
+    <h1>Crea una liga privada y déjala lista antes del arranque.</h1>
     <p class="fantasy-create-league-page__hero-description">
-      Deja preparada la competición, genera un código consistente y salta directamente a la
-      construcción de plantilla con el mercado de pretemporada activo.
+      Define el nombre, genera el código de invitación y entra directo al mercado para montar tu
+      plantilla.
     </p>
   </div>
 
@@ -19,7 +19,7 @@
     </div>
     <div class="fantasy-create-league-page__fact">
       <dt>Siguiente paso</dt>
-      <dd>Gestionar equipo</dd>
+      <dd>Crear plantilla</dd>
     </div>
   </dl>
 </section>
@@ -52,7 +52,7 @@
         label="Descripción"
         maxlength="220"
         name="leagueDescription"
-        placeholder="Define reglas, tono o tipo de rivales que van a entrar"
+        placeholder="Añade reglas, tono o quién va a entrar en la liga"
         rows="5"
         [ngModel]="leagueDescription()"
         (ngModelChange)="leagueDescription.set($event)"
@@ -81,7 +81,7 @@
         <div>
           <p class="fantasy-create-league-page__panel-eyebrow">Liga creada</p>
           <h2>{{ createdLeague.leagueName }}</h2>
-          <p>La liga ya existe en fantasy y está preparada para configurar equipo y mercado.</p>
+          <p>La liga ya está lista para pasar a plantilla, mercado o resumen.</p>
         </div>
         <span class="fantasy-create-league-page__invite-code">{{ createdLeague.code }}</span>
       </header>
@@ -110,14 +110,14 @@
       <header class="fantasy-create-league-page__panel-header">
         <div>
           <p class="fantasy-create-league-page__panel-eyebrow">Qué ocurre después</p>
-          <h2>Onboarding listo para producción</h2>
+          <h2>Así sigue el flujo</h2>
         </div>
       </header>
 
       <ol class="fantasy-create-league-page__steps">
-        <li>Se genera un código consistente para compartir la liga.</li>
-        <li>Entras directamente al flujo de gestión de plantilla.</li>
-        <li>El dashboard queda preparado con ranking y mercado de pretemporada.</li>
+        <li>Se genera un código fácil de compartir con el resto de managers.</li>
+        <li>Entras directamente en la creación de plantilla.</li>
+        <li>El resumen queda listo con mercado y clasificación desde el primer momento.</li>
       </ol>
     </section>
   }

@@ -76,7 +76,7 @@ export class FantasyRankingPageComponent implements OnDestroy, OnInit {
         this.title.setTitle(`Ranking · ${viewModel.leagueName} | Fantasy | KingsPadelLeague`);
         this.meta.updateTag({
           name: 'description',
-          content: `Clasificación fantasy completa de ${viewModel.leagueName}: compara equipos, managers y valor de plantilla en pretemporada.`,
+          content: `Clasificación fantasy de ${viewModel.leagueName}: compara equipos, managers y valor de plantilla.`,
         });
 
         return;
@@ -86,7 +86,7 @@ export class FantasyRankingPageComponent implements OnDestroy, OnInit {
         this.title.setTitle('Ranking fantasy no encontrado | KingsPadelLeague');
         this.meta.updateTag({
           name: 'description',
-          content: 'La liga fantasy solicitada no está disponible para consultar su clasificación.',
+          content: 'La liga fantasy solicitada no está disponible para consultar la clasificación.',
         });
 
         return;
@@ -96,7 +96,7 @@ export class FantasyRankingPageComponent implements OnDestroy, OnInit {
       this.meta.updateTag({
         name: 'description',
         content:
-          'Explora la clasificación fantasy de KingsPadelLeague para comparar managers y valor de equipo.',
+          'Explora la clasificación fantasy de KingsPadelLeague para comparar managers, puntos y valor de equipo.',
       });
     });
   }
