@@ -87,4 +87,91 @@ describe('BackofficeSessionStore', () => {
 
     expect(store.currentRole()).toBe('PRESIDENT');
   });
+
+  it.each(['PLAYER', 'PRESIDENT'] as const)(
+    'includes the private profile in the %s navigation',
+    (role) => {
+      TestBed.configureTestingModule({
+        providers: [
+          BackofficeSessionStore,
+          {
+            provide: AuthStore,
+            useValue: createAuthStoreMock({
+              id: 'user-1',
+              email: 'member@example.com',
+              displayName: 'League member',
+              role,
+              teamId: 'team-1',
+            }),
+          },
+          { provide: Router, useValue: { navigate: jest.fn() } },
+        ],
+      });
+
+      const store = TestBed.inject(BackofficeSessionStore);
+
+      expect(store.navigation()).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            path: '/backoffice/perfil',
+            label: 'Mi perfil',
+            isAccessible: true,
+          }),
+        ]),
+      );
+    },
+  );
+
+  it('does not include the private player profile in the admin navigation', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        BackofficeSessionStore,
+        {
+          provide: AuthStore,
+          useValue: createAuthStoreMock({
+            id: 'admin-1',
+            email: 'admin@example.com',
+            displayName: 'Admin',
+            role: 'ADMIN',
+            teamId: null,
+          }),
+        },
+        { provide: Router, useValue: { navigate: jest.fn() } },
+      ],
+    });
+
+    const store = TestBed.inject(BackofficeSessionStore);
+
+    expect(
+      store.navigation().find((item) => item.path === '/backoffice/perfil')?.isAccessible,
+    ).toBe(false);
+  });
+
+  it('limits player navigation to the private profile', () => {
+    TestBed.configureTestingModule({
+      providers: [
+        BackofficeSessionStore,
+        {
+          provide: AuthStore,
+          useValue: createAuthStoreMock({
+            id: 'player-1',
+            email: 'player@example.com',
+            displayName: 'Player',
+            role: 'PLAYER',
+            teamId: 'team-1',
+          }),
+        },
+        { provide: Router, useValue: { navigate: jest.fn() } },
+      ],
+    });
+
+    const store = TestBed.inject(BackofficeSessionStore);
+
+    expect(
+      store
+        .navigation()
+        .filter((item) => item.isAccessible)
+        .map((item) => item.label),
+    ).toEqual(['Mi perfil']);
+  });
 });

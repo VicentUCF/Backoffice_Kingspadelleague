@@ -1,9 +1,11 @@
-<div class="profile-page">
+<div class="profile-page" [class.profile-page--embedded]="isBackofficeView">
   <header class="profile-page__header">
-    <a class="profile-page__back" routerLink="/backoffice">
-      <lucide-icon [img]="ArrowLeftIcon" size="16" />
-      Volver al backoffice
-    </a>
+    @if (!isBackofficeView) {
+      <a class="profile-page__back" routerLink="/backoffice">
+        <lucide-icon [img]="ArrowLeftIcon" size="16" aria-hidden="true" />
+        Volver al backoffice
+      </a>
+    }
     <div class="profile-page__avatar">
       @if (profileAvatarUrl(); as profileAvatarUrl) {
         <img [src]="profileAvatarUrl" [alt]="'Foto de perfil de ' + profileDisplayName()" />
@@ -11,7 +13,11 @@
         <span aria-hidden="true">{{ profileAvatarInitial() }}</span>
       }
     </div>
-    <h1 class="profile-page__title">Mi perfil</h1>
+    @if (isBackofficeView) {
+      <h2 class="profile-page__title">Datos de la cuenta</h2>
+    } @else {
+      <h1 class="profile-page__title">Mi perfil</h1>
+    }
     <p class="profile-page__email">{{ authStore.user()?.email }}</p>
   </header>
 

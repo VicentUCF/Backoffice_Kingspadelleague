@@ -1,6 +1,7 @@
 import { type Routes } from '@angular/router';
 
 import { backofficeAdminGuard } from '@core/guards/admin.guard';
+import { backofficeSectionGuard } from '@core/guards/backoffice-section.guard';
 import { BackofficeShellComponent } from './components/backoffice-shell/backoffice-shell.component';
 import { provideBackofficeFeature } from './providers/backoffice.providers';
 
@@ -9,6 +10,7 @@ export const BACKOFFICE_ROUTES: Routes = [
     path: '',
     component: BackofficeShellComponent,
     providers: [provideBackofficeFeature()],
+    canActivateChild: [backofficeSectionGuard],
     children: [
       {
         path: '',
@@ -129,6 +131,18 @@ export const BACKOFFICE_ROUTES: Routes = [
           title: 'Usuarios',
           breadcrumb: 'Usuarios',
           description: 'Directorio de usuarios y vinculación con jugadores.',
+        },
+      },
+      {
+        path: 'perfil',
+        loadComponent: () =>
+          import('@features/auth/ui/pages/profile-page/profile-page.component').then(
+            (m) => m.ProfilePageComponent,
+          ),
+        data: {
+          title: 'Mi perfil',
+          breadcrumb: 'Mi perfil',
+          description: 'Actualiza tu foto, datos personales y contraseña.',
         },
       },
       {

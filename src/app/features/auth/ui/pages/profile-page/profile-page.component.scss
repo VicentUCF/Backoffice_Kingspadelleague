@@ -6,6 +6,10 @@
   flex-direction: column;
   gap: 1.5rem;
 
+  &--embedded {
+    padding-block-start: 0;
+  }
+
   &__header {
     display: flex;
     flex-direction: column;
@@ -54,6 +58,10 @@
       height: 100%;
       object-fit: cover;
     }
+  }
+
+  &--embedded &__avatar {
+    margin-top: 0;
   }
 
   &__title {

@@ -17,7 +17,7 @@ import {
   type ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import {
   ArrowLeftIcon,
   CheckIcon,
@@ -72,6 +72,7 @@ function optionalUrlValidator(control: AbstractControl): ValidationErrors | null
 })
 export class ProfilePageComponent implements OnDestroy {
   protected readonly authStore = inject(AuthStore);
+  protected readonly isBackofficeView = inject(Router).url.startsWith('/backoffice/');
   private readonly processPlayerProfileImageUseCase = inject(ProcessPlayerProfileImageUseCase);
   private readonly profileImageInput = viewChild<ElementRef<HTMLInputElement>>('profileImageInput');
 

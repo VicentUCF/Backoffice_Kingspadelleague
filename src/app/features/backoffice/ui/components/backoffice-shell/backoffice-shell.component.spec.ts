@@ -4,6 +4,7 @@ import { render, screen, within } from '@testing-library/angular';
 import { axe } from 'jest-axe';
 
 import type { AuthRole } from '@features/auth/domain/entities/auth-user';
+import { ProcessPlayerProfileImageUseCase } from '@features/auth/application/use-cases/process-player-profile-image.use-case';
 import { AuthStore } from '@features/auth/ui/state/auth.store';
 import { BACKOFFICE_ROUTES } from '../../backoffice.routes';
 
@@ -35,8 +36,16 @@ function makeAuthStoreMock(role: AuthRole = 'ADMIN') {
     requestPasswordReset: async () => {},
     resetPassword: async () => {},
     clearError: () => {},
+    loadCurrentPlayerProfile: jest.fn().mockResolvedValue(null),
+    updateCurrentPlayerProfile: jest.fn(),
+    updateProfile: jest.fn(),
+    changePassword: jest.fn(),
   };
 }
+
+const processPlayerProfileImageUseCaseMock = {
+  execute: jest.fn(async (file: File) => file),
+};
 
 describe('BackofficeShellComponent', () => {
   it('renders navigation items for an ADMIN user', async () => {
@@ -86,6 +95,10 @@ describe('BackofficeShellComponent', () => {
       providers: [
         provideRouter([{ path: 'backoffice', children: BACKOFFICE_ROUTES }]),
         { provide: AuthStore, useValue: makeAuthStoreMock('PLAYER') },
+        {
+          provide: ProcessPlayerProfileImageUseCase,
+          useValue: processPlayerProfileImageUseCaseMock,
+        },
       ],
     });
 
@@ -96,10 +109,15 @@ describe('BackofficeShellComponent', () => {
 
     const navigation = screen.getByRole('navigation', { name: /Backoffice/i });
 
-    expect(within(navigation).getByRole('link', { name: /Mi equipo/i })).toHaveAttribute(
+    expect(within(navigation).queryByRole('link', { name: /Mi equipo/i })).toBeNull();
+    expect(within(navigation).getByRole('link', { name: /Mi perfil/i })).toHaveAttribute(
       'href',
-      '/backoffice',
+      '/backoffice/perfil',
     );
+    expect(within(navigation).queryByText('Equipos')).toBeNull();
+    expect(within(navigation).queryByText('Jugadores')).toBeNull();
+    expect(within(navigation).queryByText('Jornadas')).toBeNull();
+    expect(within(navigation).queryByText('Clasificación')).toBeNull();
     expect(within(navigation).queryByText('Usuarios')).toBeNull();
     expect(screen.queryByText('Rol activo')).toBeNull();
   });

@@ -1,6 +1,6 @@
 import { computed, inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { LayoutDashboard, Shield, Swords, Trophy, Users } from 'lucide-angular';
+import { LayoutDashboard, Shield, Swords, Trophy, User, Users } from 'lucide-angular';
 
 import type { AuthRole } from '@features/auth/domain/entities/auth-user';
 import { AuthStore } from '@features/auth/ui/state/auth.store';
@@ -36,41 +36,49 @@ export class BackofficeSessionStore {
 
   private buildNavigation(role: BackofficeRole): readonly BackofficeNavigationItem[] {
     const isAdmin = role === 'ADMIN';
+    const isPlayer = role === 'PLAYER';
 
     return [
       {
         path: BACKOFFICE_ROOT_PATH,
         label: isAdmin ? 'Dashboard' : 'Mi equipo',
         icon: LayoutDashboard,
-        isAccessible: true,
+        isAccessible: !isPlayer,
         isImplemented: true,
       },
       {
         path: `${BACKOFFICE_ROOT_PATH}/equipos`,
         label: 'Equipos',
         icon: Shield,
-        isAccessible: true,
+        isAccessible: !isPlayer,
         isImplemented: true,
       },
       {
         path: `${BACKOFFICE_ROOT_PATH}/jugadores`,
         label: 'Jugadores',
         icon: Users,
-        isAccessible: true,
+        isAccessible: !isPlayer,
         isImplemented: true,
       },
       {
         path: `${BACKOFFICE_ROOT_PATH}/jornadas`,
         label: 'Jornadas',
         icon: Swords,
-        isAccessible: true,
+        isAccessible: !isPlayer,
         isImplemented: true,
       },
       {
         path: `${BACKOFFICE_ROOT_PATH}/clasificacion`,
         label: 'Clasificación',
         icon: Trophy,
-        isAccessible: true,
+        isAccessible: !isPlayer,
+        isImplemented: true,
+      },
+      {
+        path: `${BACKOFFICE_ROOT_PATH}/perfil`,
+        label: 'Mi perfil',
+        icon: User,
+        isAccessible: !isAdmin,
         isImplemented: true,
       },
     ];
