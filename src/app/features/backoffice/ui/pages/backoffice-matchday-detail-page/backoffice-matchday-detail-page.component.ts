@@ -165,9 +165,20 @@ export class BackofficeMatchdayDetailPageComponent implements OnInit {
     return this.teamsStore.teams().find((team) => team.id === teamId) ?? null;
   });
 
-  protected readonly matchdayMatches = computed(() =>
-    this.lineupsStore.matches().filter((match) => match.matchdayId === this.matchdayId()),
-  );
+  protected readonly matchdayMatches = computed(() => {
+    const matches = this.lineupsStore
+      .matches()
+      .filter((match) => match.matchdayId === this.matchdayId());
+
+    if (this.isAdmin()) {
+      return matches;
+    }
+
+    const teamId = this.sessionStore.currentPresidentTeamId();
+    return teamId
+      ? matches.filter((match) => match.localTeamId === teamId || match.awayTeamId === teamId)
+      : [];
+  });
 
   protected readonly existingMatchEncounters = computed<readonly BackofficeMatchEncounter[]>(() =>
     this.matchdayMatches().map((match) => ({
@@ -641,6 +652,10 @@ export class BackofficeMatchdayDetailPageComponent implements OnInit {
   }
 
   protected openPlanner(matchId: string, teamId: string): void {
+    if (!this.canManageLineup(matchId, teamId)) {
+      return;
+    }
+
     this.selectedMatchId.set(matchId);
     this.selectedPlannerTeamId.set(teamId);
   }
@@ -648,6 +663,15 @@ export class BackofficeMatchdayDetailPageComponent implements OnInit {
   protected closePlanner(): void {
     this.selectedMatchId.set(null);
     this.selectedPlannerTeamId.set(null);
+  }
+
+  private canManageLineup(matchId: string, teamId: string): boolean {
+    const match = this.matchdayMatches().find((candidate) => candidate.id === matchId);
+    if (!match || (match.localTeamId !== teamId && match.awayTeamId !== teamId)) {
+      return false;
+    }
+
+    return this.isAdmin() || this.sessionStore.currentPresidentTeamId() === teamId;
   }
 
   protected async submitLineup(

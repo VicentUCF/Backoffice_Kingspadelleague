@@ -12,20 +12,22 @@ import { BackofficeTeamsStore } from '../../state/backoffice-teams.store';
 import { BackofficeMatchdayDetailPageComponent } from './backoffice-matchday-detail-page.component';
 
 function createLineupsStoreMock(
-  overrides: Partial<Pick<BackofficeLineupsStore, 'lineups' | 'pairs'>> = {},
+  overrides: Partial<Pick<BackofficeLineupsStore, 'lineups' | 'matches' | 'pairs'>> = {},
 ) {
-  const matches = signal([
-    {
-      id: 'match-1',
-      matchdayId: 'matchday-1',
-      localTeamId: 'team-1',
-      awayTeamId: 'team-2',
-      localTeamScorePoints: 0,
-      awayTeamScorePoints: 0,
-      scheduledAt: new Date('2026-03-25T18:00:00.000Z'),
-      status: 'in_progress' as const,
-    },
-  ]);
+  const matches =
+    overrides.matches ??
+    signal([
+      {
+        id: 'match-1',
+        matchdayId: 'matchday-1',
+        localTeamId: 'team-1',
+        awayTeamId: 'team-2',
+        localTeamScorePoints: 0,
+        awayTeamScorePoints: 0,
+        scheduledAt: new Date('2026-03-25T18:00:00.000Z'),
+        status: 'in_progress' as const,
+      },
+    ]);
   const lineups =
     overrides.lineups ??
     signal([
@@ -133,6 +135,7 @@ function createTeamsStoreMock() {
     teams: signal([
       { id: 'team-1', name: 'Locales', description: '', secondaryDescription: '', logo: null },
       { id: 'team-2', name: 'Visitantes', description: '', secondaryDescription: '', logo: null },
+      { id: 'team-3', name: 'Terceros', description: '', secondaryDescription: '', logo: null },
     ]),
     isLoading: signal(false),
     errorMessage: signal<string | null>(null),
@@ -408,6 +411,39 @@ describe('BackofficeMatchdayDetailPageComponent', () => {
     expect(
       await screen.findByText('Esta alineación ya fue enviada y se muestra en modo lectura.'),
     ).toBeVisible();
+  });
+
+  it('hides matches that do not belong to the president team even if stale data reaches the view', async () => {
+    const lineupsStore = createLineupsStoreMock({
+      matches: signal([
+        {
+          id: 'match-1',
+          matchdayId: 'matchday-1',
+          localTeamId: 'team-1',
+          awayTeamId: 'team-2',
+          localTeamScorePoints: 0,
+          awayTeamScorePoints: 0,
+          scheduledAt: new Date('2026-03-25T18:00:00.000Z'),
+          status: 'in_progress' as const,
+        },
+        {
+          id: 'match-2',
+          matchdayId: 'matchday-1',
+          localTeamId: 'team-2',
+          awayTeamId: 'team-3',
+          localTeamScorePoints: 0,
+          awayTeamScorePoints: 0,
+          scheduledAt: new Date('2026-03-25T19:00:00.000Z'),
+          status: 'scheduled' as const,
+        },
+      ]),
+    });
+
+    await renderComponent({ role: 'PRESIDENT', lineupsStore });
+
+    expect(screen.getByText('Locales')).toBeVisible();
+    expect(screen.queryByText('Terceros')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Gestionar alineación/i })).toHaveLength(1);
   });
 
   it('shows the new admin controls and blocks finishing a match without all pair results', async () => {
