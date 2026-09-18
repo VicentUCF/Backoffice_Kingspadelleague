@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { EyeIcon, EyeOffIcon, LucideAngularModule, LogInIcon } from 'lucide-angular';
@@ -37,6 +37,14 @@ export class LoginPageComponent {
     }),
   });
 
+  constructor() {
+    effect(() => {
+      if (this.authStore.isAuthenticated()) {
+        void this.router.navigate(['/backoffice']);
+      }
+    });
+  }
+
   get emailControl() {
     return this.form.controls.email;
   }
@@ -71,7 +79,6 @@ export class LoginPageComponent {
     const { email, password } = this.form.getRawValue();
     try {
       await this.authStore.login(email, password);
-      await this.router.navigate(['/backoffice']);
     } catch {
       // error is set in authStore.error signal
     }
